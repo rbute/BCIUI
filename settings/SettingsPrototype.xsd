@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.example.org/SettingsPrototype"
+	xmlns:tns="http://www.example.org/SettingsPrototype"
+	elementFormDefault="qualified">
+
+
+
+
+    <element name="NewElement" type="string"></element>
+
+
+
+
+
+    <group name="ExampleGroup">
+    	<sequence></sequence>
+    </group>
+
+
+
+
+    <complexType name="Singleton">
+    	<sequence>
+    	</sequence>
+    </complexType>
+
+
+    <attribute name="Option" type="string" use="required"></attribute>
+</schema>
