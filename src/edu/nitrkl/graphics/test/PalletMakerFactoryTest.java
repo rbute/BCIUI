@@ -7,7 +7,7 @@ import javax.swing.JComponent;
 
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Singleton;
-import edu.nitrkl.graphics.components.ResizablePolygon;
+import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.ui.BCIUI;
 
 public class PalletMakerFactoryTest {
@@ -20,7 +20,7 @@ public class PalletMakerFactoryTest {
 		ui.result.setText("Result Pane");
 
 		Singleton sample = new Singleton("X", new int[] { 1, 1 },
-				new ResizablePolygon[] { Factory
+				new JComponent[] { Factory
 						.makeCenteredRectangle(0.8, 0.8) }, new Color[] {
 						Color.WHITE, new Color(25, 25, 25), Color.blue });
 

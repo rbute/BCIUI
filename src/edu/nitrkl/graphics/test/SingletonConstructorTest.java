@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Singleton;
-import edu.nitrkl.graphics.components.ResizablePolygon;
+import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.ui.BCIUI;
 
 public class SingletonConstructorTest {
@@ -15,13 +15,13 @@ public class SingletonConstructorTest {
 		ui.result.setText(" ");
 
 		Singleton sample = new Singleton("A", new int[] { 1, 1 },
-				new ResizablePolygon[] { Factory
+				new Polygon2[] { Factory
 						.makeCenteredRectangle(0.5, 0.5) }, new Color[] {
 						Color.WHITE, new Color(25, 25, 25), Color.blue });
 
 		ui.choices.add(sample);
 
-		ResizablePolygon poly = Factory
+		Polygon2 poly = Factory
 				.makeCenteredRectangle(0.5, 0.5);
 		poly.setForeground(Color.blue);
 		sample.add(poly);

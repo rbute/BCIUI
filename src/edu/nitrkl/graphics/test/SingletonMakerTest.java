@@ -3,7 +3,7 @@ package edu.nitrkl.graphics.test;
 import java.awt.Color;
 
 import edu.nitrkl.graphics.components.Factory;
-import edu.nitrkl.graphics.components.ResizablePolygon;
+import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.ui.BCIUI;
 
@@ -15,7 +15,7 @@ public class SingletonMakerTest {
 		ui.result.setText(" ");
 
 		Singleton sample = new Singleton("A", new int[] { 1, 1 },
-				new ResizablePolygon[] { Factory
+				new Polygon2[] { Factory
 						.makeCenteredRectangle(0.5, 0.5) }, new Color[] {
 						Color.WHITE, new Color(25, 25, 25), Color.blue });
 

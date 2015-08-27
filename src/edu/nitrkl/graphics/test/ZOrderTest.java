@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.graphics.components.Factory;
-import edu.nitrkl.graphics.components.ResizablePolygon;
+import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;
 import edu.nitrkl.graphics.components.OcculdingLayout;
 
@@ -33,10 +33,10 @@ public class ZOrderTest {
 		label.setOpaque(false);
 		label.setForeground(Color.BLACK);
 
-		ResizablePolygon p = Factory.makeCross(0.5, 0.5);
+		Polygon2 p = Factory.makeCross(0.5, 0.5);
 		p.setForeground(Color.yellow);
 
-		ResizablePolygon p2 = Factory.makeCenteredRectangle(1, 0.5);
+		Polygon2 p2 = Factory.makeCenteredRectangle(1, 0.5);
 
 //		p2.setForeground(Color.blue);
 		p2.setForeground(null);

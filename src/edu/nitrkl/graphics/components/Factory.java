@@ -1,5 +1,6 @@
 package edu.nitrkl.graphics.components;
 
+import java.awt.Component;
 import java.awt.Polygon;
 
 import javax.swing.JComponent;
@@ -21,44 +22,41 @@ public class Factory {
 				} else {
 					singletons[i][j] = singleton.getClone();
 
-					// TODO: Set Text if extends JLabel
+					for (Component jComponents : singletons[i][j]
+							.getComponents())
+						if (jComponents instanceof JLabel)
+							((JLabel) jComponents).setText(options[i][j]);
 
-					((JLabel) singletons[i][j].getComponent(0))
-							.setText(options[i][j]);
-					((JLabel) singletons[i][j].getComponent(1))
-							.setText(options[i][j]);
-					((Singleton) singletons[i][j]).setIndex(new int[] {
-							i, j });
+					((Singleton) singletons[i][j]).setIndex(new int[] { i, j });
 				}
 			}
 		}
 		return singletons;
 	}
 
-//	public static <InputClass>[][] transpose(InputClass[][] array){
-//		InputClass[][] 
-//		
-//		
-//		return 
-//	}
-	
-	public static ResizablePolygon makeCenteredRectangle(double width,
-			double height) {
-		ResizablePolygon polygon = new ResizablePolygon();
-		polygon.addPoint(0.5 * (1 - width), 0.5 * (1 - height));
-		polygon.addPoint(0.5 * (1 - width), 0.5 * (1 + height));
-		polygon.addPoint(0.5 * (1 + width), 0.5 * (1 + height));
-		polygon.addPoint(0.5 * (1 + width), 0.5 * (1 - height));
+	// public static <InputClass>[][] transpose(InputClass[][] array){
+	// InputClass[][]
+	//
+	//
+	// return
+	// }
+
+	public static Polygon2 makeCenteredRectangle(double width, double height) {
+		Polygon2 polygon = new Polygon2();
+		((Polygon2) polygon).addPoint(0.5 * (1 - width), 0.5 * (1 - height));
+		((Polygon2) polygon).addPoint(0.5 * (1 - width), 0.5 * (1 + height));
+		((Polygon2) polygon).addPoint(0.5 * (1 + width), 0.5 * (1 + height));
+		((Polygon2) polygon).addPoint(0.5 * (1 + width), 0.5 * (1 - height));
 		return polygon;
 	}
 
-	public static ResizablePolygon makeCross(double horizontalPatchWidth,
+	public static Polygon2 makeCross(double horizontalPatchWidth,
 			double verticalPathcWidth) {
 		return Factory.makeCross(horizontalPatchWidth, verticalPathcWidth,
 				1000, 1000);
 	}
 
-	public static ResizablePolygon makeCross(double horizontalPatchWidth,
+	public static Polygon2 makeCross(double horizontalPatchWidth,
 			double verticalPathcWidth, int width, int height) {
 		Integer[] xMarkers = { 0,
 				0 + (int) ((1 - horizontalPatchWidth) * 0.5 * (width)),
@@ -84,7 +82,7 @@ public class Factory {
 		p.addPoint(xMarkers[0], yMarkers[2]);
 
 		p.getBounds().setBounds(0, 0, 1, 1);
-		return new ResizablePolygon(p);
+		return new Polygon2(p);
 	}
 
 	public static JLabel[] makeJLabels(String[] inputStrings) {

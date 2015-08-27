@@ -8,7 +8,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import edu.nitrkl.graphics.components.Factory;
-import edu.nitrkl.graphics.components.ResizablePolygon;
+import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;
 import edu.nitrkl.ui.BCIUI;
 
@@ -24,12 +24,12 @@ public class LauncherTest {
 		files.add(new JMenuItem("Open settings"));
 		hyb.menuBar.add(files, 0);
 
-		ResizablePolygon testPolygon = Factory.makeCenteredRectangle(
+		Polygon2 testPolygon = Factory.makeCenteredRectangle(
 				0.9, 0.9);
 
 		testPolygon.setForeground(Color.blue);
 
-		hyb.choices.add((Component) testPolygon.getClone());
+		hyb.choices.add((Polygon2) testPolygon.getClone());
 		hyb.choices.add(new JComponent() {
 			private static final long serialVersionUID = 1L;
 		});

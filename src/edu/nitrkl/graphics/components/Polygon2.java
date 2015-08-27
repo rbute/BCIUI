@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
-public class ResizablePolygon extends JComponent implements CloneableComponent {
+public class Polygon2 extends JComponent implements CloneableComponent {
 
 	/**
 	 * 
@@ -40,13 +40,13 @@ public class ResizablePolygon extends JComponent implements CloneableComponent {
 
 	double ypoints[] = null;
 
-	public ResizablePolygon() {
+	public Polygon2() {
 		xpoints = new double[0];
 		ypoints = new double[0];
 		npoints = 0;
 	}
 
-	public ResizablePolygon(double[] inputXPoints, double[] inputYPoints,
+	public Polygon2(double[] inputXPoints, double[] inputYPoints,
 			int inputNPoints) {
 		xpoints = inputXPoints;
 		ypoints = inputYPoints;
@@ -57,12 +57,11 @@ public class ResizablePolygon extends JComponent implements CloneableComponent {
 		calculatePoints();
 	}
 
-	public ResizablePolygon(int[] inputXPoints, int[] inputYPoints,
-			int inputNPoints) {
+	public Polygon2(int[] inputXPoints, int[] inputYPoints, int inputNPoints) {
 		this(new Polygon(inputXPoints, inputYPoints, inputNPoints));
 	}
 
-	public ResizablePolygon(Polygon p) {
+	public Polygon2(Polygon p) {
 
 		visible = new Polygon(p.xpoints, p.ypoints, p.npoints);
 
@@ -78,7 +77,7 @@ public class ResizablePolygon extends JComponent implements CloneableComponent {
 		}
 	}
 
-	protected ResizablePolygon(ResizablePolygon polygon) {
+	protected Polygon2(Polygon2 polygon) {
 
 		visible = new Polygon(polygon.visible.xpoints, polygon.visible.ypoints,
 				polygon.visible.npoints);
@@ -129,8 +128,8 @@ public class ResizablePolygon extends JComponent implements CloneableComponent {
 	}
 
 	@Override
-	public JComponent getClone() {
-		return new ResizablePolygon(this);
+	public Polygon2 getClone() {
+		return new Polygon2(this);
 	}
 
 	@Override

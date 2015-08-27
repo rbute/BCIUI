@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -99,10 +100,11 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 			System.exit(0);
 			break;
 		case "LOADPRESETS":
+			System.out.println("Load Presets");
 			JMenuItem loadPreset = null;
-			for (JMenuItem preset : (JMenuItem[]) filesMenu.getComponents())
+			for (AbstractButton preset : (AbstractButton[]) filesMenu.getComponents())
 				if (preset.getText() == "Load Presets") {
-					loadPreset = preset;
+					loadPreset = (JMenuItem)(preset);
 					break;
 				}
 			loadPreset.removeAll();

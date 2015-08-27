@@ -19,10 +19,10 @@ public class HardCoddedLauncher {
 
 		Singleton sample = new Singleton(new int[] { 1, 1 }, new JComponent[] {
 				new ResizableTextJLabel("+", 0.7f),
-				new ResizableTextJLabel("+", 0.7f),
+//				new ResizableTextJLabel("+", 0.7f),
 				Factory.makeCross(0.5, 0.5),
-				Factory.makeCenteredRectangle(1, 1) }, new Color[] { Color.red,
-				Color.black, Color.yellow, Color.white });
+				Factory.makeCenteredRectangle(1, 1) }, new Color[] {// Color.red,
+				Color.red, Color.yellow, Color.white });
 
 		String[][] options = { { "A", "B", "C", "D", "E", "F" },
 				{ "G", "H", "I", "J", "K", "L", },
@@ -39,7 +39,7 @@ public class HardCoddedLauncher {
 
 		for (int i = 0; i < boardOptions.length; i++) {
 			flashers[i] = new Flasher((Singleton[]) boardOptions[i], 200, 0.5,
-					(byte) 2);
+					(byte) 1);
 			flasherArray.add(flashers[i]);
 		}
 

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 public class Singleton extends JComponent implements CloneableComponent {
 
@@ -19,7 +20,7 @@ public class Singleton extends JComponent implements CloneableComponent {
 		for (int i = 0; i < this.index.length; i++)
 			this.index[i] = 0;
 
-		for (Component clc : singleton.getComponents()){
+		for (Component clc : singleton.getComponents()) {
 			this.add(((CloneableComponent) clc).getClone());
 		}
 		this.setLayout(new OcculdingLayout());
@@ -48,32 +49,34 @@ public class Singleton extends JComponent implements CloneableComponent {
 		}
 	}
 
-	public Singleton(String str, int[] index,
-			ResizablePolygon[] polygons, Color[] colors) {
+	public Singleton(String str, int[] index, JComponent[] jComponents,
+			Color[] colors) {
 		this(index);
-		if (polygons.length < colors.length - 2)
+		if (jComponents.length < colors.length)
 			throw new IllegalArgumentException(
-					"Number of colors must be ' Number Resizable Polygons + 2 '");
+					"Number of colors must be greater than or equal to the number of components");
 		this.setLayout(new OcculdingLayout());
 
-		ResizableTextJLabel label = null;
+		// ResizableTextJLabel label = null;
+		//
+		// label = new ResizableTextJLabel(str,0.8f);
+		// label.setForeground(colors[0]);
+		// label.setVisible(false);
+		// label.setOpaque(false);
+		// this.add(label);
+		//
+		// label = (ResizableTextJLabel) label.getClone();
+		// label.setForeground(colors[1]);
+		// label.setVisible(true);
+		// label.setOpaque(false);
+		// super.add(label);
 
-		label = new ResizableTextJLabel(str,0.8f);
-		label.setForeground(colors[0]);
-		label.setVisible(false);
-		label.setOpaque(false);
-		this.add(label);
-
-		label = (ResizableTextJLabel) label.getClone();
-		label.setForeground(colors[1]);
-		label.setVisible(true);
-		label.setOpaque(false);
-		super.add(label);
-
-		for (int i = 0; i < polygons.length; i++) {
-			ResizablePolygon polygon = polygons[i];
-			polygon.setForeground(colors[i + 2]);
-			super.add(polygon);
+		for (int i = 0; i < jComponents.length; i++) {
+			JComponent component = jComponents[i];
+			component.setForeground(colors[i]);
+			if (component instanceof JLabel)
+				((JLabel) component).setText(str);
+			super.add(component);
 		}
 	}
 
