@@ -45,60 +45,6 @@ public class HardCoddedLauncher {
 			flasherArray.add(flashers[i]);
 		}
 
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * // skluhfks // sdf // gdsf // fgds
-		 */
-//		for (Flasher flasher : flashers)
-//			flasher.setFlash(true);
-
-//		try {
-//			TimeUnit.MILLISECOND.wait(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-
-//		for (Flasher flasher : flashers)
-//			flasher.setFlash((byte) 10);
-
-//		try {
-//			TimeUnit.MILLISECOND.wait(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-
-//		for (Flasher flasher : flashers)
-//			flasher.setFlash((int) 5000);
-
-//		try {
-//			TimeUnit.MILLISECOND.wait(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-
-		for (Flasher flasher : flashers)
-			flasher.setFlash(flasherArray);
-
-//		try {
-//			TimeUnit.MILLISECOND.wait(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * dgnds rgdeig jgdg g ijkdf g gfdgidjndf dgfijgndfklgj\ fdsgkuhg
-		 * gdffglkjh gdsfg jhnd fg gfd
-		 */
-
 		hyb.result.setText("Result");
 
 		hyb.choices.setLayout(new GridLayout(boardOptions.length,
@@ -113,6 +59,61 @@ public class HardCoddedLauncher {
 		JMenu files = new JMenu("Files");
 		files.add(new JMenuItem("Open settings (To Be Implemented)"));
 		hyb.menuBar.add(files, 0);
+
+		/*
+		 * 
+		 * 
+		 * 
+		 */
+
+		for (Flasher flasher : flashers)
+			flasher.setFlash();
+
+		// try {
+		// TimeUnit.MILLISECOND.wait(5000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+
+		// for (Flasher flasher : flashers)
+		// flasher.setFlash((byte) 10);
+
+		// try {
+		// TimeUnit.MILLISECOND.wait(5000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+
+		// for (Flasher flasher : flashers)
+		// flasher.setFlash((int) 5000);
+
+		// try {
+		// TimeUnit.MILLISECOND.wait(5000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+
+		// for (Flasher flasher : flashers){
+		ArrayList<Flasher> temp = new ArrayList<Flasher>(flasherArray);
+		flasherArray.get(0).setFlash(temp);
+		// Collections.shuffle(flasherArray);
+		while (!temp.isEmpty())
+			;
+		flasherArray.get(0).setFlash(new ArrayList<Flasher>(flasherArray));
+
+		// }
+
+		// try {
+		// TimeUnit.MILLISECOND.wait(5000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+
+		/*
+		 * 
+		 * 
+		 * 
+		 */
 
 	}
 
