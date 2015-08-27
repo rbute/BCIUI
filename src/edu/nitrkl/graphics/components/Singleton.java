@@ -5,7 +5,7 @@ import java.awt.Component;
 
 import javax.swing.JComponent;
 
-public class FlasherSingleton extends JComponent implements CloneableComponent {
+public class Singleton extends JComponent implements CloneableComponent {
 
 	/**
 	 * 
@@ -14,7 +14,7 @@ public class FlasherSingleton extends JComponent implements CloneableComponent {
 
 	int[] index = null;
 
-	protected FlasherSingleton(FlasherSingleton singleton) {
+	protected Singleton(Singleton singleton) {
 		this.index = new int[singleton.index.length];
 		for (int i = 0; i < this.index.length; i++)
 			this.index[i] = 0;
@@ -22,10 +22,10 @@ public class FlasherSingleton extends JComponent implements CloneableComponent {
 		for (Component clc : singleton.getComponents()){
 			this.add(((CloneableComponent) clc).getClone());
 		}
-		this.setLayout(new ZStackingLayout());
+		this.setLayout(new OcculdingLayout());
 	}
 
-	public FlasherSingleton(int[] index) {
+	public Singleton(int[] index) {
 		for (int i : index)
 			if (i <= 0)
 				throw new IllegalArgumentException(
@@ -34,12 +34,12 @@ public class FlasherSingleton extends JComponent implements CloneableComponent {
 		this.index = new int[index.length];
 	}
 
-	public FlasherSingleton(int[] index, Component[] components, Color[] colors) {
+	public Singleton(int[] index, Component[] components, Color[] colors) {
 		this(index);
 		if (components.length != colors.length)
 			throw new IllegalArgumentException(
 					"Number of colors must be Equal to Number Resizable Components.");
-		this.setLayout(new ZStackingLayout());
+		this.setLayout(new OcculdingLayout());
 
 		for (int i = 0; i < components.length; i++) {
 			Component polygon = components[i];
@@ -48,13 +48,13 @@ public class FlasherSingleton extends JComponent implements CloneableComponent {
 		}
 	}
 
-	public FlasherSingleton(String str, int[] index,
+	public Singleton(String str, int[] index,
 			ResizablePolygon[] polygons, Color[] colors) {
 		this(index);
 		if (polygons.length < colors.length - 2)
 			throw new IllegalArgumentException(
 					"Number of colors must be ' Number Resizable Polygons + 2 '");
-		this.setLayout(new ZStackingLayout());
+		this.setLayout(new OcculdingLayout());
 
 		ResizableTextJLabel label = null;
 
@@ -79,7 +79,7 @@ public class FlasherSingleton extends JComponent implements CloneableComponent {
 
 	@Override
 	public JComponent getClone() {
-		return new FlasherSingleton(this);
+		return new Singleton(this);
 	}
 
 	public int[] getIndex() {

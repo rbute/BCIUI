@@ -6,7 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JComponent;
 
 import edu.nitrkl.graphics.components.Factory;
-import edu.nitrkl.graphics.components.FlasherSingleton;
+import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.graphics.components.ResizablePolygon;
 import edu.nitrkl.ui.BCIUI;
 
@@ -19,7 +19,7 @@ public class PalletMakerFactoryTest {
 
 		ui.result.setText("Result Pane");
 
-		FlasherSingleton sample = new FlasherSingleton("X", new int[] { 1, 1 },
+		Singleton sample = new Singleton("X", new int[] { 1, 1 },
 				new ResizablePolygon[] { Factory
 						.makeCenteredRectangle(0.8, 0.8) }, new Color[] {
 						Color.WHITE, new Color(25, 25, 25), Color.blue });

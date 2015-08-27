@@ -6,11 +6,11 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 
-import edu.nitrkl.graphics.components.FlasherSingleton;
+import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.ResizablePolygon;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;
-import edu.nitrkl.graphics.components.ZStackingLayout;
+import edu.nitrkl.graphics.components.OcculdingLayout;
 
 public class ZOrderTest {
 
@@ -23,8 +23,8 @@ public class ZOrderTest {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.getContentPane().setBackground(null);
 
-		FlasherSingleton panel = new FlasherSingleton(new int[]{1,1});
-		panel.setLayout(new ZStackingLayout());
+		Singleton panel = new Singleton(new int[]{1,1});
+		panel.setLayout(new OcculdingLayout());
 		panel.setBackground(Color.orange);
 
 		ResizableTextJLabel label = new ResizableTextJLabel("9",0.9f);

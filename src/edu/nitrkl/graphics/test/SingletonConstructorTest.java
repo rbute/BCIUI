@@ -3,7 +3,7 @@ package edu.nitrkl.graphics.test;
 import java.awt.Color;
 
 import edu.nitrkl.graphics.components.Factory;
-import edu.nitrkl.graphics.components.FlasherSingleton;
+import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.graphics.components.ResizablePolygon;
 import edu.nitrkl.ui.BCIUI;
 
@@ -14,7 +14,7 @@ public class SingletonConstructorTest {
 
 		ui.result.setText(" ");
 
-		FlasherSingleton sample = new FlasherSingleton("A", new int[] { 1, 1 },
+		Singleton sample = new Singleton("A", new int[] { 1, 1 },
 				new ResizablePolygon[] { Factory
 						.makeCenteredRectangle(0.5, 0.5) }, new Color[] {
 						Color.WHITE, new Color(25, 25, 25), Color.blue });

@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.util.HashMap;
 
-public class ZStackingLayout implements LayoutManager {
+public class OcculdingLayout implements LayoutManager {
 
 	HashMap<String, Component> components = new HashMap<String, Component>();
 

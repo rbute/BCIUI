@@ -5,13 +5,11 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Flasher;
-import edu.nitrkl.graphics.components.FlasherSingleton;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;
+import edu.nitrkl.graphics.components.Singleton;
 
 public class HardCoddedLauncher {
 
@@ -19,12 +17,12 @@ public class HardCoddedLauncher {
 
 		BCIUI hyb = new BCIUI(true);
 
-		FlasherSingleton sample = new FlasherSingleton(new int[] { 1, 1 },
-				new JComponent[] { new ResizableTextJLabel("+", 0.7f),
-						new ResizableTextJLabel("+", 0.7f),
-						Factory.makeCross(0.5, 0.5),
-						Factory.makeCenteredRectangle(1, 1) }, new Color[] {
-						Color.red, Color.black, Color.yellow, Color.white });
+		Singleton sample = new Singleton(new int[] { 1, 1 }, new JComponent[] {
+				new ResizableTextJLabel("+", 0.7f),
+				new ResizableTextJLabel("+", 0.7f),
+				Factory.makeCross(0.5, 0.5),
+				Factory.makeCenteredRectangle(1, 1) }, new Color[] { Color.red,
+				Color.black, Color.yellow, Color.white });
 
 		String[][] options = { { "A", "B", "C", "D", "E", "F" },
 				{ "G", "H", "I", "J", "K", "L", },
@@ -40,8 +38,8 @@ public class HardCoddedLauncher {
 		ArrayList<Flasher> flasherArray = new ArrayList<Flasher>();
 
 		for (int i = 0; i < boardOptions.length; i++) {
-			flashers[i] = new Flasher((FlasherSingleton[]) boardOptions[i],
-					200, 0.5, (byte) 2);
+			flashers[i] = new Flasher((Singleton[]) boardOptions[i], 200, 0.5,
+					(byte) 2);
 			flasherArray.add(flashers[i]);
 		}
 
@@ -56,9 +54,7 @@ public class HardCoddedLauncher {
 			}
 		}
 
-		JMenu files = new JMenu("Files");
-		files.add(new JMenuItem("Open settings (To Be Implemented)"));
-		hyb.menuBar.add(files, 0);
+//		hyb.filesMenu.add(new JMenuItem("Open settings (To Be Implemented)"));
 
 		/*
 		 * 

@@ -8,8 +8,8 @@ import javax.swing.JLabel;
 public class Factory {
 
 	public static JComponent[][] makeBoard(String[][] options,
-			FlasherSingleton singleton) {
-		JComponent[][] singletons = new FlasherSingleton[options.length][options[0].length];
+			Singleton singleton) {
+		JComponent[][] singletons = new Singleton[options.length][options[0].length];
 		for (int i = 0; i < options.length; i++) {
 			for (int j = 0; j < options[0].length; j++) {
 				if (options[i][j] == null) {
@@ -27,7 +27,7 @@ public class Factory {
 							.setText(options[i][j]);
 					((JLabel) singletons[i][j].getComponent(1))
 							.setText(options[i][j]);
-					((FlasherSingleton) singletons[i][j]).setIndex(new int[] {
+					((Singleton) singletons[i][j]).setIndex(new int[] {
 							i, j });
 				}
 			}

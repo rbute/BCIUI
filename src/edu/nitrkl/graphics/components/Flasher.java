@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Flasher extends Thread implements EventListener {
 
-	ArrayList<FlasherSingleton> elements = new ArrayList<FlasherSingleton>();
+	ArrayList<Singleton> elements = new ArrayList<Singleton>();
 	double dutyCycle = 0.5;
 	byte flashingLayer = 2;
 	int timePeriod = 100;
@@ -20,15 +20,15 @@ public class Flasher extends Thread implements EventListener {
 	boolean infiniteLoop = true;
 	ReentrantLock lock = new ReentrantLock();
 
-	public Flasher(ArrayList<FlasherSingleton> elements, int timePeriod,
+	public Flasher(ArrayList<Singleton> elements, int timePeriod,
 			int dutyCycle, byte flashingLayer) {
-		this((FlasherSingleton[]) elements.toArray(), timePeriod, dutyCycle,
+		this((Singleton[]) elements.toArray(), timePeriod, dutyCycle,
 				flashingLayer);
 	}
 
-	public Flasher(FlasherSingleton[] elements, int timePeriod,
+	public Flasher(Singleton[] elements, int timePeriod,
 			double dutyCycle, byte flashingLayer) {
-		for (FlasherSingleton singleton : elements)
+		for (Singleton singleton : elements)
 			this.elements.add(singleton);
 		this.timePeriod = timePeriod;
 		this.dutyCycle = dutyCycle;
@@ -115,7 +115,7 @@ public class Flasher extends Thread implements EventListener {
 	}
 
 	protected void setGroupVisibility(boolean visible) {
-		for (FlasherSingleton component : elements) {
+		for (Singleton component : elements) {
 			component.getComponent(this.flashingLayer).setVisible(visible);
 		}
 	}
