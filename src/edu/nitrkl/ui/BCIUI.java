@@ -27,8 +27,9 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JMenuBar menuBar = new JMenuBar();
 	JButton runStop = new JButton("Run ");
 
-	public BCIUI() {
+	public BCIUI(boolean unDecorate) {
 		this.setTitle("P300-SSVEP GUI");
+		this.setUndecorated(unDecorate);
 		this.setIconImage((new ImageIcon(getClass().getResource("icon.jpg")))
 				.getImage());
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -40,6 +41,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.add(result, BorderLayout.PAGE_START);
 		this.add(choices, BorderLayout.CENTER);
 
+		this.menuBar.setBackground(Color.black);
 		this.result.setBackground(new Color(0x00404040));
 		this.result.setForeground(new Color(0x002fff5f));
 		this.result.setOpaque(true);

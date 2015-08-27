@@ -7,7 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import edu.nitrkl.graphics.components.ComponentFactory;
+import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.ResizablePolygon;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;
 import edu.nitrkl.ui.BCIUI;
@@ -16,7 +16,7 @@ public class LauncherTest {
 
 	public static void main(String[] args) {
 
-		BCIUI hyb = new BCIUI();
+		BCIUI hyb = new BCIUI(false);
 		hyb.result.setText("This is the Result Pane");
 		hyb.choices.add(new ResizableTextJLabel("Choice Pane", 0.9f));
 
@@ -24,7 +24,7 @@ public class LauncherTest {
 		files.add(new JMenuItem("Open settings"));
 		hyb.menuBar.add(files, 0);
 
-		ResizablePolygon testPolygon = ComponentFactory.makeCenteredRectangle(
+		ResizablePolygon testPolygon = Factory.makeCenteredRectangle(
 				0.9, 0.9);
 
 		testPolygon.setForeground(Color.blue);

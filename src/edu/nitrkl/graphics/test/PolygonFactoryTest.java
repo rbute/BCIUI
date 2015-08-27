@@ -2,7 +2,7 @@ package edu.nitrkl.graphics.test;
 
 import javax.swing.JFrame;
 
-import edu.nitrkl.graphics.components.ComponentFactory;
+import edu.nitrkl.graphics.components.Factory;
 
 public class PolygonFactoryTest {
 	public static void main(String[] args) {
@@ -16,7 +16,7 @@ public class PolygonFactoryTest {
 //		panel.setBorder(BorderFactory.createLineBorder(Color.black, 5));
 //		frame.add(panel);
 
-		frame.add(ComponentFactory.makeCross(0.7, 0.7));
+		frame.add(Factory.makeCross(0.7, 0.7));
 		
 	}
 }

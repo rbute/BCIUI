@@ -10,7 +10,7 @@ import edu.nitrkl.ui.BCIUI;
 public class SingletonMakerTest {
 
 	public static void main(String[] args) {
-		BCIUI ui = new BCIUI();
+		BCIUI ui = new BCIUI(true);
 
 		ui.result.setText(" ");
 
