@@ -41,40 +41,76 @@ public class Flasher extends Thread implements EventListener {
 		this.notify();
 	}
 
+	/**
+	 * Stops continuous flashing
+	 */
 	public void unsetFlash() {
 		this.flashOnce = false;
 		// this.notify();
 	}
 
+	/**
+	 * Flashes the array just once
+	 */
 	public void setFlash() {
 		this.flashOnce = true;
 		// this.notify();
 	}
 
+	/**
+	 * 
+	 * @param flash
+	 *            Sets the group continuous flashing mode
+	 */
 	public void setFlash(boolean flash) {
 		this.flash = flash;
 		// this.notify();
 	}
 
+	/**
+	 * 
+	 * @param flashCount
+	 * 
+	 *            Flashes the whole group for a flashCount number of times
+	 */
 	public void setFlash(byte flashCount) {
 		this.flashCount = flashCount;
 		// this.notify();
 	}
 
+	/**
+	 * 
+	 * @param flashTime
+	 *            Flashes the entire group for a duration of flashTime
+	 */
 	public void setFlash(int flashTime) {
 		this.flashUntil = System.currentTimeMillis() + flashTime;
 		// this.notify();
 	}
 
+	/**
+	 * 
+	 * @param flashUntilTime
+	 * 
+	 *            Flashes the whole array uptil time flashUntilTime this is
+	 *            supplied to the milliseconds accuracy as in java.lang.date()
+	 */
 	public void setFlash(long flashUntilTime) {
 		this.flashUntil = flashUntilTime;
 		// this.notify();
 	}
 
+	/**
+	 * 
+	 * @param flashSequence
+	 * 
+	 *            This Function flashes the array sequentially as supplied by
+	 *            flashSequence
+	 */
 	public void setFlash(ArrayList<Flasher> flashSequence) {
 		this.flashSequence = flashSequence;
 		// this.flashSequence.remove(this);
-		 this.setFlash();
+		// this.setFlash();
 		// this.notify();
 	}
 
@@ -123,8 +159,7 @@ public class Flasher extends Thread implements EventListener {
 					flashOnce = false;
 				else if (flashCount > 0)
 					flashCount--;
-				 else
-				if (this.flashSequence.indexOf(this) >= 0) {
+				else if (this.flashSequence.indexOf(this) >= 0) {
 					this.flashSequence.remove(this);
 					if (!this.flashSequence.isEmpty())
 						this.flashSequence.get(0).setFlash(this.flashSequence);
@@ -132,5 +167,4 @@ public class Flasher extends Thread implements EventListener {
 			}
 		}
 	}
-
 }
