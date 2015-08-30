@@ -7,7 +7,6 @@ import javax.swing.JComponent;
 
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Singleton;
-import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.ui.BCIUI;
 
 public class PalletMakerFactoryTest {

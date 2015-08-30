@@ -19,7 +19,7 @@ public class HardCoddedLauncher {
 
 		Singleton sample = new Singleton(new int[] { 1, 1 }, new JComponent[] {
 				new ResizableTextJLabel("+", 0.7f),
-//				new ResizableTextJLabel("+", 0.7f),
+				// new ResizableTextJLabel("+", 0.7f),
 				Factory.makeCross(0.5, 0.5),
 				Factory.makeCenteredRectangle(1, 1) }, new Color[] {// Color.red,
 				Color.red, Color.yellow, Color.white });
@@ -54,40 +54,8 @@ public class HardCoddedLauncher {
 			}
 		}
 
-//		hyb.filesMenu.add(new JMenuItem("Open settings (To Be Implemented)"));
-
-		/*
-		 * 
-		 * 
-		 * 
-		 */
-
 		for (Flasher flasher : flashers)
 			flasher.setFlash();
-
-		// try {
-		// TimeUnit.MILLISECOND.wait(5000);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-
-		// for (Flasher flasher : flashers)
-		// flasher.setFlash((byte) 10);
-
-		// try {
-		// TimeUnit.MILLISECOND.wait(5000);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-
-		// for (Flasher flasher : flashers)
-		// flasher.setFlash((int) 5000);
-
-		// try {
-		// TimeUnit.MILLISECOND.wait(5000);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
 
 		// for (Flasher flasher : flashers){
 		ArrayList<Flasher> temp = new ArrayList<Flasher>(flasherArray);
@@ -96,20 +64,6 @@ public class HardCoddedLauncher {
 		while (!temp.isEmpty())
 			;
 		flasherArray.get(0).setFlash(new ArrayList<Flasher>(flasherArray));
-
-		// }
-
-		// try {
-		// TimeUnit.MILLISECOND.wait(5000);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-
-		/*
-		 * 
-		 * 
-		 * 
-		 */
 
 	}
 
