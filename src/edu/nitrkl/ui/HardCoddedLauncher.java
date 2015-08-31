@@ -3,6 +3,7 @@ package edu.nitrkl.ui;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JComponent;
 
@@ -57,14 +58,15 @@ public class HardCoddedLauncher {
 		for (Flasher flasher : flashers)
 			flasher.setFlash();
 
-		// for (Flasher flasher : flashers){
-		ArrayList<Flasher> temp = new ArrayList<Flasher>(flasherArray);
-		flasherArray.get(0).setFlash(temp);
-		// Collections.shuffle(flasherArray);
-		while (!temp.isEmpty())
-			;
-		flasherArray.get(0).setFlash(new ArrayList<Flasher>(flasherArray));
-
+		ArrayList<Flasher> shuffledArray = new ArrayList<Flasher>(flasherArray);
+		
+		for (int i = 0; i < 5; i++) {
+			Collections.shuffle(shuffledArray);
+			ArrayList<Flasher> temp = new ArrayList<Flasher>(shuffledArray);
+			flasherArray.get(0).setFlash(temp);
+			while (!temp.isEmpty())
+				;
+		}
 	}
 
 }

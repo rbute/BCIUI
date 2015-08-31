@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,6 +28,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JPanel choices = new JPanel(new GridLayout());
 	public JMenuBar menuBar = new JMenuBar();
 	public JMenu filesMenu = new JMenu("Files");
+	public JMenuItem loadPreset = new JMenuItem("Load Preset");
 	JButton runStop = new JButton("Run ");
 
 	public BCIUI(boolean unDecorate) {
@@ -56,10 +56,14 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.result.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 		this.choices.setBackground(Color.black);
 
-		menuItem = new JMenuItem("Load Presets");
-		menuItem.setActionCommand("LOADPRESETS");
-		menuItem.addActionListener(this);
-		this.filesMenu.add(menuItem);
+		// menuItem = new JMenuItem("Load Presets");
+		// menuItem.setActionCommand("LOADPRESETS");
+		// menuItem.addActionListener(this);
+		// this.filesMenu.add(menuItem);
+
+		loadPreset.setActionCommand("LOADPRESETS");
+		loadPreset.addActionListener(this);
+		this.filesMenu.add(loadPreset);
 
 		menuItem = new JMenuItem("Exit");
 		menuItem.setActionCommand("EXIT");
@@ -101,14 +105,9 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 			break;
 		case "LOADPRESETS":
 			System.out.println("Load Presets");
-			JMenuItem loadPreset = null;
-			for (AbstractButton preset : (AbstractButton[]) filesMenu.getComponents())
-				if (preset.getText() == "Load Presets") {
-					loadPreset = (JMenuItem)(preset);
-					break;
-				}
 			loadPreset.removeAll();
-
+				
+			
 			break;
 
 		case "LOADSETTINGS":
