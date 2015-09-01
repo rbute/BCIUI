@@ -6,15 +6,20 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileFilter;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
+import edu.nitrkl.graphics.components.RunStopBtn;
 
 public class BCIUI extends JFrame implements ActionListener, Cloneable {
 
@@ -28,8 +33,8 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JPanel choices = new JPanel(new GridLayout());
 	public JMenuBar menuBar = new JMenuBar();
 	public JMenu filesMenu = new JMenu("Files");
-	public JMenuItem loadPreset = new JMenuItem("Load Preset");
-	JButton runStop = new JButton("Run ");
+	public JMenu loadPreset = new JMenu("Load Preset");
+	RunStopBtn runStop = new RunStopBtn();
 
 	public BCIUI(boolean unDecorate) {
 		JMenuItem menuItem = null;
@@ -56,65 +61,66 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.result.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 		this.choices.setBackground(Color.black);
 
-		// menuItem = new JMenuItem("Load Presets");
-		// menuItem.setActionCommand("LOADPRESETS");
-		// menuItem.addActionListener(this);
-		// this.filesMenu.add(menuItem);
-
 		loadPreset.setActionCommand("LOADPRESETS");
 		loadPreset.addActionListener(this);
 		this.filesMenu.add(loadPreset);
 
+		loadPreset.addMenuListener(new MenuListener() {
+
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				File[] settingFiles = (new File("settings"))
+						.listFiles(new FileFilter() {
+							@Override
+							public boolean accept(File arg0) {
+								return // true;
+								arg0.getName().matches(
+										"^.*[(.mat)(.xml)(.json)]$");
+							}
+						});
+				for (File aFile : settingFiles) {
+					JMenuItem item = new JMenuItem(aFile.getName());
+					// FIXME: ActionCommands
+					item.setActionCommand("LOADSETTINGS");
+					loadPreset.add(item);
+				}
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				loadPreset.removeAll();
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				loadPreset.removeAll();
+			}
+		});
 		menuItem = new JMenuItem("Exit");
 		menuItem.setActionCommand("EXIT");
 		menuItem.addActionListener(this);
 		this.filesMenu.add(menuItem);
-
 		this.menuBar.add(filesMenu);
 		this.menuBar.add(runStop);
-
-		runStop.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				switch (arg0.getActionCommand()) {
-				case "RUN":
-					((JButton) arg0.getSource()).setActionCommand("STOP");
-					((JButton) arg0.getSource()).setText("Stop");
-					break;
-				case "STOP":
-					((JButton) arg0.getSource()).setActionCommand("RUN");
-					((JButton) arg0.getSource()).setText("Run ");
-					break;
-				default:
-					((JButton) arg0.getSource()).setActionCommand("RUN");
-					this.actionPerformed(new ActionEvent((JButton) arg0
-							.getSource(), 0, ((JButton) arg0.getSource())
-							.getActionCommand()));
-					break;
-				}
-			}
-		});
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-
 		case "EXIT":
 			System.exit(0);
 			break;
-		case "LOADPRESETS":
-			System.out.println("Load Presets");
-			loadPreset.removeAll();
-				
-			
-			break;
-
 		case "LOADSETTINGS":
-
+			System.out.println("Load Settings Called");
+			System.out.println(((JMenuItem) e.getSource()).getName());
 			break;
 		default:
+			System.out.println(e.getActionCommand());
 			break;
 		}
 	}
+
 }
