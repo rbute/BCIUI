@@ -1,4 +1,4 @@
-package edu.nitrkl.backend.components;
+package edu.nitrkl.graphics.components;
 
 import java.io.File;
 import java.io.IOException;

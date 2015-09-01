@@ -7,10 +7,10 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import edu.nitrkl.graphics.components.BCIUI;
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;
-import edu.nitrkl.ui.BCIUI;
 
 public class LauncherTest {
 

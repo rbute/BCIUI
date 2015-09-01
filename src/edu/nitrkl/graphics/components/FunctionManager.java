@@ -1,10 +1,8 @@
-package edu.nitrkl.ui;
+package edu.nitrkl.graphics.components;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import edu.nitrkl.graphics.components.Flasher;
 
 public class FunctionManager implements ActionListener {
 

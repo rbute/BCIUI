@@ -1,4 +1,4 @@
-package edu.nitrkl.ui;
+package edu.nitrkl.graphics.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileFilter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -16,10 +14,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-
-import edu.nitrkl.graphics.components.RunStopBtn;
 
 public class BCIUI extends JFrame implements ActionListener, Cloneable {
 
@@ -33,7 +27,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JPanel choices = new JPanel(new GridLayout());
 	public JMenuBar menuBar = new JMenuBar();
 	public JMenu filesMenu = new JMenu("Files");
-	public JMenu loadPreset = new JMenu("Load Preset");
+	public FileSelectMenu loadPresetMenu = null;
 	RunStopBtn runStop = new RunStopBtn();
 
 	public BCIUI(boolean unDecorate) {
@@ -61,44 +55,10 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.result.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 		this.choices.setBackground(Color.black);
 
-		loadPreset.setActionCommand("LOADPRESETS");
-		loadPreset.addActionListener(this);
-		this.filesMenu.add(loadPreset);
-
-		loadPreset.addMenuListener(new MenuListener() {
-
-			@Override
-			public void menuSelected(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				File[] settingFiles = (new File("settings"))
-						.listFiles(new FileFilter() {
-							@Override
-							public boolean accept(File arg0) {
-								return // true;
-								arg0.getName().matches(
-										"^.*[(.mat)(.xml)(.json)]$");
-							}
-						});
-				for (File aFile : settingFiles) {
-					JMenuItem item = new JMenuItem(aFile.getName());
-					// FIXME: ActionCommands
-					item.setActionCommand("LOADSETTINGS");
-					loadPreset.add(item);
-				}
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				loadPreset.removeAll();
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				loadPreset.removeAll();
-			}
-		});
+		loadPresetMenu = new FileSelectMenu("Load Preset", "settings",
+				new String[] { ".xml", ".mat" }, "LOADPRESETS",
+				new ActionListener[] { this });
+		this.filesMenu.add(loadPresetMenu);
 		menuItem = new JMenuItem("Exit");
 		menuItem.setActionCommand("EXIT");
 		menuItem.addActionListener(this);
@@ -113,9 +73,12 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		case "EXIT":
 			System.exit(0);
 			break;
-		case "LOADSETTINGS":
-			System.out.println("Load Settings Called");
-			System.out.println(((JMenuItem) e.getSource()).getName());
+		case "LOADPRESETS":
+			// System.out.println(((JMenuItem) e.getSource()).getText());
+			System.out.println("Selected Settings: "
+					+ ((JMenuItem) e.getSource()).getText());
+			System.out.println("Settings Named: "
+					+ ((JMenuItem) e.getSource()).getName());
 			break;
 		default:
 			System.out.println(e.getActionCommand());

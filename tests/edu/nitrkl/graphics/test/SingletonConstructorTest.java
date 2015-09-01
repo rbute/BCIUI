@@ -2,10 +2,10 @@ package edu.nitrkl.graphics.test;
 
 import java.awt.Color;
 
+import edu.nitrkl.graphics.components.BCIUI;
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.graphics.components.Polygon2;
-import edu.nitrkl.ui.BCIUI;
 
 public class SingletonConstructorTest {
 

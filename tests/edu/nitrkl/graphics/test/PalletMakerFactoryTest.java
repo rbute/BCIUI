@@ -5,9 +5,9 @@ import java.awt.GridLayout;
 
 import javax.swing.JComponent;
 
+import edu.nitrkl.graphics.components.BCIUI;
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Singleton;
-import edu.nitrkl.ui.BCIUI;
 
 public class PalletMakerFactoryTest {
 

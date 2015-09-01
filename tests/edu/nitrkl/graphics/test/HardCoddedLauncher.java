@@ -1,4 +1,4 @@
-package edu.nitrkl.ui;
+package edu.nitrkl.graphics.test;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import javax.swing.JComponent;
 
+import edu.nitrkl.graphics.components.BCIUI;
 import edu.nitrkl.graphics.components.Factory;
 import edu.nitrkl.graphics.components.Flasher;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;

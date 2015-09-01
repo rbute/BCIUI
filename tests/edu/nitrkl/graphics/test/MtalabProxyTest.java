@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
-import edu.nitrkl.backend.components.MatlabInterface;
+import edu.nitrkl.graphics.components.MatlabInterface;
 
 public class MtalabProxyTest {
 
