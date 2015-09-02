@@ -56,7 +56,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.choices.setBackground(Color.black);
 
 		loadPresetMenu = new FileSelectMenu("Load Preset", "settings",
-				new String[] { ".xml", ".mat" }, "LOADPRESETS",
+				new String[] { ".xml", ".mat" , ".json"}, "LOADPRESETS",
 				new ActionListener[] { this });
 		this.filesMenu.add(loadPresetMenu);
 		menuItem = new JMenuItem("Exit");

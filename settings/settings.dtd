@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT settings (title,singleton+,groups+,polygon*)>
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT singleton (symbol+,(polygon+|(xml:polygon)+))>
+<!ELEMENT symbol (#PCDATA)>
+
+<!ELEMENT polygon (point+)>
+<!ELEMENT point (coordinate,coordinate)>
+<!ELEMENT coordinate (#PCDATA)>
+
+<!ELEMENT groups (groupName,group*) >
+<!ATTLIST groups type CDATA (P300,SSVEP) "SSVEP" >
+
+<!ELEMENT groupName (#PCDATA)>
+<!ELEMENT group (timePeriod,dutyCycle,singleton*)>
+<!ELEMENT timePeriod (#PCDATA)>
+<!ELEMENT dutyCycle (#PCDATA)>
