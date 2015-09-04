@@ -38,14 +38,6 @@ public class ResizableTextJLabel extends JLabel implements CloneableComponent {
 		this.setForeground(color);
 	}
 
-//	public ResizableTextJLabel(String string, int center, float relativeSize) {
-//		super(string, center);
-//		if (relativeSize > 1 || relativeSize < 0)
-//			throw new IllegalArgumentException(
-//					"Relative Size Must Be between 0 and 1");
-//		this.relativeTextSize = relativeSize;
-//	}
-
 	public Component clone(String str) {
 		ResizableTextJLabel cloned = null;
 		try {

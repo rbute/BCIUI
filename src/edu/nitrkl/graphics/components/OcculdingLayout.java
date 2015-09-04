@@ -25,13 +25,11 @@ public class OcculdingLayout implements LayoutManager {
 
 	@Override
 	public Dimension minimumLayoutSize(Container arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Dimension preferredLayoutSize(Container arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

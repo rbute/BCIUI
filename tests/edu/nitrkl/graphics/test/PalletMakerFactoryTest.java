@@ -14,7 +14,7 @@ public class PalletMakerFactoryTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		BCIUI ui = new BCIUI(false);
+		BCIUI ui = new BCIUI("",false);
 
 		ui.result.setText("Result Pane");
 

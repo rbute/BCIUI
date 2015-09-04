@@ -34,12 +34,10 @@ public class FileSelectMenu extends JMenu implements MenuListener {
 		this.itemsActionCommand = actionCommand;
 		this.listeners = listeningObjects;
 		this.addMenuListener(this);
-		// System.out.println(this.matchExpressions);
 	}
 
 	@Override
 	public void menuSelected(MenuEvent arg0) {
-		// System.out.println("Menu Selected");
 		this.removeAll();
 		File[] settingFiles = (new File(directory)).listFiles(new FileFilter() {
 			@Override
@@ -49,7 +47,6 @@ public class FileSelectMenu extends JMenu implements MenuListener {
 		});
 		for (File aFile : settingFiles) {
 			JMenuItem item = new JMenuItem(aFile.getName());
-			// FIXME: ActionCommands
 			item.setName(this.directory + "/" + aFile.getName());
 			item.setActionCommand(this.itemsActionCommand);
 			for (ActionListener aListener : listeners)

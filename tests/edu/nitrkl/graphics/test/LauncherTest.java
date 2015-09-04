@@ -16,7 +16,7 @@ public class LauncherTest {
 
 	public static void main(String[] args) {
 
-		BCIUI hyb = new BCIUI(false);
+		BCIUI hyb = new BCIUI("",false);
 		hyb.result.setText("This is the Result Pane");
 		hyb.choices.add(new ResizableTextJLabel("Choice Pane", 0.9f));
 

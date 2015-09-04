@@ -9,21 +9,16 @@ public class TextReaderTest {
 	public static void main(String[] args) throws IOException {
 		// boolean success = false;
 		File file = new File("settings");
-		System.out.println(file.getAbsolutePath());
 
-		ArrayList<String> str = new ArrayList<String>();
+		ArrayList<File> str = new ArrayList<File>();
 
-		for (File aFile : file.listFiles()) {
-			if(aFile.getName().matches("^.*(.mat)$")){
-				System.out.println(aFile.getName());
-				str.add(aFile.getName());
-			}
-		}
+		for (File aFile : file.listFiles()) 
+			if(aFile.getName().matches("^.*[(.json)(.JSON)]$"))
+				str.add(aFile);
+		System.out.println(str);
+		for(File aFile :str)
+			if(aFile.getName().matches("^[(default)(Default)(DEFAULT)]{1,1}.+[(json)(JSON)]{1,1}$"))
+				System.out.println(aFile);
 		
-//		for (File aFile: file.listFiles()){
-//			System.out.println(aFile.getName());
-//		}
-			
-		System.out.println(file.getPath());
 	}
 }

@@ -2,9 +2,16 @@ package edu.nitrkl.graphics.components;
 
 import java.awt.Component;
 import java.awt.Polygon;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+
+import matlabcontrol.MatlabConnectionException;
+import matlabcontrol.MatlabInvocationException;
+import matlabcontrol.MatlabProxy;
+import matlabcontrol.MatlabProxyFactory;
 
 public class Factory {
 
@@ -33,13 +40,6 @@ public class Factory {
 		}
 		return singletons;
 	}
-
-	// public static <InputClass>[][] transpose(InputClass[][] array){
-	// InputClass[][]
-	//
-	//
-	// return
-	// }
 
 	public static Polygon2 makeCenteredRectangle(double width, double height) {
 		Polygon2 polygon = new Polygon2();
@@ -149,6 +149,14 @@ public class Factory {
 			}
 		}
 		return temp;
+	}
+
+	public static MatlabProxy getMatlabProxy(String scriptDir)
+			throws MatlabConnectionException, MatlabInvocationException,
+			IOException {
+		MatlabProxy matProxy = (new MatlabProxyFactory()).getProxy();
+		matProxy.eval("cd " + (new File(scriptDir)).getCanonicalPath());
+		return matProxy;
 	}
 
 }

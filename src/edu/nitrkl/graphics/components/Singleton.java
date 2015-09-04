@@ -57,20 +57,6 @@ public class Singleton extends JComponent implements CloneableComponent {
 					"Number of colors must be greater than or equal to the number of components");
 		this.setLayout(new OcculdingLayout());
 
-		// ResizableTextJLabel label = null;
-		//
-		// label = new ResizableTextJLabel(str,0.8f);
-		// label.setForeground(colors[0]);
-		// label.setVisible(false);
-		// label.setOpaque(false);
-		// this.add(label);
-		//
-		// label = (ResizableTextJLabel) label.getClone();
-		// label.setForeground(colors[1]);
-		// label.setVisible(true);
-		// label.setOpaque(false);
-		// super.add(label);
-
 		for (int i = 0; i < jComponents.length; i++) {
 			JComponent component = jComponents[i];
 			component.setForeground(colors[i]);

@@ -17,7 +17,7 @@ public class HardCoddedLauncher {
 
 	public static void main(String[] args) {
 
-		BCIUI hyb = new BCIUI(true);
+		BCIUI hyb = new BCIUI("",true);
 
 		Singleton sample = new Singleton(new int[] { 1, 1 }, new JComponent[] {
 				new ResizableTextJLabel("+", 0.7f),

@@ -1,4 +1,4 @@
-package edu.nitrkl.graphics.components;
+package trashed;
 
 import java.io.File;
 import java.io.IOException;

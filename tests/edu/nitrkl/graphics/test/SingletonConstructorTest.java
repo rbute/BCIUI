@@ -10,7 +10,7 @@ import edu.nitrkl.graphics.components.Polygon2;
 public class SingletonConstructorTest {
 
 	public static void main(String[] args) {
-		BCIUI ui = new BCIUI(false);
+		BCIUI ui = new BCIUI("",false);
 
 		ui.result.setText(" ");
 

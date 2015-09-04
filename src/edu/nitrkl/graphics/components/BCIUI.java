@@ -30,10 +30,10 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public FileSelectMenu loadPresetMenu = null;
 	RunStopBtn runStop = new RunStopBtn();
 
-	public BCIUI(boolean unDecorate) {
+	public BCIUI(String title,boolean unDecorate) {
 		JMenuItem menuItem = null;
 
-		this.setTitle("P300-SSVEP GUI");
+		this.setTitle(title);
 		this.setUndecorated(unDecorate);
 		this.setIconImage((new ImageIcon(getClass().getResource("icon.jpg")))
 				.getImage());
@@ -56,7 +56,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.choices.setBackground(Color.black);
 
 		loadPresetMenu = new FileSelectMenu("Load Preset", "settings",
-				new String[] { ".xml", ".mat" , ".json"}, "LOADPRESETS",
+				new String[] { ".json" }, "LOADPRESETS",
 				new ActionListener[] { this });
 		this.filesMenu.add(loadPresetMenu);
 		menuItem = new JMenuItem("Exit");
