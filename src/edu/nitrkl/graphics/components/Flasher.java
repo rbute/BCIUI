@@ -132,9 +132,6 @@ public class Flasher extends Thread implements EventListener {
 		synchronized (this.lock) {
 			this.lock.notifyAll();			
 		}
-		// this.flashSequence.remove(this);
-		// this.setFlash();
-		// this.notify();
 	}
 
 	protected void setGroupVisibility(boolean visible) {
