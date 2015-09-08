@@ -6,6 +6,8 @@ import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+// TODO: Invoke Action Command and send to action listeners.
+
 public class Singleton extends JComponent implements CloneableComponent {
 
 	/**
@@ -14,6 +16,9 @@ public class Singleton extends JComponent implements CloneableComponent {
 	private static final long serialVersionUID = -9136644409217116184L;
 
 	int[] index = null;
+	String actionCommand = "";
+	String name = "";
+	String option = "";
 
 	protected Singleton(Singleton singleton) {
 		this.index = new int[singleton.index.length];

@@ -40,6 +40,10 @@ public class Polygon2 extends JComponent implements CloneableComponent {
 
 	double ypoints[] = null;
 
+	public Polygon2(String[] str){
+		
+	}
+	
 	public Polygon2() {
 		xpoints = new double[0];
 		ypoints = new double[0];

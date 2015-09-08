@@ -15,6 +15,10 @@ public class ResizableTextJLabel extends JLabel implements CloneableComponent {
 	private static final long serialVersionUID = 1L;
 	public float relativeTextSize = 1;
 
+	public ResizableTextJLabel(String[] args) {
+			
+	}
+
 	public ResizableTextJLabel() {
 		super();
 		super.setHorizontalAlignment(CENTER);

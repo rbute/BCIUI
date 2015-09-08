@@ -39,7 +39,7 @@ public class Flasher extends Thread implements EventListener {
 	public void terminate() {
 		infiniteLoop = false;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
 	}
 
@@ -49,9 +49,8 @@ public class Flasher extends Thread implements EventListener {
 	public void unsetFlash() {
 		this.flashOnce = false;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
-		// this.notify();
 	}
 
 	/**
@@ -60,9 +59,8 @@ public class Flasher extends Thread implements EventListener {
 	public void setFlash() {
 		this.flashOnce = true;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
-		// this.notify();
 	}
 
 	/**
@@ -73,9 +71,8 @@ public class Flasher extends Thread implements EventListener {
 	public void setFlash(boolean flash) {
 		this.flash = flash;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
-		// this.notify();
 	}
 
 	/**
@@ -87,9 +84,8 @@ public class Flasher extends Thread implements EventListener {
 	public void setFlash(byte flashCount) {
 		this.flashCount = flashCount;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
-		// this.notify();
 	}
 
 	/**
@@ -100,9 +96,8 @@ public class Flasher extends Thread implements EventListener {
 	public void setFlash(int flashTime) {
 		this.flashUntil = System.currentTimeMillis() + flashTime;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
-		// this.notify();
 	}
 
 	/**
@@ -115,9 +110,8 @@ public class Flasher extends Thread implements EventListener {
 	public void setFlash(long flashUntilTime) {
 		this.flashUntil = flashUntilTime;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
-		// this.notify();
 	}
 
 	/**
@@ -130,7 +124,7 @@ public class Flasher extends Thread implements EventListener {
 	public void setFlash(ArrayList<Flasher> flashSequence) {
 		this.flashSequence = flashSequence;
 		synchronized (this.lock) {
-			this.lock.notifyAll();			
+			this.lock.notifyAll();
 		}
 	}
 
@@ -188,7 +182,6 @@ public class Flasher extends Thread implements EventListener {
 			synchronized (this.lock) {
 				try {
 					lock.wait();
-//					System.out.println("Lock Wait Over for: " + this.getId());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

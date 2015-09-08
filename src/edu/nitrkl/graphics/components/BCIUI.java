@@ -29,6 +29,11 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JMenu filesMenu = new JMenu("Files");
 	public FileSelectMenu loadPresetMenu = null;
 	RunStopBtn runStop = new RunStopBtn();
+	
+	public BCIUI(String[] args) {
+		this("",true);
+		
+	}
 
 	public BCIUI(String title,boolean unDecorate) {
 		JMenuItem menuItem = null;
