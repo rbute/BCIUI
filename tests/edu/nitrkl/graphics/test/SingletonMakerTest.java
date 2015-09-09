@@ -10,14 +10,13 @@ import edu.nitrkl.graphics.components.Singleton;
 public class SingletonMakerTest {
 
 	public static void main(String[] args) {
-		BCIUI ui = new BCIUI("",true);
+		BCIUI ui = new BCIUI("", true);
 
 		ui.result.setText(" ");
 
 		Singleton sample = new Singleton("A", new int[] { 1, 1 },
-				new Polygon2[] { Factory
-						.makeCenteredRectangle(0.5, 0.5) }, new Color[] {
-						Color.WHITE, new Color(25, 25, 25), Color.blue });
+				new Polygon2[] { Factory.makeCenteredRectangle(0.5, 0.5) },
+				new Color[] { Color.WHITE, new Color(25, 25, 25), Color.blue });
 
 		ui.choices.add(sample);
 

@@ -1,6 +1,7 @@
 package edu.nitrkl.graphics.components;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class FlasherGroup extends ArrayList<Flasher> {
 
@@ -17,8 +18,6 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	enum GroupMemberPolicy {
 		EQUAL, ARITHMETIC, GEOMETRIC
 	};
-	
-	
 
 	GroupMemberPolicy freq = GroupMemberPolicy.ARITHMETIC;
 
@@ -27,10 +26,19 @@ public class FlasherGroup extends ArrayList<Flasher> {
 			aFlasher.timePeriod = timePeriod;
 			aFlasher.infiniteLoop = false;
 			aFlasher.flashSequence.removeAll(aFlasher.flashSequence);
+			// synchronized (aFlasher.lock) {
+			// aFlasher.lock.notifyAll();
+			// }
+		}
+		for (Flasher aFlasher : this)
 			synchronized (aFlasher.lock) {
 				aFlasher.lock.notifyAll();
 			}
-		}
+	}
+
+	public void setLock(ReentrantLock lock) {
+		for (Flasher aFlasher : this)
+			aFlasher.lock = lock;
 	}
 
 	public void unsetFlash() {

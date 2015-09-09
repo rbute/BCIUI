@@ -36,30 +36,35 @@ public class Flasher extends Thread implements EventListener {
 		this.start();
 	}
 
-	public void terminate() {
+	public synchronized void terminate() {
 		infiniteLoop = false;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+		synchronized (this) {
+			this.notify();
 		}
 	}
 
 	/**
 	 * Stops continuous flashing
 	 */
-	public void unsetFlash() {
+	public synchronized void unsetFlash() {
 		this.flashOnce = false;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+		synchronized (this) {
+			this.notify();
 		}
 	}
 
 	/**
 	 * Flashes the array just once
 	 */
-	public void setFlash() {
+	public synchronized void setFlash() {
 		this.flashOnce = true;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+
+		// synchronized (this.lock) {
+		// this.lock.notifyAll();
+		// }
+
+		synchronized (this) {
+			this.notify();
 		}
 	}
 
@@ -68,10 +73,10 @@ public class Flasher extends Thread implements EventListener {
 	 * @param flash
 	 *            Sets the group continuous flashing mode
 	 */
-	public void setFlash(boolean flash) {
+	public synchronized void setFlash(boolean flash) {
 		this.flash = flash;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+		synchronized (this) {
+			this.notify();
 		}
 	}
 
@@ -81,10 +86,10 @@ public class Flasher extends Thread implements EventListener {
 	 * 
 	 *            Flashes the whole group for a flashCount number of times
 	 */
-	public void setFlash(byte flashCount) {
+	public synchronized void setFlash(byte flashCount) {
 		this.flashCount = flashCount;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+		synchronized (this) {
+			this.notify();
 		}
 	}
 
@@ -93,10 +98,10 @@ public class Flasher extends Thread implements EventListener {
 	 * @param flashTime
 	 *            Flashes the entire group for a duration of flashTime
 	 */
-	public void setFlash(int flashTime) {
+	public synchronized void setFlash(int flashTime) {
 		this.flashUntil = System.currentTimeMillis() + flashTime;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+		synchronized (this) {
+			this.notify();
 		}
 	}
 
@@ -107,10 +112,10 @@ public class Flasher extends Thread implements EventListener {
 	 *            Flashes the whole array uptil time flashUntilTime this is
 	 *            supplied to the milliseconds accuracy as in java.lang.date()
 	 */
-	public void setFlash(long flashUntilTime) {
+	public synchronized void setFlash(long flashUntilTime) {
 		this.flashUntil = flashUntilTime;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+		synchronized (this) {
+			this.notify();
 		}
 	}
 
@@ -121,11 +126,18 @@ public class Flasher extends Thread implements EventListener {
 	 *            This Function flashes the array sequentially as supplied by
 	 *            flashSequence
 	 */
-	public void setFlash(ArrayList<Flasher> flashSequence) {
+	public synchronized void setFlash(ArrayList<Flasher> flashSequence) {
 		this.flashSequence = flashSequence;
-		synchronized (this.lock) {
-			this.lock.notifyAll();
+		synchronized (this) {
+			this.notify();
 		}
+		// synchronized (this){
+		// try {
+		// this.wait();
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 	protected void setGroupVisibility(boolean visible) {
@@ -179,9 +191,9 @@ public class Flasher extends Thread implements EventListener {
 						this.flashSequence.get(0).setFlash(this.flashSequence);
 				}
 			}
-			synchronized (this.lock) {
+			synchronized (this) {
 				try {
-					lock.wait();
+					this.wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
