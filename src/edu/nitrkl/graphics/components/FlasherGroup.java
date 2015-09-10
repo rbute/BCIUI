@@ -104,6 +104,10 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		}
 	}
 
+	public void waitUntilUnlocked() {
+
+	}
+
 	@Override
 	public boolean add(Flasher e) {
 		boolean result = false;

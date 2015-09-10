@@ -146,27 +146,12 @@ public class Flasher extends Thread implements EventListener {
 		}
 	}
 
-	protected void flash() {
+	protected void flash() throws InterruptedException {
 		setGroupVisibility(true);
-		this.lock.lock();
-
-		try {
-			Thread.sleep((long) (timePeriod * dutyCycle));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		this.lock.unlock();
+		Thread.sleep((long) (timePeriod * dutyCycle));
 		setGroupVisibility(false);
-		this.lock.lock();
+		Thread.sleep((long) (timePeriod * (1 - dutyCycle)));
 
-		try {
-			Thread.sleep((long) (timePeriod * (1 - dutyCycle)));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		this.lock.unlock();
 	}
 
 	@Override
@@ -177,20 +162,30 @@ public class Flasher extends Thread implements EventListener {
 							.currentTimeMillis() < flashUntil))
 					|| (this.flashSequence.indexOf(this) >= 0)) {
 
-				flash();
+				if (!this.lock.isLocked())
+					this.lock.lock();
+
+				try {
+					flash();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 
 				if (System.currentTimeMillis() < flashUntil)
 					;
-				else if (flashOnce)
+				else if (flashOnce) {
 					flashOnce = false;
-				else if (flashCount > 0)
+				} else if (flashCount > 0) {
 					flashCount--;
-				else if (this.flashSequence.indexOf(this) >= 0) {
+				} else if (this.flashSequence.indexOf(this) >= 0) {
 					this.flashSequence.remove(this);
 					if (!this.flashSequence.isEmpty())
 						this.flashSequence.get(0).setFlash(this.flashSequence);
 				}
 			}
+			if (this.lock.isLocked())
+				this.lock.unlock();
+
 			synchronized (this) {
 				try {
 					this.wait();

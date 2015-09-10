@@ -17,7 +17,7 @@ public class HardCoddedLauncher {
 
 	public static void main(String[] args) {
 
-		BCIUI hyb = new BCIUI("",true);
+		BCIUI hyb = new BCIUI("", true);
 
 		Singleton sample = new Singleton(new int[] { 1, 1 }, new JComponent[] {
 				new ResizableTextJLabel("+", 0.7f),
@@ -60,7 +60,7 @@ public class HardCoddedLauncher {
 			flasher.setFlash();
 
 		ArrayList<Flasher> shuffledArray = new ArrayList<Flasher>(flasherArray);
-		
+
 		for (int i = 0; i < 5; i++) {
 			Collections.shuffle(shuffledArray);
 			ArrayList<Flasher> temp = new ArrayList<Flasher>(shuffledArray);
@@ -68,5 +68,19 @@ public class HardCoddedLauncher {
 			while (!temp.isEmpty())
 				;
 		}
+	}
+
+	static void waitForFinish(ArrayList<Flasher> flashers) {
+		boolean allUnlocked = false;
+		do {
+			for (Flasher flasher : flashers) {
+				flasher.lock.lock();
+				flasher.lock.unlock();
+				if (flasher.lock.tryLock() || flashers.isEmpty()) {
+					allUnlocked = true;
+				}
+
+			}
+		} while (allUnlocked);
 	}
 }

@@ -44,6 +44,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 	long intervalDuration = 750;
 	long minSSVEPtime = 750;
+	protected boolean SSVEPrunning = false;
 
 	enum P300GroupMergePolicy {
 		ROUNDROBIN, RANDOMIZE, CONCATENATE;
@@ -53,11 +54,12 @@ public class SessionManager extends Thread implements ActionListener {
 		SIMULTENEOUS, ROUNDROBIN;
 	}
 
-	P300GroupMergePolicy merging = P300GroupMergePolicy.RANDOMIZE;
-	SSVEPGroupExitationPolicy excitation = SSVEPGroupExitationPolicy.SIMULTENEOUS;
+	P300GroupMergePolicy P300merging = P300GroupMergePolicy.RANDOMIZE;
+	SSVEPGroupExitationPolicy SSVEPexcitation = SSVEPGroupExitationPolicy.SIMULTENEOUS;
 
-	public SessionManager(BCIUI ui, String Title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
+	public SessionManager(BCIUI ui, boolean undecorate, String Title,
+			String[][] options, ActionMap[][] actionMap,
+			JComponent[] components, Color[] colors,
 			ArrayList<ArrayList<int[]>> groups, SignalType[] signalType) {
 		// TODO Auto-generated constructor stub
 
@@ -67,7 +69,7 @@ public class SessionManager extends Thread implements ActionListener {
 		for (FlasherGroup flasherGroup : groupsShuffle)
 			Collections.shuffle(flasherGroup, new Random());
 
-		switch (merging) {
+		switch (P300merging) {
 		case CONCATENATE:
 			ArrayList<Flasher> temp = new ArrayList<Flasher>();
 			for (FlasherGroup flasherGroup : groupsShuffle)
@@ -119,20 +121,88 @@ public class SessionManager extends Thread implements ActionListener {
 	}
 
 	public void terminate() {
+		this.infiniteLoop = false;
+		this.notify();
+	}
+
+	protected void ssvepExcite() {
+		switch (SSVEPexcitation) {
+		case ROUNDROBIN:
+			if (!SSVEPrunning) {
+				for (FlasherGroup aGroup : groups)
+					if (aGroup.type == SignalType.SSVEP) {
+						aGroup.setFlash(minSSVEPtime);
+						// this.lock.lock();
+						synchronized (lock) {
+							try {
+								lock.wait(minSSVEPtime);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				SSVEPrunning = true;
+			} else {
+				SSVEPrunning = false;
+			}
+			break;
+
+		case SIMULTENEOUS:
+			if (!SSVEPrunning) {
+				for (FlasherGroup aGroup : groups)
+					if (aGroup.type == SignalType.SSVEP) {
+						aGroup.setFlash();
+					}
+				SSVEPrunning = true;
+			} else {
+				for (FlasherGroup aGroup : groups)
+					if (aGroup.type == SignalType.SSVEP) {
+						aGroup.unsetFlash();
+					}
+				SSVEPrunning = false;
+			}
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	protected void p300Excite() {
 
 	}
 
 	@Override
 	public void run() {
 		while (infiniteLoop) {
-			
+			while (run) {
+
+			}
+			synchronized (this) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		switch (e.getActionCommand()) {
+		case "START":
+			run = true;
+			this.notify();
+			break;
 
+		case "STOP":
+			run = false;
+			break;
+
+		default:
+			break;
+		}
 	}
-
 }
