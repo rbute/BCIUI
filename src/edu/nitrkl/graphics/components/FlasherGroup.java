@@ -15,11 +15,11 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	protected double dutyCycle = 0.5;
 	protected int timePeriod = 100;
 
-	enum GroupMemberPolicy {
+	enum GroupFreqPolicy {
 		EQUAL, ARITHMETIC, GEOMETRIC
 	};
 
-	GroupMemberPolicy freq = GroupMemberPolicy.ARITHMETIC;
+	GroupFreqPolicy freq = GroupFreqPolicy.ARITHMETIC;
 
 	public void terminate() {
 		for (Flasher aFlasher : this) {
