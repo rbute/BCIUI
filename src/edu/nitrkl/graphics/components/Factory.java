@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import matlabcontrol.MatlabConnectionException;
@@ -16,16 +15,14 @@ import matlabcontrol.MatlabProxyFactory;
 
 public class Factory {
 
-	public static JComponent[][] makeBoard(String[][] options,
+	public static Singleton[][] makeBoard(String[][] options,
 			Singleton singleton) {
-		JComponent[][] singletons = new Singleton[options.length][options[0].length];
+		Singleton[][] singletons = new Singleton[options.length][options[0].length];
 		for (int i = 0; i < options.length; i++) {
 			for (int j = 0; j < options[0].length; j++) {
 				if (options[i][j] == null) {
 					// FIXME: Error Thrown
-					singletons[i][j] = new JComponent() {
-						private static final long serialVersionUID = 7155706997007627766L;
-					};
+					singletons[i][j] = new Singleton(new int[] { 0, 0 });
 
 				} else {
 					singletons[i][j] = singleton.getClone();
@@ -276,12 +273,24 @@ public class Factory {
 					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
 					for (int[] index : flasher) {
 						// FIXME: Error Thrown
-						System.out.println("Length of index: " + index.length);
-						System.out.println("Singletons Length: "
-								+ singletons.length);
-						System.out.println("Singletons width: "
-								+ singletons[0].length);
-						flashersList.add(singletons[index[0]][index[1]]);
+						// System.out.println("Length of index: " +
+						// index.length);
+						// System.out.println("Singletons Length: "
+						// + singletons.length);
+						// System.out.println("Singletons width: "
+						// + singletons[0].length);
+						// System.out.print("Index: ");
+						// for (int inte : index) {
+						// System.out.print(" " + inte);
+						// }
+						// System.out.println("");
+						// System.out.println(singletons[0][0]);
+						System.out.println("Index: " + (index[0] - 1) + " "
+								+ (index[1] - 1));
+						System.out.println();
+
+						flashersList
+								.add(singletons[index[0] - 1][index[1] - 1]);
 
 					}
 					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, 1);

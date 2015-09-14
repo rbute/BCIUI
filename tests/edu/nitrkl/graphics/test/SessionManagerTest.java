@@ -143,13 +143,18 @@ public class SessionManagerTest {
 		groups.add(ssvepGroup);
 
 		SessionManager manager = new SessionManager(true, "Hello World",
-				new String[][] { { "A" }, { "B" } }, null, new JComponent[] {
-						new ResizableTextJLabel("X", 0.7f),
+				new String[][] { { "A", "B", "C", "D", "E", "F" },
+						{ "G", "H", "I", "J", "K", "L", },
+						{ "M", "N", "O", "P", "Q", "R" },
+						{ "S", "T", "U", "V", "W", "X" },
+						{ "Y", "Z", "0", "1", "2", "3" },
+						{ "4", "5", "6", "7", "8", "9" } }, null,
+				new JComponent[] { new ResizableTextJLabel("X", 0.7f),
 						Factory.makeCenteredRectangle(1, 0.5),
 						Factory.makeCross(0.5, 0.5) }, new Color[] { Color.red,
 						Color.yellow, Color.white }, groups,
-				new GroupFreqPolicy[] { GroupFreqPolicy.EQUAL,
-						GroupFreqPolicy.ARITHMETIC }, new SignalType[] {
+				new GroupFreqPolicy[] { null, GroupFreqPolicy.EQUAL,
+						GroupFreqPolicy.ARITHMETIC }, new SignalType[] { null,
 						SignalType.P300, SignalType.SSVEP });
 		manager.run();
 

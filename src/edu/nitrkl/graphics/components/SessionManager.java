@@ -127,6 +127,8 @@ public class SessionManager extends Thread implements ActionListener {
 		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
 				colors);
 		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
+//		System.out.println("Singletons Dimention: " + singletons.length + " "
+//				+ singletons[0].length);
 		this.groups = Factory.makeGroups(groups, singletons, freqPolicy,
 				signalType);
 

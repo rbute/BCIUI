@@ -21,9 +21,13 @@ public class Flasher extends Thread implements EventListener {
 	public ReentrantLock lock = new ReentrantLock();
 
 	public Flasher(ArrayList<Singleton> elements, int timePeriod,
-			double d, int i) {
-		this((Singleton[]) elements.toArray(), timePeriod, d,
-				i);
+			double dutyCycle, int i) {
+		// this((Singleton[]) elements.toArray(), timePeriod, dutyCycle, i);
+		this.elements.addAll(elements);
+		this.timePeriod = timePeriod;
+		this.dutyCycle = dutyCycle;
+		this.flashingLayer = (byte) flashingLayer;
+		this.start();
 	}
 
 	public Flasher(Singleton[] elements, int timePeriod, double dutyCycle,
@@ -32,7 +36,7 @@ public class Flasher extends Thread implements EventListener {
 			this.elements.add(singleton);
 		this.timePeriod = timePeriod;
 		this.dutyCycle = dutyCycle;
-		this.flashingLayer = (byte)flashingLayer;
+		this.flashingLayer = (byte) flashingLayer;
 		this.start();
 	}
 

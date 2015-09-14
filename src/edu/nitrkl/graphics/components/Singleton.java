@@ -72,7 +72,7 @@ public class Singleton extends JComponent implements CloneableComponent {
 	}
 
 	@Override
-	public JComponent getClone() {
+	public Singleton getClone() {
 		return new Singleton(this);
 	}
 
