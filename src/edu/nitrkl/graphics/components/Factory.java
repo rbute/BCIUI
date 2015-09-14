@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Polygon;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -149,6 +150,150 @@ public class Factory {
 			}
 		}
 		return temp;
+	}
+
+	public static ArrayList<ArrayList<ArrayList<int[]>>> makeGroups(
+			String[][][][] list) {
+		ArrayList<ArrayList<ArrayList<int[]>>> applicationGroups = new ArrayList<ArrayList<ArrayList<int[]>>>();
+		for (String[][][] index : list) {
+			// if (index == null) {
+			// applicationGroups.add(null);
+			// } else {
+			ArrayList<ArrayList<int[]>> flasherGroups = new ArrayList<ArrayList<int[]>>();
+			for (String[][] is : index) {
+				ArrayList<int[]> flasher = new ArrayList<int[]>();
+				for (String[] is2 : is) {
+					int[] coords = new int[is2.length];
+					for (int i = 0; i < coords.length; i++) {
+						coords[i] = Integer.parseInt(is2[i]);
+					}
+					flasher.add(coords);
+				}
+				flasherGroups.add(flasher);
+			}
+			applicationGroups.add(flasherGroups);
+			// }
+		}
+		return applicationGroups;
+	}
+
+	public static ArrayList<ArrayList<ArrayList<int[]>>> makeGroups(
+			int[][][][] list) {
+		ArrayList<ArrayList<ArrayList<int[]>>> applicationGroups = new ArrayList<ArrayList<ArrayList<int[]>>>();
+		for (int[][][] index : list) {
+			if (index == null) {
+				applicationGroups.add(null);
+			} else {
+				ArrayList<ArrayList<int[]>> flasherGroups = new ArrayList<ArrayList<int[]>>();
+				for (int[][] is : index) {
+					ArrayList<int[]> flasher = new ArrayList<int[]>();
+					for (int[] is2 : is)
+						flasher.add(is2);
+					flasherGroups.add(flasher);
+				}
+				applicationGroups.add(flasherGroups);
+			}
+		}
+		return applicationGroups;
+	}
+
+	public static ArrayList<ArrayList<ArrayList<Singleton>>> makeGroups(
+			int[][][][] list, Singleton[][] singletons) {
+		ArrayList<ArrayList<ArrayList<Singleton>>> managersList = new ArrayList<ArrayList<ArrayList<Singleton>>>();
+
+		for (int[][][] group : list) {
+			ArrayList<ArrayList<Singleton>> groupsList = new ArrayList<ArrayList<Singleton>>();
+			if (group != null) {
+				for (int[][] flasher : group) {
+					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
+					for (int[] index : flasher)
+						flashersList.add(singletons[index[0]][index[1]]);
+					groupsList.add(flashersList);
+				}
+				managersList.add(groupsList);
+			} else {
+				managersList.add(null);
+			}
+		}
+
+		return managersList;
+	}
+
+	/**
+	 * 
+	 * @param list
+	 * @param singletons
+	 * @param signalType
+	 * @return
+	 * 
+	 *         For Complete Construction of the Hierarchy
+	 */
+
+	public static ArrayList<FlasherGroup> makeGroups(int[][][][] list,
+			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
+			SignalType[] signalType) {
+		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
+		int i = 0;
+		for (int[][][] group : list) {
+			FlasherGroup flasherGroup = new FlasherGroup();
+			if (group != null) {
+				for (int[][] flasher : group) {
+					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
+					for (int[] index : flasher)
+						flashersList.add(singletons[index[0]][index[1]]);
+					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, 1);
+					flasherGroup.add(aFlasher);
+					flasherGroup.type = signalType[i];
+					flasherGroup.freq = freqPolicy[i];
+				}
+				flasherGroupsCluster.add(flasherGroup);
+			}
+			i++;
+		}
+		return flasherGroupsCluster;
+	}
+
+	/**
+	 * 
+	 * @param list
+	 * @param singletons
+	 * @param signalType
+	 * @return
+	 * 
+	 *         For Complete Construction of the Hierarchy
+	 */
+
+	public static ArrayList<FlasherGroup> makeGroups(
+			ArrayList<ArrayList<ArrayList<int[]>>> list,
+			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
+			SignalType[] signalType) {
+		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
+		int i = 0;
+		for (ArrayList<ArrayList<int[]>> group : list) {
+			FlasherGroup flasherGroup = new FlasherGroup();
+			if (group != null) {
+				for (ArrayList<int[]> flasher : group) {
+					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
+					for (int[] index : flasher) {
+						// FIXME: Error Thrown
+						System.out.println("Length of index: " + index.length);
+						System.out.println("Singletons Length: "
+								+ singletons.length);
+						System.out.println("Singletons width: "
+								+ singletons[0].length);
+						flashersList.add(singletons[index[0]][index[1]]);
+
+					}
+					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, 1);
+					flasherGroup.add(aFlasher);
+					flasherGroup.type = signalType[i];
+					flasherGroup.freq = freqPolicy[i];
+				}
+				flasherGroupsCluster.add(flasherGroup);
+			}
+			i++;
+		}
+		return flasherGroupsCluster;
 	}
 
 	public static MatlabProxy getMatlabProxy(String scriptDir)

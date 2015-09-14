@@ -1,6 +1,7 @@
 package edu.nitrkl.graphics.components;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class FlasherGroup extends ArrayList<Flasher> {
@@ -15,9 +16,9 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	protected double dutyCycle = 0.5;
 	protected int timePeriod = 100;
 
-	enum GroupFreqPolicy {
-		EQUAL, ARITHMETIC, GEOMETRIC
-	};
+	// public enum GroupFreqPolicy {
+	// EQUAL, ARITHMETIC, GEOMETRIC
+	// };
 
 	GroupFreqPolicy freq = GroupFreqPolicy.ARITHMETIC;
 
@@ -129,6 +130,30 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		for (Flasher aFlasher : this) {
 			aFlasher.dutyCycle = dutyCycle;
 		}
+	}
+
+	@Override
+	public boolean remove(Object arg0) {
+		boolean result = super.remove(arg0);
+		if (this.isEmpty())
+			this.notifyAll();
+		return result;
+	}
+
+	@Override
+	public Flasher remove(int index) {
+		Flasher result = super.remove(index);
+		if (this.isEmpty())
+			this.notifyAll();
+		return result;
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		boolean result = super.remove(c);
+		if (this.isEmpty())
+			this.notifyAll();
+		return result;
 	}
 
 }

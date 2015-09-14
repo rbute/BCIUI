@@ -13,16 +13,14 @@ import javax.swing.JComponent;
 
 import matlabcontrol.MatlabProxy;
 
-import edu.nitrkl.graphics.components.FlasherGroup.GroupFreqPolicy;
-
 public class SessionManager extends Thread implements ActionListener {
 
-	Singleton[][] Singletons = null;
+	Singleton[][] singletons = null;
 	BCIUI ui = new BCIUI("", true);
 
 	ArrayList<FlasherGroup> groups = new ArrayList<FlasherGroup>();
 	ArrayList<FlasherGroup> groupsShuffle = new ArrayList<FlasherGroup>();
-	ArrayList<Flasher> flashersShuffle = new ArrayList<Flasher>();
+	FlasherGroup flashersShuffle = new FlasherGroup();
 
 	String startScript = "";
 	String taskScript = "";
@@ -60,10 +58,11 @@ public class SessionManager extends Thread implements ActionListener {
 
 	public SessionManager(boolean undecorate, String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<int[]>> groups, GroupFreqPolicy[] freqPolicy,
-			SignalType[] signalType) {
-		// TODO Auto-generated constructor stub
+			ArrayList<ArrayList<ArrayList<int[]>>> groups,
+			GroupFreqPolicy[] freqPolicy, SignalType[] signalType) {
 
+		// TODO Auto-generated constructor stub
+		this.ui = new BCIUI(title, undecorate);
 		buildUi(title, options, actionMap, components, colors, groups,
 				freqPolicy, signalType);
 	}
@@ -74,7 +73,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 		switch (P300merging) {
 		case CONCATENATE:
-			ArrayList<Flasher> temp = new ArrayList<Flasher>();
+			FlasherGroup temp = new FlasherGroup();
 			for (FlasherGroup flasherGroup : groupsShuffle)
 				if (flasherGroup.type == SignalType.P300)
 					temp.addAll(flasherGroup);
@@ -82,7 +81,7 @@ public class SessionManager extends Thread implements ActionListener {
 			break;
 
 		case RANDOMIZE:
-			ArrayList<Flasher> temp2 = new ArrayList<Flasher>();
+			FlasherGroup temp2 = new FlasherGroup();
 			for (FlasherGroup flasherGroup : groupsShuffle)
 				if (flasherGroup.type == SignalType.P300)
 					temp2.addAll(flasherGroup);
@@ -91,7 +90,7 @@ public class SessionManager extends Thread implements ActionListener {
 			break;
 
 		case ROUNDROBIN:
-			ArrayList<Flasher> temp3 = new ArrayList<Flasher>();
+			FlasherGroup temp3 = new FlasherGroup();
 			int iteration = 0;
 			for (FlasherGroup flasherGroup : groupsShuffle)
 				if (flasherGroup.type == SignalType.P300)
@@ -119,10 +118,18 @@ public class SessionManager extends Thread implements ActionListener {
 
 	public void buildUi(String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<int[]>> groups, GroupFreqPolicy[] freqPolicy,
-			SignalType[] signalType) {
+			ArrayList<ArrayList<ArrayList<int[]>>> groups,
+			GroupFreqPolicy[] freqPolicy, SignalType[] signalType) {
 
 		ui.setTitle(title);
+		ui.choices.removeAll();
+
+		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
+				colors);
+		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
+		this.groups = Factory.makeGroups(groups, singletons, freqPolicy,
+				signalType);
+
 		// FIXME: Write Code
 		// Singleton temp = new Singleton(new int{1,1},, colors)
 
@@ -180,11 +187,11 @@ public class SessionManager extends Thread implements ActionListener {
 		this.flashersShuffle.get(0).setFlash(flashersShuffle);
 	}
 
-	protected void printMessage(ArrayList<Object> message) {
-		String str = "";
-		for (Object object : message)
-			str += object.toString()+" ";
-	}
+	// protected void printMessage(ArrayList<Object> message) {
+	// String str = "";
+	// for (Object object : message)
+	// str += object.toString() + " ";
+	// }
 
 	@Override
 	public void run() {
@@ -203,8 +210,15 @@ public class SessionManager extends Thread implements ActionListener {
 					}
 				}
 				// FIXME: Attention Hungry Loops
-				while (!flashersShuffle.isEmpty())
-					;
+				// while (!flashersShuffle.isEmpty())
+				// ;
+				synchronized (flashersShuffle) {
+					try {
+						flashersShuffle.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			synchronized (this) {
 				try {
