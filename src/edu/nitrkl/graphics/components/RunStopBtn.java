@@ -14,23 +14,32 @@ public class RunStopBtn extends JButton implements ActionListener {
 
 	public RunStopBtn() {
 		super("Run");
+		super.setActionCommand("RUN");
+		super.addActionListener(this);
+	}
+
+	@Override
+	public void addActionListener(ActionListener l) {
+		try {
+			super.removeActionListener(l);
+		} catch (Exception e) {
+		}
+		super.addActionListener(l);
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		switch (arg0.getActionCommand()) {
 		case "RUN":
-			((JButton) arg0.getSource()).setActionCommand("STOP");
-			((JButton) arg0.getSource()).setText("Stop");
+			this.setActionCommand("STOP");
+			this.setText("Stop");
 			break;
 		case "STOP":
-			((JButton) arg0.getSource()).setActionCommand("RUN");
-			((JButton) arg0.getSource()).setText("Run ");
+			this.setActionCommand("STRT");
+			this.setText("Run ");
 			break;
 		default:
-			((JButton) arg0.getSource()).setActionCommand("RUN");
-			this.actionPerformed(new ActionEvent((JButton) arg0.getSource(), 0,
-					((JButton) arg0.getSource()).getActionCommand()));
 			break;
 		}
 	}

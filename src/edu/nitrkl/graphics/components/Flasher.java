@@ -133,7 +133,7 @@ public class Flasher extends Thread implements EventListener {
 	public synchronized void setFlash(ArrayList<Flasher> flashSequence) {
 		this.flashSequence = flashSequence;
 		synchronized (this) {
-			this.notify();
+			this.notifyAll();
 		}
 		// synchronized (this){
 		// try {

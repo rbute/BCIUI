@@ -2,6 +2,7 @@ package edu.nitrkl.graphics.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -29,13 +30,13 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JMenu filesMenu = new JMenu("Files");
 	public FileSelectMenu loadPresetMenu = null;
 	RunStopBtn runStop = new RunStopBtn();
-	
+
 	public BCIUI(String[] args) {
-		this("",true);
-		
+		this("", true);
+
 	}
 
-	public BCIUI(String title,boolean unDecorate) {
+	public BCIUI(String title, boolean unDecorate) {
 		JMenuItem menuItem = null;
 
 		this.setTitle(title);
@@ -58,6 +59,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.result.setForeground(new Color(0x002fff5f));
 		this.result.setOpaque(true);
 		this.result.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
+		this.result.setPreferredSize(new Dimension(0, 54));
 		this.choices.setBackground(Color.black);
 
 		loadPresetMenu = new FileSelectMenu("Load Preset", "settings",

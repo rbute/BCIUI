@@ -238,7 +238,7 @@ public class Factory {
 					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
 					for (int[] index : flasher)
 						flashersList.add(singletons[index[0]][index[1]]);
-					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, 1);
+					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
 					flasherGroup.add(aFlasher);
 					flasherGroup.type = signalType[i];
 					flasherGroup.freq = freqPolicy[i];
@@ -273,27 +273,11 @@ public class Factory {
 					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
 					for (int[] index : flasher) {
 						// FIXME: Error Thrown
-						// System.out.println("Length of index: " +
-						// index.length);
-						// System.out.println("Singletons Length: "
-						// + singletons.length);
-						// System.out.println("Singletons width: "
-						// + singletons[0].length);
-						// System.out.print("Index: ");
-						// for (int inte : index) {
-						// System.out.print(" " + inte);
-						// }
-						// System.out.println("");
-						// System.out.println(singletons[0][0]);
-						System.out.println("Index: " + (index[0] - 1) + " "
-								+ (index[1] - 1));
-						System.out.println();
-
 						flashersList
 								.add(singletons[index[0] - 1][index[1] - 1]);
 
 					}
-					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, 1);
+					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
 					flasherGroup.add(aFlasher);
 					flasherGroup.type = signalType[i];
 					flasherGroup.freq = freqPolicy[i];

@@ -1,6 +1,7 @@
 package edu.nitrkl.graphics.components;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -59,12 +60,16 @@ public class SessionManager extends Thread implements ActionListener {
 	public SessionManager(boolean undecorate, String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
 			ArrayList<ArrayList<ArrayList<int[]>>> groups,
-			GroupFreqPolicy[] freqPolicy, SignalType[] signalType) {
+			GroupFreqPolicy[] freqPolicy, SignalType[] signalType, int vGap,
+			int hGap) {
 
 		// TODO Auto-generated constructor stub
+		this.ui.dispose();
 		this.ui = new BCIUI(title, undecorate);
 		buildUi(title, options, actionMap, components, colors, groups,
-				freqPolicy, signalType);
+				freqPolicy, signalType, vGap, hGap);
+		this.ui.runStop.addActionListener(this);
+		this.start();
 	}
 
 	public void p300shuflle() {
@@ -119,7 +124,8 @@ public class SessionManager extends Thread implements ActionListener {
 	public void buildUi(String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
 			ArrayList<ArrayList<ArrayList<int[]>>> groups,
-			GroupFreqPolicy[] freqPolicy, SignalType[] signalType) {
+			GroupFreqPolicy[] freqPolicy, SignalType[] signalType, int vGap,
+			int hGap) {
 
 		ui.setTitle(title);
 		ui.choices.removeAll();
@@ -127,13 +133,19 @@ public class SessionManager extends Thread implements ActionListener {
 		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
 				colors);
 		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
-//		System.out.println("Singletons Dimention: " + singletons.length + " "
-//				+ singletons[0].length);
+		this.ui.choices.setLayout(new GridLayout(singletons.length,
+				singletons[0].length, hGap, vGap));
+
+		for (Singleton[] singletonRow : singletons)
+			for (Singleton aSingleton : singletonRow)
+				this.ui.choices.add(aSingleton);
+
+		this.ui.runStop.addActionListener(this);
+
 		this.groups = Factory.makeGroups(groups, singletons, freqPolicy,
 				signalType);
 
-		// FIXME: Write Code
-		// Singleton temp = new Singleton(new int{1,1},, colors)
+		// for()
 
 	}
 
@@ -149,7 +161,6 @@ public class SessionManager extends Thread implements ActionListener {
 				for (FlasherGroup aGroup : groups)
 					if (aGroup.type == SignalType.SSVEP) {
 						aGroup.setFlash(minSSVEPtime);
-						// this.lock.lock();
 						synchronized (lock) {
 							try {
 								lock.wait(minSSVEPtime);
@@ -186,7 +197,10 @@ public class SessionManager extends Thread implements ActionListener {
 	}
 
 	protected void p300Excite() {
-		this.flashersShuffle.get(0).setFlash(flashersShuffle);
+		if (!this.flashersShuffle.isEmpty())
+			this.flashersShuffle.get(0).setFlash(flashersShuffle);
+		else
+			System.out.println("this.flashersShuffle is empty");
 	}
 
 	// protected void printMessage(ArrayList<Object> message) {
@@ -203,7 +217,6 @@ public class SessionManager extends Thread implements ActionListener {
 				p300shuflle();
 				ssvepExcite();
 				p300Excite();
-				// FIXME: Attention Hungry Loops
 				synchronized (this.lock) {
 					try {
 						lock.wait(this.minSSVEPtime);
@@ -221,9 +234,11 @@ public class SessionManager extends Thread implements ActionListener {
 						e.printStackTrace();
 					}
 				}
+				System.out.println("Running");
 			}
 			synchronized (this) {
 				try {
+					// System.out.println("Waiting");
 					this.wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -235,12 +250,16 @@ public class SessionManager extends Thread implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "START":
+		case "RUN":
+			// System.out.println("Started Running.");
+			synchronized (this) {
+				this.notifyAll();
+			}
 			run = true;
-			this.notify();
 			break;
 
 		case "STOP":
+			// System.out.println("Stopped Running.");
 			run = false;
 			break;
 

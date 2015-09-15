@@ -150,12 +150,12 @@ public class SessionManagerTest {
 						{ "Y", "Z", "0", "1", "2", "3" },
 						{ "4", "5", "6", "7", "8", "9" } }, null,
 				new JComponent[] { new ResizableTextJLabel("X", 0.7f),
-						Factory.makeCenteredRectangle(1, 0.5),
-						Factory.makeCross(0.5, 0.5) }, new Color[] { Color.red,
-						Color.yellow, Color.white }, groups,
+						Factory.makeCross(0.5, 0.5),
+						Factory.makeCenteredRectangle(0.6, 1) }, new Color[] {
+						Color.red, Color.yellow, Color.white }, groups,
 				new GroupFreqPolicy[] { null, GroupFreqPolicy.EQUAL,
 						GroupFreqPolicy.ARITHMETIC }, new SignalType[] { null,
-						SignalType.P300, SignalType.SSVEP });
+						SignalType.P300, SignalType.SSVEP }, 10, 10);
 		manager.run();
 
 	}
