@@ -135,13 +135,6 @@ public class Flasher extends Thread implements EventListener {
 		synchronized (this) {
 			this.notifyAll();
 		}
-		// synchronized (this){
-		// try {
-		// this.wait();
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// }
 	}
 
 	protected void setGroupVisibility(boolean visible) {

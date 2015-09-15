@@ -74,15 +74,6 @@ public class SessionManagerTest {
 		p300group.add(indexes);
 
 		indexes = new ArrayList<int[]>();
-		indexes.add(new int[] { 6, 1 });
-		indexes.add(new int[] { 6, 2 });
-		indexes.add(new int[] { 6, 3 });
-		indexes.add(new int[] { 6, 4 });
-		indexes.add(new int[] { 6, 5 });
-		indexes.add(new int[] { 6, 6 });
-		p300group.add(indexes);
-
-		indexes = new ArrayList<int[]>();
 		indexes.add(new int[] { 1, 1 });
 		indexes.add(new int[] { 2, 1 });
 		indexes.add(new int[] { 3, 1 });

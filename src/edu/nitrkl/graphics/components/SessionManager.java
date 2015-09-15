@@ -59,14 +59,14 @@ public class SessionManager extends Thread implements ActionListener {
 
 	public SessionManager(boolean undecorate, String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groups,
+			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
 			GroupFreqPolicy[] freqPolicy, SignalType[] signalType, int vGap,
 			int hGap) {
 
 		// TODO Auto-generated constructor stub
 		this.ui.dispose();
 		this.ui = new BCIUI(title, undecorate);
-		buildUi(title, options, actionMap, components, colors, groups,
+		buildUi(title, options, actionMap, components, colors, groupsList,
 				freqPolicy, signalType, vGap, hGap);
 		this.ui.runStop.addActionListener(this);
 		this.start();
@@ -123,7 +123,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 	public void buildUi(String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groups,
+			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
 			GroupFreqPolicy[] freqPolicy, SignalType[] signalType, int vGap,
 			int hGap) {
 
@@ -142,10 +142,30 @@ public class SessionManager extends Thread implements ActionListener {
 
 		this.ui.runStop.addActionListener(this);
 
-		this.groups = Factory.makeGroups(groups, singletons, freqPolicy,
+		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
 				signalType);
 
-		// for()
+		for (FlasherGroup flasherGroup : this.groups)
+			if (flasherGroup.type == SignalType.P300)
+				groupsShuffle.add(flasherGroup);
+
+		// for (FlasherGroup group : this.groups) {
+		// if (group == null) {
+		// System.out.println("Null Group");
+		// } else {
+		// System.out.println("Group with Memebers: " + group.size()
+		// + " and signal type " + group.type);
+		// for (Flasher flasher : group) {
+		//
+		// if (group == null) {
+		// System.out.println("Null Flasher");
+		// } else {
+		// System.out.println("Flasher with Memebers: "
+		// + flasher.elements.size());
+		// }
+		// }
+		// }
+		// }
 
 	}
 
@@ -155,45 +175,45 @@ public class SessionManager extends Thread implements ActionListener {
 	}
 
 	protected void ssvepExcite() {
-		switch (SSVEPexcitation) {
-		case ROUNDROBIN:
-			if (!SSVEPrunning) {
-				for (FlasherGroup aGroup : groups)
-					if (aGroup.type == SignalType.SSVEP) {
-						aGroup.setFlash(minSSVEPtime);
-						synchronized (lock) {
-							try {
-								lock.wait(minSSVEPtime);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
+		// switch (SSVEPexcitation) {
+		// case ROUNDROBIN:
+		// if (!SSVEPrunning) {
+		for (FlasherGroup aGroup : groups)
+			if (aGroup.type == SignalType.SSVEP) {
+				aGroup.setFlash(minSSVEPtime);
+				synchronized (lock) {
+					try {
+						lock.wait(minSSVEPtime);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
-				SSVEPrunning = true;
-			} else {
-				SSVEPrunning = false;
+				}
 			}
-			break;
-
-		case SIMULTENEOUS:
-			if (!SSVEPrunning) {
-				for (FlasherGroup aGroup : groups)
-					if (aGroup.type == SignalType.SSVEP) {
-						aGroup.setFlash();
-					}
-				SSVEPrunning = true;
-			} else {
-				for (FlasherGroup aGroup : groups)
-					if (aGroup.type == SignalType.SSVEP) {
-						aGroup.unsetFlash();
-					}
-				SSVEPrunning = false;
-			}
-			break;
-
-		default:
-			break;
-		}
+		// SSVEPrunning = true;
+		// } else {
+		// SSVEPrunning = false;
+		// }
+		// break;
+		//
+		// case SIMULTENEOUS:
+		// if (!SSVEPrunning) {
+		// for (FlasherGroup aGroup : groups)
+		// if (aGroup.type == SignalType.SSVEP) {
+		// aGroup.setFlash();
+		// }
+		// SSVEPrunning = true;
+		// } else {
+		// for (FlasherGroup aGroup : groups)
+		// if (aGroup.type == SignalType.SSVEP) {
+		// aGroup.unsetFlash();
+		// }
+		// SSVEPrunning = false;
+		// }
+		// break;
+		//
+		// default:
+		// break;
+		// }
 	}
 
 	protected void p300Excite() {
@@ -214,8 +234,8 @@ public class SessionManager extends Thread implements ActionListener {
 		while (infiniteLoop) {
 			while (run) {
 
-				p300shuflle();
 				ssvepExcite();
+				p300shuflle();
 				p300Excite();
 				synchronized (this.lock) {
 					try {
@@ -225,15 +245,16 @@ public class SessionManager extends Thread implements ActionListener {
 					}
 				}
 				// FIXME: Attention Hungry Loops
-				// while (!flashersShuffle.isEmpty())
-				// ;
-				synchronized (flashersShuffle) {
-					try {
-						flashersShuffle.wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+				while (!flashersShuffle.isEmpty())
+					;
+				// System.out.println("Waiting for Flashers Shuffle to get Empty");
+				// synchronized (flashersShuffle) {
+				// try {
+				// flashersShuffle.wait();
+				// } catch (InterruptedException e) {
+				// e.printStackTrace();
+				// }
+				// }
 				System.out.println("Running");
 			}
 			synchronized (this) {
