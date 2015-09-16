@@ -24,9 +24,9 @@ public class FlasherGroup extends ArrayList<Flasher> {
 					+ c.size() + " doesn't match with size of flashFreqs "
 					+ flashFreqs.length);
 		for (float f : flashFreqs)
-			if (!(f > 3.32 || f < 40.1))
+			if (!(f > 0.9 || f < 40.1))
 				throw new IllegalArgumentException(
-						"No supplied frequency shall exceed 3.33 to 40 limit.");
+						"No supplied frequency shall exceed 1.0 to 40.0 limit.");
 		flashTimes = new int[flashFreqs.length];
 		for (int i = 0; i < flashFreqs.length; i++) {
 			flashTimes[i] = (int) (1000 / flashFreqs[i]);
@@ -50,15 +50,26 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	}
 
 	void calculateFrequencies() {
+		if (this.size() != flashTimes.length)
+			flashTimes = new int[this.size()];
+
 		switch (freq) {
 		case ARITHMETIC:
-
+			for (int i = 0; i < flashTimes.length; i++)
+				flashTimes[i] = (int) (1 / (startingFreq + (endingFreq - startingFreq)
+						* ((i + 1) / flashTimes.length)));
 			break;
 
 		case GEOMETRIC:
+			for (int i = 0; i < flashTimes.length; i++)
+				flashTimes[i] = (int) (1 / (startingFreq * java.lang.Math.pow(
+						(endingFreq / startingFreq),
+						((i + 1) / flashTimes.length))));
 			break;
 
 		case EQUAL:
+			for (int i = 0; i < flashTimes.length; i++)
+				flashTimes[i] = (int) (1 / (startingFreq));
 
 			break;
 
@@ -76,11 +87,13 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	}
 
 	@Override
-	public boolean remove(Object arg0) {
+	public synchronized boolean remove(Object arg0) {
 		boolean result = super.remove(arg0);
 		synchronized (this) {
-			if (this.isEmpty())
+			if (this.isEmpty()) {
 				this.notifyAll();
+				// System.out.println("FlasherGroup Noifies all");
+			}
 		}
 		return result;
 	}
@@ -89,8 +102,7 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	public boolean removeAll(Collection<?> c) {
 		boolean result = super.remove(c);
 		synchronized (this) {
-			if (this.isEmpty())
-				this.notifyAll();
+			this.notifyAll();
 		}
 		return result;
 	}
@@ -122,19 +134,13 @@ public class FlasherGroup extends ArrayList<Flasher> {
 
 	public void setFlash(boolean flash) {
 		for (Flasher aFlasher : this) {
-			aFlasher.flash = flash;
-			synchronized (aFlasher.lock) {
-				aFlasher.lock.notifyAll();
-			}
+			aFlasher.setFlash(flash);
 		}
 	}
 
 	public void setFlash(byte flashCount) {
 		for (Flasher aFlasher : this) {
-			aFlasher.flashCount = flashCount;
-			synchronized (aFlasher.lock) {
-				aFlasher.lock.notifyAll();
-			}
+			aFlasher.setFlash(flashCount);
 		}
 	}
 

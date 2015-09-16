@@ -9,7 +9,7 @@ public class Flasher extends Thread implements EventListener {
 	ArrayList<Singleton> elements = new ArrayList<Singleton>();
 	double dutyCycle = 0.5;
 	byte flashingLayer = 2;
-	int timePeriod = 100;
+	public int timePeriod = 100;
 
 	ArrayList<Flasher> flashSequence = new ArrayList<Flasher>();
 	boolean flashOnce = false;
@@ -21,7 +21,7 @@ public class Flasher extends Thread implements EventListener {
 	public ReentrantLock lock = new ReentrantLock();
 
 	public Flasher(ArrayList<Singleton> elements, int timePeriod,
-			double dutyCycle, int i) {
+			double dutyCycle, int flashingLayer) {
 		// this((Singleton[]) elements.toArray(), timePeriod, dutyCycle, i);
 		this.elements.addAll(elements);
 		this.timePeriod = timePeriod;
@@ -82,6 +82,7 @@ public class Flasher extends Thread implements EventListener {
 		synchronized (this) {
 			this.notify();
 		}
+		System.out.println("Notified thread: " + this.getId());
 	}
 
 	/**

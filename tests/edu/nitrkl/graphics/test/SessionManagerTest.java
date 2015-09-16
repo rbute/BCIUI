@@ -145,9 +145,10 @@ public class SessionManagerTest {
 						Factory.makeCenteredRectangle(0.6, 1) }, new Color[] {
 						Color.red, Color.yellow, Color.white }, groups,
 				new GroupFreqPolicy[] { null, GroupFreqPolicy.EQUAL,
-						GroupFreqPolicy.ARITHMETIC }, new SignalType[] { null,
+						GroupFreqPolicy.ARITHMETIC }, new float[] { 5, 3, 6 },
+				new float[] { 5, 3, 20 }, new SignalType[] { null,
 						SignalType.P300, SignalType.SSVEP }, 10, 10);
-		manager.run();
+		// manager.run();
 
 	}
 

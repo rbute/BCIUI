@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JComponent;
 
@@ -41,7 +42,7 @@ public class HardCoddedLauncher {
 
 		for (int i = 0; i < boardOptions.length; i++) {
 			flashers[i] = new Flasher((Singleton[]) boardOptions[i], 200, 0.5,
-					(byte) 1);
+					(byte) 2);
 			flasherArray.add(flashers[i]);
 		}
 
@@ -56,8 +57,8 @@ public class HardCoddedLauncher {
 			}
 		}
 
-		for (Flasher flasher : flashers)
-			flasher.setFlash();
+		// for (Flasher flasher : flashers)
+		// flasher.setFlash();
 
 		ArrayList<Flasher> shuffledArray = new ArrayList<Flasher>(flasherArray);
 
@@ -65,22 +66,26 @@ public class HardCoddedLauncher {
 			Collections.shuffle(shuffledArray);
 			ArrayList<Flasher> temp = new ArrayList<Flasher>(shuffledArray);
 			flasherArray.get(0).setFlash(temp);
-			while (!temp.isEmpty())
-				;
 		}
+
+		try {
+			TimeUnit.MILLISECONDS.sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		int i = 0;
+
+		for (Flasher flasher : shuffledArray) {
+			flasher.timePeriod = 50 + i * 20;
+			flasher.setFlash(true);
+		}
+
+		// for (int i = 0; i < 5; i++) {
+		// Collections.shuffle(shuffledArray);
+		// ArrayList<Flasher> temp = new ArrayList<Flasher>(shuffledArray);
+		// flasherArray.get(0).setFlash(true);
+		// }
 	}
 
-	static void waitForFinish(ArrayList<Flasher> flashers) {
-		boolean allUnlocked = false;
-		do {
-			for (Flasher flasher : flashers) {
-				flasher.lock.lock();
-				flasher.lock.unlock();
-				if (flasher.lock.tryLock() || flashers.isEmpty()) {
-					allUnlocked = true;
-				}
-
-			}
-		} while (allUnlocked);
-	}
 }

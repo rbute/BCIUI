@@ -16,60 +16,133 @@ import matlabcontrol.MatlabProxy;
 
 public class SessionManager extends Thread implements ActionListener {
 
-	Singleton[][] singletons = null;
-	BCIUI ui = new BCIUI("", true);
+	enum P300GroupMergePolicy {
+		CONCATENATE, RANDOMIZE, ROUNDROBIN;
+	}
 
-	ArrayList<FlasherGroup> groups = new ArrayList<FlasherGroup>();
-	ArrayList<FlasherGroup> groupsShuffle = new ArrayList<FlasherGroup>();
-	FlasherGroup flashersShuffle = new FlasherGroup();
-
-	String startScript = "";
-	String taskScript = "";
 	String endScript = "";
 
-	ArrayList<Object> messageSendFormat = new ArrayList<Object>();
-	ArrayList<Class<?>> messageReceiveFormat = new ArrayList<Class<?>>();
+	FlasherGroup flashersShuffle = new FlasherGroup();
+	ArrayList<FlasherGroup> groups = new ArrayList<FlasherGroup>();
+	ArrayList<FlasherGroup> groupsFlash = new ArrayList<FlasherGroup>();
+	ArrayList<FlasherGroup> groupsShuffle = new ArrayList<FlasherGroup>();
 
-	ArrayList<Object> logSendFormat = new ArrayList<Object>();
+	boolean infiniteLoop = true;
+	long intervalDuration = 1500;
+	ReentrantLock lock = new ReentrantLock(true);
+
 	ArrayList<Class<?>> logReceiveFormat = new ArrayList<Class<?>>();
+	ArrayList<Object> logSendFormat = new ArrayList<Object>();
+
+	MatlabProxy matlabSession = null;
+	ArrayList<Class<?>> messageReceiveFormat = new ArrayList<Class<?>>();
 
 	// boolean logging = true;
 	// BufferedWriter loggingStream = null;
 
-	MatlabProxy matlabSession = null;
+	ArrayList<Object> messageSendFormat = new ArrayList<Object>();
 
-	boolean run = false;
-	boolean infiniteLoop = true;
-	ReentrantLock lock = new ReentrantLock(true);
-
-	long intervalDuration = 750;
 	long minSSVEPtime = 750;
+	P300GroupMergePolicy P300merging = P300GroupMergePolicy.RANDOMIZE;
+	boolean run = false;
+
+	long sessionStartTime = 0;
+	Singleton[][] singletons = null;
 	protected boolean SSVEPrunning = false;
 
-	enum P300GroupMergePolicy {
-		ROUNDROBIN, RANDOMIZE, CONCATENATE;
-	};
+	String startScript = "";
 
-	enum SSVEPGroupExitationPolicy {
-		SIMULTENEOUS, ROUNDROBIN;
-	}
+	String taskScript = "";;
 
-	P300GroupMergePolicy P300merging = P300GroupMergePolicy.RANDOMIZE;
-	SSVEPGroupExitationPolicy SSVEPexcitation = SSVEPGroupExitationPolicy.SIMULTENEOUS;
+	BCIUI ui = new BCIUI("", true);
 
 	public SessionManager(boolean undecorate, String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
 			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			GroupFreqPolicy[] freqPolicy, SignalType[] signalType, int vGap,
+			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
+			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
 			int hGap) {
 
 		// TODO Auto-generated constructor stub
 		this.ui.dispose();
 		this.ui = new BCIUI(title, undecorate);
 		buildUi(title, options, actionMap, components, colors, groupsList,
-				freqPolicy, signalType, vGap, hGap);
+				freqPolicy, startingFrequencies, stoppingFrequencies,
+				signalType, vGap, hGap);
 		this.ui.runStop.addActionListener(this);
 		this.start();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		switch (e.getActionCommand()) {
+		case "RUN":
+			synchronized (this) {
+				this.notifyAll();
+			}
+			run = true;
+			break;
+
+		case "STOP":
+			run = false;
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	public void buildUi(String title, String[][] options,
+			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
+			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
+			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
+			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
+			int hGap) {
+
+		ui.setTitle(title);
+		ui.choices.removeAll();
+
+		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
+				colors);
+		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
+		this.ui.choices.setLayout(new GridLayout(singletons.length,
+				singletons[0].length, hGap, vGap));
+
+		for (Singleton[] singletonRow : singletons)
+			for (Singleton aSingleton : singletonRow)
+				this.ui.choices.add(aSingleton);
+
+		this.ui.runStop.addActionListener(this);
+
+		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
+				signalType);
+
+		for (FlasherGroup flasherGroup : this.groups)
+			if (flasherGroup.type == SignalType.P300)
+				groupsShuffle.add(flasherGroup);
+
+		for (FlasherGroup flasherGroup : this.groups)
+			if (flasherGroup.type == SignalType.SSVEP) {
+				groupsFlash.add(flasherGroup);
+				// System.out.println("SSVEP Group found. Members: "
+				// + flasherGroup.size());
+				flasherGroup.calculateFrequencies();
+			}
+
+	}
+
+	public ArrayList<FlasherGroup> getSSVEPGroups() {
+		ArrayList<FlasherGroup> ssvepGroups = new ArrayList<FlasherGroup>();
+		for (FlasherGroup flasherGroup : groups)
+			ssvepGroups.add(flasherGroup);
+		return ssvepGroups;
+	}
+
+	protected void p300Excite() {
+		if (!this.flashersShuffle.isEmpty())
+			this.flashersShuffle.get(0).setFlash(flashersShuffle);
+		else
+			System.out.println("this.flashersShuffle is empty");
 	}
 
 	public void p300shuflle() {
@@ -114,126 +187,12 @@ public class SessionManager extends Thread implements ActionListener {
 		}
 	}
 
-	public ArrayList<FlasherGroup> getSSVEPGroups() {
-		ArrayList<FlasherGroup> ssvepGroups = new ArrayList<FlasherGroup>();
-		for (FlasherGroup flasherGroup : groups)
-			ssvepGroups.add(flasherGroup);
-		return ssvepGroups;
-	}
-
-	public void buildUi(String title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			GroupFreqPolicy[] freqPolicy, SignalType[] signalType, int vGap,
-			int hGap) {
-
-		ui.setTitle(title);
-		ui.choices.removeAll();
-
-		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
-				colors);
-		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
-		this.ui.choices.setLayout(new GridLayout(singletons.length,
-				singletons[0].length, hGap, vGap));
-
-		for (Singleton[] singletonRow : singletons)
-			for (Singleton aSingleton : singletonRow)
-				this.ui.choices.add(aSingleton);
-
-		this.ui.runStop.addActionListener(this);
-
-		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
-				signalType);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.P300)
-				groupsShuffle.add(flasherGroup);
-
-		// for (FlasherGroup group : this.groups) {
-		// if (group == null) {
-		// System.out.println("Null Group");
-		// } else {
-		// System.out.println("Group with Memebers: " + group.size()
-		// + " and signal type " + group.type);
-		// for (Flasher flasher : group) {
-		//
-		// if (group == null) {
-		// System.out.println("Null Flasher");
-		// } else {
-		// System.out.println("Flasher with Memebers: "
-		// + flasher.elements.size());
-		// }
-		// }
-		// }
-		// }
-
-	}
-
-	public void terminate() {
-		this.infiniteLoop = false;
-		this.notify();
-	}
-
-	protected void ssvepExcite() {
-		// switch (SSVEPexcitation) {
-		// case ROUNDROBIN:
-		// if (!SSVEPrunning) {
-		for (FlasherGroup aGroup : groups)
-			if (aGroup.type == SignalType.SSVEP) {
-				aGroup.setFlash(minSSVEPtime);
-				synchronized (lock) {
-					try {
-						lock.wait(minSSVEPtime);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		// SSVEPrunning = true;
-		// } else {
-		// SSVEPrunning = false;
-		// }
-		// break;
-		//
-		// case SIMULTENEOUS:
-		// if (!SSVEPrunning) {
-		// for (FlasherGroup aGroup : groups)
-		// if (aGroup.type == SignalType.SSVEP) {
-		// aGroup.setFlash();
-		// }
-		// SSVEPrunning = true;
-		// } else {
-		// for (FlasherGroup aGroup : groups)
-		// if (aGroup.type == SignalType.SSVEP) {
-		// aGroup.unsetFlash();
-		// }
-		// SSVEPrunning = false;
-		// }
-		// break;
-		//
-		// default:
-		// break;
-		// }
-	}
-
-	protected void p300Excite() {
-		if (!this.flashersShuffle.isEmpty())
-			this.flashersShuffle.get(0).setFlash(flashersShuffle);
-		else
-			System.out.println("this.flashersShuffle is empty");
-	}
-
-	// protected void printMessage(ArrayList<Object> message) {
-	// String str = "";
-	// for (Object object : message)
-	// str += object.toString() + " ";
-	// }
-
 	@Override
 	public void run() {
 		while (infiniteLoop) {
 			while (run) {
 
+				sessionStartTime = System.currentTimeMillis();
 				ssvepExcite();
 				p300shuflle();
 				p300Excite();
@@ -255,11 +214,17 @@ public class SessionManager extends Thread implements ActionListener {
 				// e.printStackTrace();
 				// }
 				// }
-				System.out.println("Running");
+				ssvepDeexcite();
+				synchronized (this) {
+					try {
+						this.wait(intervalDuration);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			synchronized (this) {
 				try {
-					// System.out.println("Waiting");
 					this.wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -268,24 +233,20 @@ public class SessionManager extends Thread implements ActionListener {
 		}
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		switch (e.getActionCommand()) {
-		case "RUN":
-			// System.out.println("Started Running.");
-			synchronized (this) {
-				this.notifyAll();
-			}
-			run = true;
-			break;
+	protected void ssvepDeexcite() {
+		// System.out.println("SSVEPs deexited");
+		for (FlasherGroup aGroup : groupsFlash)
+			aGroup.setFlash(false);
+	}
 
-		case "STOP":
-			// System.out.println("Stopped Running.");
-			run = false;
-			break;
+	protected void ssvepExcite() {
+		// System.out.println("SSVEPs exited");
+		for (FlasherGroup aGroup : groupsFlash)
+			aGroup.setFlash(true);
+	}
 
-		default:
-			break;
-		}
+	public void terminate() {
+		this.infiniteLoop = false;
+		this.notify();
 	}
 }

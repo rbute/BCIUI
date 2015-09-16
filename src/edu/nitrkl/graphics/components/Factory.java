@@ -15,6 +15,14 @@ import matlabcontrol.MatlabProxyFactory;
 
 public class Factory {
 
+	public static MatlabProxy getMatlabProxy(String scriptDir)
+			throws MatlabConnectionException, MatlabInvocationException,
+			IOException {
+		MatlabProxy matProxy = (new MatlabProxyFactory()).getProxy();
+		matProxy.eval("cd " + (new File(scriptDir)).getCanonicalPath());
+		return matProxy;
+	}
+
 	public static Singleton[][] makeBoard(String[][] options,
 			Singleton singleton) {
 		Singleton[][] singletons = new Singleton[options.length][options[0].length];
@@ -83,95 +91,43 @@ public class Factory {
 		return new Polygon2(p);
 	}
 
-	public static JLabel[] makeJLabels(String[] inputStrings) {
-		JLabel[] temp = new JLabel[inputStrings.length];
-		for (int i = 0; i < inputStrings.length; i++) {
-			temp[i] = new JLabel();
-			temp[i].setText(inputStrings[i]);
-			temp[i].setOpaque(true);
-		}
-		return temp;
-	}
+	/**
+	 * 
+	 * @param list
+	 * @param singletons
+	 * @param signalType
+	 * @return
+	 * 
+	 *         For Complete Construction of the Hierarchy
+	 */
 
-	public static JLabel[][] makeJLabels(String[][] inputStrings) {
-		JLabel[][] temp = new JLabel[inputStrings[0].length][inputStrings.length];
-		for (int i = 0; i < inputStrings.length; i++) {
-			for (int j = 0; j < inputStrings[0].length; j++) {
-				temp[i][j] = new JLabel();
-				temp[i][j].setText(inputStrings[i][j]);
-				temp[i][j].setOpaque(true);
-			}
-		}
-		return temp;
-	}
+	public static ArrayList<FlasherGroup> makeGroups(
+			ArrayList<ArrayList<ArrayList<int[]>>> list,
+			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
+			SignalType[] signalType) {
+		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
+		int i = 0;
+		for (ArrayList<ArrayList<int[]>> group : list) {
+			FlasherGroup flasherGroup = new FlasherGroup();
+			if (group != null) {
+				for (ArrayList<int[]> flasher : group) {
+					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
+					for (int[] index : flasher) {
+						// FIXME: Error Thrown
+						flashersList
+								.add(singletons[index[0] - 1][index[1] - 1]);
 
-	public static ResizableTextJLabel[] makeResizingTextJLabels(
-			String[] inputStrings) {
-		ResizableTextJLabel[] temp = new ResizableTextJLabel[inputStrings.length];
-		for (int i = 0; i < inputStrings.length; i++) {
-			temp[i] = new ResizableTextJLabel();
-			temp[i].setText(inputStrings[i]);
-			temp[i].setOpaque(true);
-		}
-		return temp;
-	}
-
-	public static ResizableTextJLabel[][] makeResizingTextJLabels(
-			String[][] inputStrings) {
-		ResizableTextJLabel[][] temp = new ResizableTextJLabel[inputStrings[0].length][inputStrings.length];
-		for (int i = 0; i < inputStrings.length; i++) {
-			for (int j = 0; j < inputStrings[0].length; j++) {
-				temp[i][j] = new ResizableTextJLabel();
-				temp[i][j].setText(inputStrings[i][j]);
-				temp[i][j].setOpaque(true);
-			}
-		}
-		return temp;
-	}
-
-	public static SquareJLabel[] makeSquareJLabels(String[] inputStrings) {
-		SquareJLabel[] temp = new SquareJLabel[inputStrings.length];
-		for (int i = 0; i < inputStrings.length; i++) {
-			temp[i].setText(inputStrings[i]);
-		}
-		return temp;
-	}
-
-	public static SquareJLabel[][] makeSquareJLabels(String[][] inputStrings) {
-		SquareJLabel[][] temp = new SquareJLabel[inputStrings[0].length][inputStrings.length];
-		for (int i = 0; i < inputStrings.length; i++) {
-			for (int j = 0; j < inputStrings[0].length; j++) {
-				temp[i][j] = new SquareJLabel();
-				temp[i][j].setText(inputStrings[i][j]);
-				temp[i][j].setOpaque(true);
-			}
-		}
-		return temp;
-	}
-
-	public static ArrayList<ArrayList<ArrayList<int[]>>> makeGroups(
-			String[][][][] list) {
-		ArrayList<ArrayList<ArrayList<int[]>>> applicationGroups = new ArrayList<ArrayList<ArrayList<int[]>>>();
-		for (String[][][] index : list) {
-			// if (index == null) {
-			// applicationGroups.add(null);
-			// } else {
-			ArrayList<ArrayList<int[]>> flasherGroups = new ArrayList<ArrayList<int[]>>();
-			for (String[][] is : index) {
-				ArrayList<int[]> flasher = new ArrayList<int[]>();
-				for (String[] is2 : is) {
-					int[] coords = new int[is2.length];
-					for (int i = 0; i < coords.length; i++) {
-						coords[i] = Integer.parseInt(is2[i]);
 					}
-					flasher.add(coords);
+					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
+					flasherGroup.add(aFlasher);
+					flasherGroup.type = signalType[i];
+					flasherGroup.freq = freqPolicy[i];
 				}
-				flasherGroups.add(flasher);
+				flasherGroupsCluster.add(flasherGroup);
 			}
-			applicationGroups.add(flasherGroups);
-			// }
+			i++;
 		}
-		return applicationGroups;
+		return flasherGroupsCluster;
 	}
 
 	public static ArrayList<ArrayList<ArrayList<int[]>>> makeGroups(
@@ -250,51 +206,95 @@ public class Factory {
 		return flasherGroupsCluster;
 	}
 
-	/**
-	 * 
-	 * @param list
-	 * @param singletons
-	 * @param signalType
-	 * @return
-	 * 
-	 *         For Complete Construction of the Hierarchy
-	 */
-
-	public static ArrayList<FlasherGroup> makeGroups(
-			ArrayList<ArrayList<ArrayList<int[]>>> list,
-			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
-			SignalType[] signalType) {
-		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
-		int i = 0;
-		for (ArrayList<ArrayList<int[]>> group : list) {
-			FlasherGroup flasherGroup = new FlasherGroup();
-			if (group != null) {
-				for (ArrayList<int[]> flasher : group) {
-					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
-					for (int[] index : flasher) {
-						// FIXME: Error Thrown
-						flashersList
-								.add(singletons[index[0] - 1][index[1] - 1]);
-
+	public static ArrayList<ArrayList<ArrayList<int[]>>> makeGroups(
+			String[][][][] list) {
+		ArrayList<ArrayList<ArrayList<int[]>>> applicationGroups = new ArrayList<ArrayList<ArrayList<int[]>>>();
+		for (String[][][] index : list) {
+			// if (index == null) {
+			// applicationGroups.add(null);
+			// } else {
+			ArrayList<ArrayList<int[]>> flasherGroups = new ArrayList<ArrayList<int[]>>();
+			for (String[][] is : index) {
+				ArrayList<int[]> flasher = new ArrayList<int[]>();
+				for (String[] is2 : is) {
+					int[] coords = new int[is2.length];
+					for (int i = 0; i < coords.length; i++) {
+						coords[i] = Integer.parseInt(is2[i]);
 					}
-					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
-					flasherGroup.add(aFlasher);
-					flasherGroup.type = signalType[i];
-					flasherGroup.freq = freqPolicy[i];
+					flasher.add(coords);
 				}
-				flasherGroupsCluster.add(flasherGroup);
+				flasherGroups.add(flasher);
 			}
-			i++;
+			applicationGroups.add(flasherGroups);
+			// }
 		}
-		return flasherGroupsCluster;
+		return applicationGroups;
 	}
 
-	public static MatlabProxy getMatlabProxy(String scriptDir)
-			throws MatlabConnectionException, MatlabInvocationException,
-			IOException {
-		MatlabProxy matProxy = (new MatlabProxyFactory()).getProxy();
-		matProxy.eval("cd " + (new File(scriptDir)).getCanonicalPath());
-		return matProxy;
+	public static JLabel[] makeJLabels(String[] inputStrings) {
+		JLabel[] temp = new JLabel[inputStrings.length];
+		for (int i = 0; i < inputStrings.length; i++) {
+			temp[i] = new JLabel();
+			temp[i].setText(inputStrings[i]);
+			temp[i].setOpaque(true);
+		}
+		return temp;
+	}
+
+	public static JLabel[][] makeJLabels(String[][] inputStrings) {
+		JLabel[][] temp = new JLabel[inputStrings[0].length][inputStrings.length];
+		for (int i = 0; i < inputStrings.length; i++) {
+			for (int j = 0; j < inputStrings[0].length; j++) {
+				temp[i][j] = new JLabel();
+				temp[i][j].setText(inputStrings[i][j]);
+				temp[i][j].setOpaque(true);
+			}
+		}
+		return temp;
+	}
+
+	public static ResizableTextJLabel[] makeResizingTextJLabels(
+			String[] inputStrings) {
+		ResizableTextJLabel[] temp = new ResizableTextJLabel[inputStrings.length];
+		for (int i = 0; i < inputStrings.length; i++) {
+			temp[i] = new ResizableTextJLabel();
+			temp[i].setText(inputStrings[i]);
+			temp[i].setOpaque(true);
+		}
+		return temp;
+	}
+
+	public static ResizableTextJLabel[][] makeResizingTextJLabels(
+			String[][] inputStrings) {
+		ResizableTextJLabel[][] temp = new ResizableTextJLabel[inputStrings[0].length][inputStrings.length];
+		for (int i = 0; i < inputStrings.length; i++) {
+			for (int j = 0; j < inputStrings[0].length; j++) {
+				temp[i][j] = new ResizableTextJLabel();
+				temp[i][j].setText(inputStrings[i][j]);
+				temp[i][j].setOpaque(true);
+			}
+		}
+		return temp;
+	}
+
+	public static SquareJLabel[] makeSquareJLabels(String[] inputStrings) {
+		SquareJLabel[] temp = new SquareJLabel[inputStrings.length];
+		for (int i = 0; i < inputStrings.length; i++) {
+			temp[i].setText(inputStrings[i]);
+		}
+		return temp;
+	}
+
+	public static SquareJLabel[][] makeSquareJLabels(String[][] inputStrings) {
+		SquareJLabel[][] temp = new SquareJLabel[inputStrings[0].length][inputStrings.length];
+		for (int i = 0; i < inputStrings.length; i++) {
+			for (int j = 0; j < inputStrings[0].length; j++) {
+				temp[i][j] = new SquareJLabel();
+				temp[i][j].setText(inputStrings[i][j]);
+				temp[i][j].setOpaque(true);
+			}
+		}
+		return temp;
 	}
 
 }
