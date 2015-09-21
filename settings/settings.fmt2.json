@@ -1,0 +1,106 @@
+{
+	"calss": "BCIUI",
+	"title": "",
+	"fullscreen": true,
+	"singleton": 
+	{
+		"class": "Singleton",
+		"components": 
+		[
+			{
+				"class": "resizableTextJLabel",
+				"text": "X",
+				"relativeSize": 0.8,
+				"Color": "Color.red"
+			},
+
+			{
+				"class": "Polygon2",
+				"points": 
+				[
+					[
+						0.0,
+						0.25,
+						0.25,
+						0.75,
+						0.75,
+						1.0,
+						1.0,
+						0.75,
+						0.75,
+						0.25,
+						0.25,
+						0.0
+					],
+
+					[
+						0.25,
+						0.25,
+						0.0,
+						0.0,
+						0.25,
+						0.25,
+						0.75,
+						0.75,
+						1.0,
+						1.0,
+						0.75,
+						0.75
+					]
+				]
+			},
+
+			{
+				"class": "Polygon2",
+				"points": 
+				[
+					[
+						0.0,
+						1.0,
+						1.0,
+						0.0
+					],
+
+					[
+						0.0,
+						0.0,
+						1.0,
+						1.0
+					]
+				]
+			}
+		]
+	},
+
+	"groups": 
+	[
+		{
+			"class": "FlasherGroup",
+			"type": "P300",
+			"timePeriod": 100
+		},
+
+		{
+			
+		},
+
+		{
+			
+		}
+	],
+
+	"actions": 
+	{
+		
+	},
+
+	"options": 
+	[
+		
+	],
+
+	"logging": 
+	[
+		
+	]
+}

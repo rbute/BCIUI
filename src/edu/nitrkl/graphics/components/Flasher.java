@@ -82,7 +82,7 @@ public class Flasher extends Thread implements EventListener {
 		synchronized (this) {
 			this.notify();
 		}
-		System.out.println("Notified thread: " + this.getId());
+		// System.out.println("Notified thread: " + this.getId());
 	}
 
 	/**
