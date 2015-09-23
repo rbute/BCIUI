@@ -1,0 +1,153 @@
+{
+	"uioptions": 
+	{
+		"title": "BCI UI",
+		"undecorate": true
+	},
+
+	"singletonmodel": 
+	{
+		"class": "Singleton",
+		"position": 
+		[
+			1,
+			1
+		],
+
+		"elements": 
+		[
+			{
+				"class": "ResizableTextJLabel",
+				"Color": 
+				{
+					"class": "Color"
+				},
+
+				"text": "",
+				"position": 
+				[
+					1,
+					1
+				]
+			},
+
+			{
+				"class": "Polygon2",
+				"points": 
+				[
+					[
+						0.25,
+						0.25
+					],
+
+					[
+						0.25,
+						0.0
+					],
+
+					[
+						0.75,
+						0.0
+					],
+
+					[
+						0.75,
+						0.25
+					],
+
+					[
+						1.0,
+						0.25
+					],
+
+					[
+						1.0,
+						0.75
+					],
+
+					[
+						0.75,
+						0.75
+					],
+
+					[
+						0.75,
+						1.0
+					],
+
+					[
+						0.25,
+						1.0
+					],
+
+					[
+						0.25,
+						0.75
+					],
+
+					[
+						0.0,
+						0.75
+					],
+
+					[
+						0.0,
+						0.25
+					]
+				]
+			},
+
+			{
+				"class": "Polygon2",
+				"points": 
+				[
+					[
+						0,
+						0
+					],
+
+					[
+						1,
+						0
+					],
+
+					[
+						1,
+						1
+					],
+
+					[
+						0,
+						1
+					]
+				]
+			}
+		]
+	},
+
+	"groupmodel": 
+	{
+		"": "",
+		"gp1": 
+		{
+			"type": "P300",
+			"timeperiod": 150,
+			"dutycycle": 0.50
+		}
+	},
+
+	"actionmap": 
+	{
+		
+	},
+
+	"keys": 
+	{
+		
+	},
+
+	"positioning": 
+	[
+		
+	]
+}

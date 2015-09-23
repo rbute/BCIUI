@@ -20,13 +20,13 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	public FlasherGroup(Collection<Flasher> c, float[] flashFreqs) {
 		super(c);
 		if (c.size() != flashFreqs.length)
-			throw new IllegalArgumentException(Messages.getString("FlasherGroup.0") //$NON-NLS-1$
-					+ c.size() + Messages.getString("FlasherGroup.1") //$NON-NLS-1$
+			throw new IllegalArgumentException("Input Collections size "
+					+ c.size() + " doesn't match with size of flashFreqs "
 					+ flashFreqs.length);
 		for (float f : flashFreqs)
 			if (!(f > 0.9 || f < 40.1))
 				throw new IllegalArgumentException(
-						Messages.getString("FlasherGroup.2")); //$NON-NLS-1$
+						"No supplied frequency shall exceed 1.0 to 40.0 limit.");
 		flashTimes = new int[flashFreqs.length];
 		for (int i = 0; i < flashFreqs.length; i++) {
 			flashTimes[i] = (int) (1000 / flashFreqs[i]);

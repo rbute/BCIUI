@@ -31,10 +31,10 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public FileSelectMenu loadPresetMenu = null;
 	RunStopBtn runStop = new RunStopBtn();
 
-	public BCIUI(String[] args) {
-		this("", true);
-
-	}
+//	public BCIUI(String[] args) {
+//		this("", true);
+//
+//	}
 
 	public BCIUI(String title, boolean unDecorate) {
 		JMenuItem menuItem = null;

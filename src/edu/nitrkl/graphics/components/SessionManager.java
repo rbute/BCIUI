@@ -56,6 +56,8 @@ public class SessionManager extends Thread implements ActionListener {
 
 	BCIUI ui = new BCIUI("", true);
 
+	// ReentrantLock lock = new ReentrantLock();
+
 	public SessionManager(boolean undecorate, String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
 			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
@@ -79,6 +81,9 @@ public class SessionManager extends Thread implements ActionListener {
 		case "RUN":
 			synchronized (this) {
 				this.notifyAll();
+				synchronized (this.lock) {
+					this.lock.notifyAll();
+				}
 			}
 			run = true;
 			break;
@@ -90,6 +95,12 @@ public class SessionManager extends Thread implements ActionListener {
 		default:
 			break;
 		}
+	}
+
+	public void buildUi(BCIUI ui, Singleton sample,
+			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
+			ActionMap actionMap, char[][] keys) {
+//		char opt = 1;
 	}
 
 	public void buildUi(String title, String[][] options,
