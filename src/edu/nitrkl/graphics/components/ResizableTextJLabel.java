@@ -7,6 +7,9 @@ import java.awt.Font;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ResizableTextJLabel extends JLabel implements CloneableComponent {
 
 	/**
@@ -14,10 +17,6 @@ public class ResizableTextJLabel extends JLabel implements CloneableComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	public float relativeTextSize = 1;
-
-	public ResizableTextJLabel(String[] args) {
-			
-	}
 
 	public ResizableTextJLabel() {
 		super();
@@ -40,6 +39,17 @@ public class ResizableTextJLabel extends JLabel implements CloneableComponent {
 	public ResizableTextJLabel(String str, float relativeSize, Color color) {
 		this(str, relativeSize);
 		this.setForeground(color);
+	}
+
+	public ResizableTextJLabel(JSONObject resizableTextJLabel) {
+		super();
+		super.setText(resizableTextJLabel.get("text").toString());
+		this.setRelativeTextSize(new Float(resizableTextJLabel.get(
+				"relativesize").toString()));
+
+		JSONArray color = resizableTextJLabel.getJSONArray("color");
+		this.setForeground(new Color(new Integer(color.getInt(0)), new Integer(
+				color.getInt(1)), new Integer(color.getInt(2))));
 	}
 
 	public Component clone(String str) {

@@ -16,6 +16,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import org.json.JSONObject;
+
 public class BCIUI extends JFrame implements ActionListener, Cloneable {
 
 	/**
@@ -31,10 +33,14 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public FileSelectMenu loadPresetMenu = null;
 	RunStopBtn runStop = new RunStopBtn();
 
-//	public BCIUI(String[] args) {
-//		this("", true);
-//
-//	}
+	// public BCIUI(String[] args) {
+	// this("", true);
+	//
+	// }
+
+	public BCIUI(JSONObject settings) {
+		this(settings.getString("title"), settings.getBoolean("undecorate"));
+	}
 
 	public BCIUI(String title, boolean unDecorate) {
 		JMenuItem menuItem = null;

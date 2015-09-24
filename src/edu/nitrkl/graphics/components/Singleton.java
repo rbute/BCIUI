@@ -6,6 +6,9 @@ import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 // TODO: Invoke Action Command and send to action listeners.
 
 public class Singleton extends JComponent implements CloneableComponent {
@@ -69,6 +72,17 @@ public class Singleton extends JComponent implements CloneableComponent {
 				((JLabel) component).setText(str);
 			super.add(component);
 		}
+	}
+
+	public Singleton(JSONObject singleton) {
+		// TODO Auto-generated constructor stub
+		this.name = singleton.getString("symbol");
+		JSONArray arr = singleton.getJSONArray("index");
+		this.index = new int[arr.length()];
+		for (int i = 0; i < arr.length(); i++) {
+			this.index[i] = arr.getInt(i);
+		}
+		arr = singleton.getJSONArray("elements");
 	}
 
 	@Override

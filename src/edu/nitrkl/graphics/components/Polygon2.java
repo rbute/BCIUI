@@ -7,6 +7,9 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Polygon2 extends JComponent implements CloneableComponent {
 
 	/**
@@ -40,10 +43,6 @@ public class Polygon2 extends JComponent implements CloneableComponent {
 
 	double ypoints[] = null;
 
-	public Polygon2(String[] str){
-		
-	}
-	
 	public Polygon2() {
 		xpoints = new double[0];
 		ypoints = new double[0];
@@ -59,10 +58,6 @@ public class Polygon2 extends JComponent implements CloneableComponent {
 		visible.xpoints = new int[npoints];
 		visible.ypoints = new int[npoints];
 		calculatePoints();
-	}
-
-	public Polygon2(int[] inputXPoints, int[] inputYPoints, int inputNPoints) {
-		this(new Polygon(inputXPoints, inputYPoints, inputNPoints));
 	}
 
 	public Polygon2(Polygon p) {
@@ -101,6 +96,23 @@ public class Polygon2 extends JComponent implements CloneableComponent {
 
 		// FIXME: Fixed Value
 		this.setVisible(true);
+	}
+
+	public Polygon2(JSONObject Polygon2) {
+		this(Polygon2.getJSONArray("points"));
+		JSONArray color = Polygon2.getJSONArray("color");
+		this.setForeground(new Color(new Integer(color.getInt(0)), new Integer(
+				color.getInt(1)), new Integer(color.getInt(2))));
+	}
+
+	public Polygon2(JSONArray points) {
+		this();
+		for (int i = 0; i < points.length(); i++) {
+			JSONArray coords = (JSONArray) points.get(i);
+
+			this.addPoint(new Double(coords.get(0).toString()), new Double(
+					coords.get(1).toString()));
+		}
 	}
 
 	public void addPoint(double x, double y) {
