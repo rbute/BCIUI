@@ -2,11 +2,14 @@ package edu.nitrkl.graphics.components;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // TODO: Invoke Action Command and send to action listeners.
@@ -60,7 +63,7 @@ public class Singleton extends JComponent implements CloneableComponent {
 	public Singleton(String str, int[] index, JComponent[] jComponents,
 			Color[] colors) {
 		this(index);
-		if (jComponents.length < colors.length)
+		if (jComponents.length > colors.length)
 			throw new IllegalArgumentException(
 					"Number of colors must be greater than or equal to the number of components");
 		this.setLayout(new OcculdingLayout());
@@ -74,7 +77,10 @@ public class Singleton extends JComponent implements CloneableComponent {
 		}
 	}
 
-	public Singleton(JSONObject singleton) {
+	public Singleton(JSONObject singleton) throws ClassNotFoundException,
+			JSONException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
 		// TODO Auto-generated constructor stub
 		this.name = singleton.getString("symbol");
 		JSONArray arr = singleton.getJSONArray("index");
@@ -83,6 +89,32 @@ public class Singleton extends JComponent implements CloneableComponent {
 			this.index[i] = arr.getInt(i);
 		}
 		arr = singleton.getJSONArray("elements");
+
+		this.setLayout(new OcculdingLayout());
+
+		for (int i = 0; i < arr.length(); i++) {
+			JSONObject jObj = arr.getJSONObject(i);
+			// System.out.println(jObj.get("class"));
+
+			@SuppressWarnings("unchecked")
+			Class<? extends JComponent> cls = (Class<? extends JComponent>) Class
+					.forName(jObj.get("class").toString());
+
+			Constructor<? extends JComponent> cons = cls
+					.getConstructor(new Class[] { JSONObject.class });
+
+			JComponent comp = cons.newInstance(jObj);
+
+			comp.setVisible(true);
+
+			// this.add(((Class<? extends JComponent>) Class.forName(arr
+			// .getJSONObject(i).getString("class").toString()))
+			// .getConstructor(new Class[] { JSONObject.class })
+			// .newInstance(arr.getJSONObject(i)));
+
+			this.add(comp);
+		}
+		// System.out.println(arr);
 	}
 
 	@Override

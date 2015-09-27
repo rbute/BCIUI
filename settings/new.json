@@ -20,21 +20,32 @@
 		[
 			{
 				"class": "edu.nitrkl.graphics.components.ResizableTextJLabel",
-				"Color": 
-				{
-					"class": "java.awt.Color"
-				},
+				"color": 
+				[
+					255,
+					0,
+					0
+				],
 
-				"text": "",
+				"text": "Y",
 				"position": 
 				[
 					1,
 					1
-				]
+				],
+
+				"relativesize": 0.7
 			},
 
 			{
 				"class": "edu.nitrkl.graphics.components.Polygon2",
+				"color": 
+				[
+					0,
+					255,
+					0
+				],
+
 				"points": 
 				[
 					[
@@ -101,6 +112,13 @@
 
 			{
 				"class": "edu.nitrkl.graphics.components.Polygon2",
+				"color": 
+				[
+					0,
+					0,
+					255
+				],
+
 				"points": 
 				[
 					[

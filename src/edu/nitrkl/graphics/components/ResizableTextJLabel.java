@@ -39,17 +39,25 @@ public class ResizableTextJLabel extends JLabel implements CloneableComponent {
 	public ResizableTextJLabel(String str, float relativeSize, Color color) {
 		this(str, relativeSize);
 		this.setForeground(color);
+
+		super.setHorizontalAlignment(CENTER);
+		super.setVerticalAlignment(CENTER);
 	}
 
 	public ResizableTextJLabel(JSONObject resizableTextJLabel) {
 		super();
 		super.setText(resizableTextJLabel.get("text").toString());
+
 		this.setRelativeTextSize(new Float(resizableTextJLabel.get(
 				"relativesize").toString()));
 
 		JSONArray color = resizableTextJLabel.getJSONArray("color");
 		this.setForeground(new Color(new Integer(color.getInt(0)), new Integer(
 				color.getInt(1)), new Integer(color.getInt(2))));
+		this.setVisible(true);
+
+		super.setHorizontalAlignment(CENTER);
+		super.setVerticalAlignment(CENTER);
 	}
 
 	public Component clone(String str) {
@@ -77,6 +85,9 @@ public class ResizableTextJLabel extends JLabel implements CloneableComponent {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
+
+		if (this.getText().length() == 0)
+			this.setText(" ");
 
 		super.setFont(new Font(super.getFont().getFontName(), super.getFont()
 				.getStyle(), (int) (relativeTextSize * (height < width
