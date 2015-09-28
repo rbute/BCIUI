@@ -2,7 +2,7 @@ package edu.nitrkl.graphics.test;
 
 import java.io.IOException;
 
-import trashed.MatlabInterface;
+import edu.nitrkl.graphics.components.MatlabInterface;
 import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
 

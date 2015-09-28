@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
+import org.json.JSONArray;
+
 import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
 import matlabcontrol.MatlabProxy;
@@ -45,6 +47,17 @@ public class Factory {
 			}
 		}
 		return singletons;
+	}
+
+	public static Singleton[][] makeBoard(JSONArray arr, Singleton singleton) {
+		String[][] options = new String[arr.length()][((JSONArray) arr.get(0))
+				.length()];
+
+		for (int i = 0; i < arr.length(); i++)
+			for (int j = 0; j < ((JSONArray) arr.get(0)).length(); j++)
+				options[i][j] = ((JSONArray) arr.get(i)).getString(j);
+
+		return makeBoard(options, singleton);
 	}
 
 	public static Polygon2 makeCenteredRectangle(double width, double height) {
@@ -121,7 +134,7 @@ public class Factory {
 					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
 					flasherGroup.add(aFlasher);
 					flasherGroup.type = signalType[i];
-					flasherGroup.freq = freqPolicy[i];
+					flasherGroup.freqPolicy = freqPolicy[i];
 				}
 				flasherGroupsCluster.add(flasherGroup);
 			}
@@ -197,7 +210,7 @@ public class Factory {
 					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
 					flasherGroup.add(aFlasher);
 					flasherGroup.type = signalType[i];
-					flasherGroup.freq = freqPolicy[i];
+					flasherGroup.freqPolicy = freqPolicy[i];
 				}
 				flasherGroupsCluster.add(flasherGroup);
 			}

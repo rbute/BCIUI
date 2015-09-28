@@ -1,4 +1,4 @@
-package trashed;
+package edu.nitrkl.graphics.components;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,6 @@ public class MatlabInterface {
 		this.resultVariable = resultVar;
 		// System.out.println(testFile.getCanonicalPath().split(testFile.getName().split(".m")[0])[0]);
 		// System.out.println(testFile.getName().split(".m")[0]);
-
 	}
 
 	public String eval(String expression) {

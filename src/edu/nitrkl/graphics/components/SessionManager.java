@@ -12,6 +12,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
 
+import org.json.JSONObject;
+
 import matlabcontrol.MatlabProxy;
 
 public class SessionManager extends Thread implements ActionListener {
@@ -75,6 +77,12 @@ public class SessionManager extends Thread implements ActionListener {
 		this.start();
 	}
 
+	public SessionManager(JSONObject jsObj) {
+		ui.dispose();
+		ui = new BCIUI(jsObj.getString("title"), jsObj.getBoolean("undecorate"));
+		this.buildUi(jsObj);
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
@@ -97,10 +105,9 @@ public class SessionManager extends Thread implements ActionListener {
 		}
 	}
 
-	public void buildUi(BCIUI ui, Singleton sample,
-			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			ActionMap actionMap, char[][] keys) {
-//		char opt = 1;
+	public void buildUi(JSONObject jsObj) {
+		// char opt = 1;
+		
 	}
 
 	public void buildUi(String title, String[][] options,

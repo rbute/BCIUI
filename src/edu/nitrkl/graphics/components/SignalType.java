@@ -1,6 +1,5 @@
 package edu.nitrkl.graphics.components;
 
 public enum SignalType {
-	SSVEP,
-	P300;
+	SSVEP, P300;
 }
