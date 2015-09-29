@@ -2,7 +2,7 @@
 	"uioptions": 
 	{
 		"class": "edu.nitrkl.graphics.components.BCIUI",
-		"title": "BCI UI",
+		"title": "BCI UI(Test Mode)",
 		"undecorate": true,
 		"horizontalgap": 10,
 		"verticalgap": 10
