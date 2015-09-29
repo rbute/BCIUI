@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -12,6 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import matlabcontrol.MatlabProxy;
@@ -67,7 +70,6 @@ public class SessionManager extends Thread implements ActionListener {
 			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
 			int hGap) {
 
-		// TODO Auto-generated constructor stub
 		this.ui.dispose();
 		this.ui = new BCIUI(title, undecorate);
 		buildUi(title, options, actionMap, components, colors, groupsList,
@@ -78,9 +80,20 @@ public class SessionManager extends Thread implements ActionListener {
 	}
 
 	public SessionManager(JSONObject jsObj) {
-		ui.dispose();
-		ui = new BCIUI(jsObj.getString("title"), jsObj.getBoolean("undecorate"));
-		this.buildUi(jsObj);
+		BCIUI ui2 = null;
+		try {
+			ui2 = new BCIUI(
+					jsObj.getJSONObject("uioptions").getString("title"), jsObj
+							.getJSONObject("uioptions")
+							.getBoolean("undecorate"));
+			this.buildUi(jsObj);
+			ui.dispose();
+			ui = ui2;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ui2.dispose();
+		} finally {
+		}
 	}
 
 	@Override
@@ -105,9 +118,98 @@ public class SessionManager extends Thread implements ActionListener {
 		}
 	}
 
-	public void buildUi(JSONObject jsObj) {
-		// char opt = 1;
-		
+	public void buildUi(JSONObject jsObj) throws JSONException,
+			ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
+
+		Singleton[][] singletons2 = Factory.makeBoard(
+				(JSONArray) jsObj.get("keys"),
+				new Singleton((JSONObject) jsObj
+						.getJSONObject("singletonmodel")));
+
+		ArrayList<FlasherGroup> groups2 = new ArrayList<FlasherGroup>();
+
+		String[] names = JSONObject.getNames(jsObj.getJSONObject("groupmodel"));
+
+		// System.out.println(JSONObject.getNames(jsObj.get("groupmodel")));
+
+		for (String aString : names) {
+
+			// System.out.println("Looking for: " + aString
+			// + ". Invoker: Sessionmanager.buildui.");
+
+			groups2.add(new FlasherGroup(jsObj.getJSONObject("groupmodel")
+					.getJSONObject(aString)));
+		}
+
+		this.singletons = singletons2;
+		this.groups = groups2;
+
+		// TODO
+		// TODO: settings
+		// TODO
+
+		this.ui.choices.setLayout(new GridLayout(singletons.length,
+				singletons[0].length, jsObj.getJSONObject("uioptions").getInt(
+						"horizontalgap"), jsObj.getJSONObject("uioptions")
+						.getInt("verticalgap")));
+
+		for (Singleton[] singletonRow : singletons)
+			for (Singleton aSingleton : singletonRow)
+				this.ui.choices.add(aSingleton);
+
+		this.ui.runStop.addActionListener(this);
+
+		for (FlasherGroup flasherGroup : this.groups)
+			if (flasherGroup.type == SignalType.P300)
+				groupsShuffle.add(flasherGroup);
+
+		for (FlasherGroup flasherGroup : this.groups)
+			if (flasherGroup.type == SignalType.SSVEP) {
+				groupsFlash.add(flasherGroup);
+				// System.out.println("SSVEP Group found. Members: "
+				// + flasherGroup.size());
+				flasherGroup.calculateFrequencies();
+			}
+	}
+
+	public void buildUi(String title, String[][] options,
+			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
+			int[][][][] groupsList, GroupFreqPolicy[] freqPolicy,
+			float[] startingFrequencies, float[] stoppingFrequencies,
+			SignalType[] signalType, int vGap, int hGap) {
+
+		ui.setTitle(title);
+		ui.choices.removeAll();
+
+		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
+				colors);
+		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
+		this.ui.choices.setLayout(new GridLayout(singletons.length,
+				singletons[0].length, hGap, vGap));
+
+		for (Singleton[] singletonRow : singletons)
+			for (Singleton aSingleton : singletonRow)
+				this.ui.choices.add(aSingleton);
+
+		this.ui.runStop.addActionListener(this);
+
+		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
+				signalType);
+
+		for (FlasherGroup flasherGroup : this.groups)
+			if (flasherGroup.type == SignalType.P300)
+				groupsShuffle.add(flasherGroup);
+
+		for (FlasherGroup flasherGroup : this.groups)
+			if (flasherGroup.type == SignalType.SSVEP) {
+				groupsFlash.add(flasherGroup);
+				// System.out.println("SSVEP Group found. Members: "
+				// + flasherGroup.size());
+				flasherGroup.calculateFrequencies();
+			}
+
 	}
 
 	public void buildUi(String title, String[][] options,

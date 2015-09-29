@@ -3,7 +3,9 @@
 	{
 		"class": "edu.nitrkl.graphics.components.BCIUI",
 		"title": "BCI UI",
-		"undecorate": true
+		"undecorate": true,
+		"horizontalgap": 10,
+		"verticalgap": 10
 	},
 
 	"singletonmodel": 
@@ -357,7 +359,7 @@
 			"dutyCycle": 0.50,
 			"spectHigherFreq": 20,
 			"spectLowerFreq": 21,
-			"GroupFreqPolicy": "ARITHMATIC",
+			"GroupFreqPolicy": "ARITHMETIC",
 			"flashingLayer": 1,
 			"groups": 
 			[

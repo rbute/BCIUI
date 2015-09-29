@@ -6,14 +6,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-
-import org.json.JSONArray;
 
 import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
 import matlabcontrol.MatlabProxy;
 import matlabcontrol.MatlabProxyFactory;
+
+import org.json.JSONArray;
 
 public class Factory {
 
@@ -32,8 +33,9 @@ public class Factory {
 			for (int j = 0; j < options[0].length; j++) {
 				if (options[i][j] == null) {
 					// FIXME: Error Thrown
-					singletons[i][j] = new Singleton(new int[] { 0, 0 });
-
+					// singletons[i][j] = new Singleton(new int[] { 0, 0 });
+					singletons[i][j] = Factory.makeEmptySingleton(singleton,
+							new int[] { i, j });
 				} else {
 					singletons[i][j] = singleton.getClone();
 
@@ -47,6 +49,15 @@ public class Factory {
 			}
 		}
 		return singletons;
+	}
+
+	public static Singleton makeEmptySingleton(Singleton singleton, int[] index) {
+		Singleton aSingleton = new Singleton(index);
+		for (int i = 0; i < (singleton.getComponents()).length; i++)
+			aSingleton.add(new JComponent() {
+				private static final long serialVersionUID = 1L;
+			});
+		return aSingleton;
 	}
 
 	public static Singleton[][] makeBoard(JSONArray arr, Singleton singleton) {
