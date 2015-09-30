@@ -79,21 +79,16 @@ public class SessionManager extends Thread implements ActionListener {
 		this.start();
 	}
 
-	public SessionManager(JSONObject jsObj) {
+	public SessionManager(JSONObject jsObj) throws JSONException,
+			ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
 		BCIUI ui2 = null;
-		try {
-			ui2 = new BCIUI(
-					jsObj.getJSONObject("uioptions").getString("title"), jsObj
-							.getJSONObject("uioptions")
-							.getBoolean("undecorate"));
-			this.buildUi(jsObj);
-			ui.dispose();
-			ui = ui2;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ui2.dispose();
-		} finally {
-		}
+		ui2 = new BCIUI(jsObj.getJSONObject("uioptions").getString("title"),
+				jsObj.getJSONObject("uioptions").getBoolean("undecorate"));
+		this.buildUi(jsObj);
+		// ui.dispose();
+		ui = ui2;
 	}
 
 	@Override
@@ -118,26 +113,22 @@ public class SessionManager extends Thread implements ActionListener {
 		}
 	}
 
-	public void buildUi(JSONObject jsObj) throws JSONException,
+	public synchronized void buildUi(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 
+		Singleton singleton = new Singleton(
+				(JSONObject) jsObj.getJSONObject("singletonmodel"));
+
 		Singleton[][] singletons2 = Factory.makeBoard(
-				(JSONArray) jsObj.get("keys"),
-				new Singleton((JSONObject) jsObj
-						.getJSONObject("singletonmodel")));
+				(JSONArray) jsObj.get("keys"), singleton);
 
 		ArrayList<FlasherGroup> groups2 = new ArrayList<FlasherGroup>();
 
 		String[] names = JSONObject.getNames(jsObj.getJSONObject("groupmodel"));
 
-		// System.out.println(JSONObject.getNames(jsObj.get("groupmodel")));
-
 		for (String aString : names) {
-
-			// System.out.println("Looking for: " + aString
-			// + ". Invoker: Sessionmanager.buildui.");
 
 			groups2.add(new FlasherGroup(jsObj.getJSONObject("groupmodel")
 					.getJSONObject(aString)));
@@ -145,10 +136,10 @@ public class SessionManager extends Thread implements ActionListener {
 
 		this.singletons = singletons2;
 		this.groups = groups2;
+		this.ui.dispose();
+		this.ui = new BCIUI(jsObj.getJSONObject("uioptions"));
 
-		// TODO
 		// TODO: settings
-		// TODO
 
 		this.ui.choices.setLayout(new GridLayout(singletons.length,
 				singletons[0].length, jsObj.getJSONObject("uioptions").getInt(
@@ -156,8 +147,9 @@ public class SessionManager extends Thread implements ActionListener {
 						.getInt("verticalgap")));
 
 		for (Singleton[] singletonRow : singletons)
-			for (Singleton aSingleton : singletonRow)
+			for (Singleton aSingleton : singletonRow) {
 				this.ui.choices.add(aSingleton);
+			}
 
 		this.ui.runStop.addActionListener(this);
 
@@ -168,8 +160,6 @@ public class SessionManager extends Thread implements ActionListener {
 		for (FlasherGroup flasherGroup : this.groups)
 			if (flasherGroup.type == SignalType.SSVEP) {
 				groupsFlash.add(flasherGroup);
-				// System.out.println("SSVEP Group found. Members: "
-				// + flasherGroup.size());
 				flasherGroup.calculateFrequencies();
 			}
 	}
@@ -205,8 +195,6 @@ public class SessionManager extends Thread implements ActionListener {
 		for (FlasherGroup flasherGroup : this.groups)
 			if (flasherGroup.type == SignalType.SSVEP) {
 				groupsFlash.add(flasherGroup);
-				// System.out.println("SSVEP Group found. Members: "
-				// + flasherGroup.size());
 				flasherGroup.calculateFrequencies();
 			}
 
@@ -244,8 +232,6 @@ public class SessionManager extends Thread implements ActionListener {
 		for (FlasherGroup flasherGroup : this.groups)
 			if (flasherGroup.type == SignalType.SSVEP) {
 				groupsFlash.add(flasherGroup);
-				// System.out.println("SSVEP Group found. Members: "
-				// + flasherGroup.size());
 				flasherGroup.calculateFrequencies();
 			}
 

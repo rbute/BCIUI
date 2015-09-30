@@ -40,6 +40,8 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 
 	public BCIUI(JSONObject settings) {
 		this(settings.getString("title"), settings.getBoolean("undecorate"));
+		this.choices.setLayout(new GridLayout());
+
 	}
 
 	public BCIUI(String title, boolean unDecorate) {

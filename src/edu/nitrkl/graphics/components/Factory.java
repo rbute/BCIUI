@@ -26,6 +26,24 @@ public class Factory {
 		return matProxy;
 	}
 
+	public static Singleton[][] makeBoard(JSONArray arr, Singleton singleton) {
+		String[][] options = new String[arr.length()][((JSONArray) arr.get(0))
+				.length()];
+
+		for (int i = 0; i < arr.length(); i++)
+			for (int j = 0; j < ((JSONArray) arr.get(0)).length(); j++)
+				options[i][j] = ((JSONArray) arr.get(i)).getString(j);
+
+		// for (String[] optionsRow : options) {
+		// for (String str : optionsRow) {
+		// System.out.print(str + " ");
+		// }
+		// System.out.println();
+		// }
+
+		return makeBoard(options, singleton);
+	}
+
 	public static Singleton[][] makeBoard(String[][] options,
 			Singleton singleton) {
 		Singleton[][] singletons = new Singleton[options.length][options[0].length];
@@ -49,26 +67,6 @@ public class Factory {
 			}
 		}
 		return singletons;
-	}
-
-	public static Singleton makeEmptySingleton(Singleton singleton, int[] index) {
-		Singleton aSingleton = new Singleton(index);
-		for (int i = 0; i < (singleton.getComponents()).length; i++)
-			aSingleton.add(new JComponent() {
-				private static final long serialVersionUID = 1L;
-			});
-		return aSingleton;
-	}
-
-	public static Singleton[][] makeBoard(JSONArray arr, Singleton singleton) {
-		String[][] options = new String[arr.length()][((JSONArray) arr.get(0))
-				.length()];
-
-		for (int i = 0; i < arr.length(); i++)
-			for (int j = 0; j < ((JSONArray) arr.get(0)).length(); j++)
-				options[i][j] = ((JSONArray) arr.get(i)).getString(j);
-
-		return makeBoard(options, singleton);
 	}
 
 	public static Polygon2 makeCenteredRectangle(double width, double height) {
@@ -113,6 +111,15 @@ public class Factory {
 
 		p.getBounds().setBounds(0, 0, 1, 1);
 		return new Polygon2(p);
+	}
+
+	public static Singleton makeEmptySingleton(Singleton singleton, int[] index) {
+		Singleton aSingleton = new Singleton(index);
+		for (int i = 0; i < (singleton.getComponents()).length; i++)
+			aSingleton.add(new JComponent() {
+				private static final long serialVersionUID = 1L;
+			});
+		return aSingleton;
 	}
 
 	/**
