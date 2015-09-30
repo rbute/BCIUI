@@ -13,11 +13,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
 
+import matlabcontrol.MatlabProxy;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import matlabcontrol.MatlabProxy;
 
 public class SessionManager extends Thread implements ActionListener {
 
@@ -33,7 +33,7 @@ public class SessionManager extends Thread implements ActionListener {
 	ArrayList<FlasherGroup> groupsShuffle = new ArrayList<FlasherGroup>();
 
 	boolean infiniteLoop = true;
-	long intervalDuration = 1500;
+	long detectionRecess = 1500;
 	ReentrantLock lock = new ReentrantLock(true);
 
 	ArrayList<Class<?>> logReceiveFormat = new ArrayList<Class<?>>();
@@ -87,8 +87,10 @@ public class SessionManager extends Thread implements ActionListener {
 		ui2 = new BCIUI(jsObj.getJSONObject("uioptions").getString("title"),
 				jsObj.getJSONObject("uioptions").getBoolean("undecorate"));
 		this.buildUi(jsObj);
-		// ui.dispose();
 		ui = ui2;
+		this.detectionRecess = jsObj.getJSONObject("uioptions").getInt(
+				"detectionrecess");
+		System.gc();
 	}
 
 	@Override
@@ -131,15 +133,13 @@ public class SessionManager extends Thread implements ActionListener {
 		for (String aString : names) {
 
 			groups2.add(new FlasherGroup(jsObj.getJSONObject("groupmodel")
-					.getJSONObject(aString)));
+					.getJSONObject(aString), singletons2));
 		}
 
 		this.singletons = singletons2;
 		this.groups = groups2;
 		this.ui.dispose();
 		this.ui = new BCIUI(jsObj.getJSONObject("uioptions"));
-
-		// TODO: settings
 
 		this.ui.choices.setLayout(new GridLayout(singletons.length,
 				singletons[0].length, jsObj.getJSONObject("uioptions").getInt(
@@ -323,7 +323,7 @@ public class SessionManager extends Thread implements ActionListener {
 				ssvepDeexcite();
 				synchronized (this) {
 					try {
-						this.wait(intervalDuration);
+						this.wait(detectionRecess);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -340,13 +340,11 @@ public class SessionManager extends Thread implements ActionListener {
 	}
 
 	protected void ssvepDeexcite() {
-		// System.out.println("SSVEPs deexited");
 		for (FlasherGroup aGroup : groupsFlash)
 			aGroup.setFlash(false);
 	}
 
 	protected void ssvepExcite() {
-		// System.out.println("SSVEPs exited");
 		for (FlasherGroup aGroup : groupsFlash)
 			aGroup.setFlash(true);
 	}

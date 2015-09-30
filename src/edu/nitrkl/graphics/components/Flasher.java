@@ -22,7 +22,6 @@ public class Flasher extends Thread implements EventListener {
 
 	public Flasher(ArrayList<Singleton> elements, int timePeriod,
 			double dutyCycle, int flashingLayer) {
-		// this((Singleton[]) elements.toArray(), timePeriod, dutyCycle, i);
 		this.elements.addAll(elements);
 		this.timePeriod = timePeriod;
 		this.dutyCycle = dutyCycle;

@@ -6,11 +6,11 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 
-import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.graphics.components.Factory;
+import edu.nitrkl.graphics.components.OcculdingLayout;
 import edu.nitrkl.graphics.components.Polygon2;
 import edu.nitrkl.graphics.components.ResizableTextJLabel;
-import edu.nitrkl.graphics.components.OcculdingLayout;
+import edu.nitrkl.graphics.components.Singleton;
 
 public class ZOrderTest {
 

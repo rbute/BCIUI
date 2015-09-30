@@ -8,8 +8,8 @@ import org.json.JSONObject;
 
 import edu.nitrkl.graphics.components.BCIUI;
 import edu.nitrkl.graphics.components.Factory;
-import edu.nitrkl.graphics.components.Singleton;
 import edu.nitrkl.graphics.components.Polygon2;
+import edu.nitrkl.graphics.components.Singleton;
 
 public class SingletonConstructorTest {
 

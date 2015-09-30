@@ -15,11 +15,17 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	private static final long serialVersionUID = 7526886100298709892L;
 
 	protected double dutyCycle = 0.5;
-	float spectHigherFreq = 20;
+	int flashingLayer = 0;
 	int[] flashTimes = new int[0];
 	GroupFreqPolicy freqPolicy = GroupFreqPolicy.ARITHMETIC;
+	float spectHigherFreq = 20;
 	float spectLowerFreq = 5;
-	int flashingLayer = 0;
+
+	public SignalType type;
+
+	public FlasherGroup() {
+		super();
+	}
 
 	public FlasherGroup(Collection<Flasher> c, float[] flashFreqs) {
 		super(c);
@@ -37,34 +43,30 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		}
 	}
 
+	private FlasherGroup(JSONObject jsObj) {
+		super();
+		this.type = Enum.valueOf(SignalType.class,
+				jsObj.getString("SignalType"));
+		this.freqPolicy = Enum.valueOf(GroupFreqPolicy.class,
+				jsObj.getString("GroupFreqPolicy"));
+		this.spectLowerFreq = (float) jsObj.getDouble("spectLowerFreq");
+		this.spectHigherFreq = (float) jsObj.getDouble("spectHigherFreq");
+		this.dutyCycle = jsObj.getDouble("dutyCycle");
+		this.flashingLayer = jsObj.getInt("flashingLayer");
+	}
+
 	public FlasherGroup(JSONObject jsObj, Singleton[][] singletons) {
 		this(jsObj);
 		if (!jsObj.isNull("groups")) {
-			// int[][][] indexes = new
-			// int[jsObj.getJSONArray("groups").length()][((JSONArray) jsObj
-			// .getJSONArray("groups").get(0)).length()][((JSONArray)
-			// ((JSONArray) jsObj
-			// .getJSONArray("groups").get(0))).length()];
 
-			for (int i = 0; i < jsObj.getJSONArray("groups").length(); i++) {
+			JSONArray groups = jsObj.getJSONArray("groups");
 
+			for (int i = 0; i < groups.length(); i++) {
 				ArrayList<Singleton> singletonList = new ArrayList<Singleton>();
-
-				for (int j = 0; j < ((JSONArray) jsObj.getJSONArray("groups")
-						.get(0)).length(); j++) {
-
-					singletonList
-							.add(singletons[((JSONArray) jsObj.getJSONArray(
-									"groups").get(0)).getInt(0)][((JSONArray) jsObj
-									.getJSONArray("groups").get(0)).getInt(1)]);
-
-					// for (int k = 0; k < ((JSONArray) ((JSONArray) jsObj
-					// .getJSONArray("groups").get(0))).length(); k++) {
-					// indexes[i][j][k] = ((JSONArray) ((JSONArray) jsObj
-					// .getJSONArray("groups").get(i)).getJSONArray(j))
-					// .getInt(k);
-					// }
-				}
+				for (int j = 0; j < groups.getJSONArray(i).length(); j++)
+					singletonList.add(singletons[(groups.getJSONArray(i)
+							.getJSONArray(j).getInt(0)) - 1][(groups
+							.getJSONArray(i).getJSONArray(j).getInt(1)) - 1]);
 
 				this.add(new Flasher(singletonList, 1000, this.dutyCycle,
 						this.flashingLayer));
@@ -79,24 +81,6 @@ public class FlasherGroup extends ArrayList<Flasher> {
 			}
 		}
 	}
-
-	protected FlasherGroup(JSONObject jsObj) {
-		super();
-		this.type = Enum.valueOf(SignalType.class,
-				jsObj.getString("SignalType"));
-		this.freqPolicy = Enum.valueOf(GroupFreqPolicy.class,
-				jsObj.getString("GroupFreqPolicy"));
-		this.spectLowerFreq = (float) jsObj.getDouble("spectLowerFreq");
-		this.spectHigherFreq = (float) jsObj.getDouble("spectHigherFreq");
-		this.dutyCycle = jsObj.getDouble("dutyCycle");
-		this.flashingLayer = jsObj.getInt("flashingLayer");
-	}
-
-	public FlasherGroup() {
-		super();
-	}
-
-	public SignalType type;
 
 	@Override
 	public boolean add(Flasher e) {
@@ -136,6 +120,37 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		default:
 			break;
 		}
+	}
+
+	public void calculateTimePeriod() {
+		switch (freqPolicy) {
+		case EQUAL:
+			flashTimes = new int[this.size()];
+			for (int i = 0; i < flashTimes.length; i++)
+				flashTimes[i] = (int) (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
+						* (i / this.size()));
+
+			break;
+
+		case ARITHMETIC:
+			flashTimes = new int[this.size()];
+			for (int i = 0; i < flashTimes.length; i++)
+				flashTimes[i] = (int) (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
+						* (i / this.size()));
+
+			break;
+
+		case GEOMETRIC:
+			for (int i = 0; i < flashTimes.length; i++)
+				flashTimes[i] = (int) (spectLowerFreq * java.lang.Math.pow(
+						(spectHigherFreq / spectLowerFreq), (i / this.size())));
+
+			break;
+
+		default:
+			break;
+		}
+
 	}
 
 	@Override
@@ -225,37 +240,6 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	public void setLock(ReentrantLock lock) {
 		for (Flasher aFlasher : this)
 			aFlasher.lock = lock;
-	}
-
-	public void calculateTimePeriod() {
-		switch (freqPolicy) {
-		case EQUAL:
-			flashTimes = new int[this.size()];
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
-						* (i / this.size()));
-
-			break;
-
-		case ARITHMETIC:
-			flashTimes = new int[this.size()];
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
-						* (i / this.size()));
-
-			break;
-
-		case GEOMETRIC:
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (spectLowerFreq * java.lang.Math.pow(
-						(spectHigherFreq / spectLowerFreq), (i / this.size())));
-
-			break;
-
-		default:
-			break;
-		}
-
 	}
 
 	public void unsetFlash() {

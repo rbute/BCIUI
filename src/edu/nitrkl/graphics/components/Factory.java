@@ -5,6 +5,8 @@ import java.awt.Polygon;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -17,6 +19,20 @@ import matlabcontrol.MatlabProxyFactory;
 import org.json.JSONArray;
 
 public class Factory {
+
+	protected static final Logger logger = Logger.getLogger("syslog.log");
+	static {
+		try {
+			logger.addHandler(new FileHandler("logs/log_"
+					+ System.currentTimeMillis() + "_.log"));
+		} catch (SecurityException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static Logger getLogger() {
+		return logger;
+	}
 
 	public static MatlabProxy getMatlabProxy(String scriptDir)
 			throws MatlabConnectionException, MatlabInvocationException,
@@ -34,13 +50,6 @@ public class Factory {
 			for (int j = 0; j < ((JSONArray) arr.get(0)).length(); j++)
 				options[i][j] = ((JSONArray) arr.get(i)).getString(j);
 
-		// for (String[] optionsRow : options) {
-		// for (String str : optionsRow) {
-		// System.out.print(str + " ");
-		// }
-		// System.out.println();
-		// }
-
 		return makeBoard(options, singleton);
 	}
 
@@ -51,7 +60,6 @@ public class Factory {
 			for (int j = 0; j < options[0].length; j++) {
 				if (options[i][j] == null) {
 					// FIXME: Error Thrown
-					// singletons[i][j] = new Singleton(new int[] { 0, 0 });
 					singletons[i][j] = Factory.makeEmptySingleton(singleton,
 							new int[] { i, j });
 				} else {

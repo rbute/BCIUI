@@ -5,7 +5,8 @@
 		"title": "BCI UI(Test Mode)",
 		"undecorate": true,
 		"horizontalgap": 10,
-		"verticalgap": 10
+		"verticalgap": 10,
+		"detectionrecess": 1000
 	},
 
 	"singletonmodel": 
@@ -360,7 +361,7 @@
 			"spectHigherFreq": 20,
 			"spectLowerFreq": 21,
 			"GroupFreqPolicy": "ARITHMETIC",
-			"flashingLayer": 1,
+			"flashingLayer": 2,
 			"groups": 
 			[
 				[

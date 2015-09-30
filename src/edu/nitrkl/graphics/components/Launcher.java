@@ -1,29 +1,31 @@
 package edu.nitrkl.graphics.components;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
+import java.util.logging.Level;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class Launcher {
 
-	public static synchronized void main(String[] args) throws JSONException,
-			FileNotFoundException, InterruptedException,
-			ClassNotFoundException, NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+	public static synchronized void main(String[] args)
+			throws SecurityException, IOException {
 
 		System.gc();
-		new SessionManager(new JSONObject(new JSONTokener(new FileReader(
-				"settings/new.json"))));
-		System.gc();
-		// synchronized (TimeUnit.MINUTES) {
-		// TimeUnit.MINUTES.wait();
-		// }
-		// System.out.println("Session ended");
+
+		Factory.getLogger().setLevel(Level.ALL);
+		try {
+
+			Factory.getLogger().info(" Starting Execution");
+			new SessionManager(new JSONObject(new JSONTokener(new FileReader(
+					Messages.getString("Launcher.DefaultSettingsFile")))));
+
+		} catch (Exception e) {
+			Factory.getLogger().setLevel(Level.SEVERE);
+			Factory.getLogger().throwing(Launcher.class.toString(),
+					"public static void main()", e);
+		}
 	}
 
 }
