@@ -9,6 +9,15 @@ import org.json.JSONTokener;
 
 public class Launcher {
 
+	/**
+	 * 
+	 * @param args
+	 * @throws SecurityException
+	 * @throws IOException
+	 * 
+	 * @--logging=[]
+	 * 
+	 */
 	public static synchronized void main(String[] args)
 			throws SecurityException, IOException {
 

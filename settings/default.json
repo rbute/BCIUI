@@ -81,8 +81,8 @@
 		{
 			"SignalType": "SSVEP",
 			"dutyCycle": 0.50,
-			"spectHigherFreq": 20,
-			"spectLowerFreq": 21,
+			"spectHigherFreq": 30,
+			"spectLowerFreq": 4,
 			"GroupFreqPolicy": "ARITHMETIC",
 			"flashingLayer": 1,
 			"groups": 
@@ -161,21 +161,21 @@
 	"keys": 
 	[
 		[
-			"Q",
-			"F",
-			"E"
+			"\u266A",
+			"\u2191",
+			"\uA71B"
 		],
 
 		[
-			"A",
-			" ",
-			"D"
+			"\u2190",
+			"\u25A0",
+			"\u2192"
 		],
 
 		[
-			"Z",
-			"B",
-			"C"
+			"\u263C",
+			"\u2193",
+			"\uA71C"
 		]
 	]
 }

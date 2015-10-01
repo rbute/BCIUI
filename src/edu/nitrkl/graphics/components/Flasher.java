@@ -140,6 +140,7 @@ public class Flasher extends Thread implements EventListener {
 	protected void setGroupVisibility(boolean visible) {
 		for (Singleton component : elements) {
 			component.getComponent(this.flashingLayer).setVisible(visible);
+			component.paintImmediately();
 		}
 	}
 

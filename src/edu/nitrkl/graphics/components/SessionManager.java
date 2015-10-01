@@ -61,7 +61,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 	String startScript = "";
 
-	String taskScript = "";;
+	String taskScript = "";
 
 	BCIUI ui = new BCIUI("", true);
 

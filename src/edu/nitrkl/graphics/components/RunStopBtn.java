@@ -34,10 +34,12 @@ public class RunStopBtn extends JButton implements ActionListener {
 		case "RUN":
 			this.setActionCommand("STOP");
 			this.setText("Stop");
+			Factory.getLogger().info("RUN ");
 			break;
 		case "STOP":
-			this.setActionCommand("STRT");
+			this.setActionCommand("RUN");
 			this.setText("Run ");
+			Factory.getLogger().info("STOP ");
 			break;
 		default:
 			break;
