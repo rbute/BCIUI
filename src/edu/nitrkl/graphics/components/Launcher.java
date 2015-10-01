@@ -23,14 +23,19 @@ public class Launcher {
 
 		System.gc();
 
-		Factory.getLogger().setLevel(Level.ALL);
+		Factory.getLogger().setLevel(Level.OFF);
 		try {
 
 			Factory.getLogger().info(" Starting Execution");
+			// SessionManager mgr =
 			new SessionManager(new JSONObject(new JSONTokener(new FileReader(
 					Messages.getString("Launcher.DefaultSettingsFile")))));
 
+			// mgr.buildUi(new JSONObject(new JSONTokener(new FileReader(
+			// "settings/new.json"))));
+
 		} catch (Exception e) {
+			e.printStackTrace();
 			Factory.getLogger().setLevel(Level.SEVERE);
 			Factory.getLogger().throwing(Launcher.class.toString(),
 					"public static void main()", e);

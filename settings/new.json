@@ -6,7 +6,7 @@
 		"undecorate": true,
 		"horizontalgap": 10,
 		"verticalgap": 10,
-		"detectionrecess": 1000
+		"detectionrecess": 2000
 	},
 
 	"singletonmodel": 

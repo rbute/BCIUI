@@ -6,7 +6,8 @@
 		"undecorate": true,
 		"horizontalgap": 10,
 		"verticalgap": 10,
-		"detectionrecess": 1000
+		"detectionrecess": 1,
+		"startscript": ""
 	},
 
 	"singletonmodel": 
@@ -26,7 +27,7 @@
 				"color": 
 				[
 					255,
-					0,
+					255,
 					0
 				],
 
@@ -44,9 +45,9 @@
 				"class": "edu.nitrkl.graphics.components.Polygon2",
 				"color": 
 				[
-					0,
-					0,
-					255
+					100,
+					200,
+					200
 				],
 
 				"points": 

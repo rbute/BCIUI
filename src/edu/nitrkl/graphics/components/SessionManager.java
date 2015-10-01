@@ -61,7 +61,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 	String startScript = "";
 
-	String taskScript = "";
+	String taskScript = "";;
 
 	BCIUI ui = new BCIUI("", true);
 
@@ -161,6 +161,9 @@ public class SessionManager extends Thread implements ActionListener {
 			groups2.add(new FlasherGroup(jsObj.getJSONObject("groupmodel")
 					.getJSONObject(aString), singletons2));
 		}
+
+		this.detectionRecess = jsObj.getJSONObject("uioptions").getInt(
+				"detectionrecess");
 
 		this.singletons = singletons2;
 		this.groups = groups2;
