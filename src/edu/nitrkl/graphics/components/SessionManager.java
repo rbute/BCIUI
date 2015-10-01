@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +14,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 
 import matlabcontrol.MatlabProxy;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class SessionManager extends Thread implements ActionListener {
 
@@ -70,6 +74,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 		this.ui.dispose();
 		this.ui = new BCIUI(title, undecorate);
+		this.ui.filesMenu.addActionListener(this);
 		buildUi(title, options, actionMap, components, colors, groupsList,
 				freqPolicy, startingFrequencies, stoppingFrequencies,
 				signalType, vGap, hGap);
@@ -87,6 +92,7 @@ public class SessionManager extends Thread implements ActionListener {
 		this.ui = new BCIUI(
 				jsObj.getJSONObject("uioptions").getString("title"), jsObj
 						.getJSONObject("uioptions").getBoolean("undecorate"));
+		this.ui.filesMenu.addActionListener(this);
 		this.buildUi(jsObj);
 		this.detectionRecess = jsObj.getJSONObject("uioptions").getInt(
 				"detectionrecess");
@@ -110,6 +116,24 @@ public class SessionManager extends Thread implements ActionListener {
 
 		case "STOP":
 			run = false;
+			break;
+		case "LOADPRESETS":
+			// (((JMenuItem) e.getSource()).getText())
+			// new JSONObject(new JSONTokener(new FileReader(
+			Factory.getLogger().info(
+					"Loading settings: "
+							+ ((JMenuItem) e.getSource()).getText());
+			try {
+				buildUi(new JSONObject(new JSONTokener(new FileReader(
+						((JMenuItem) e.getSource()).getText()))));
+			} catch (JSONException | ClassNotFoundException
+					| NoSuchMethodException | SecurityException
+					| InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException
+					| FileNotFoundException e1) {
+				e1.printStackTrace();
+				Factory.getLogger().severe(e1.getMessage());
+			}
 			break;
 
 		default:
@@ -140,15 +164,20 @@ public class SessionManager extends Thread implements ActionListener {
 
 		this.singletons = singletons2;
 		this.groups = groups2;
-
 		this.ui.choices.setLayout(new GridLayout(singletons.length,
 				singletons[0].length, jsObj.getJSONObject("uioptions").getInt(
 						"horizontalgap"), jsObj.getJSONObject("uioptions")
 						.getInt("verticalgap")));
 
+		this.ui.choices.removeAll();
 		for (Singleton[] singletonRow : singletons)
 			for (Singleton aSingleton : singletonRow) {
 				this.ui.choices.add(aSingleton);
+				try {
+					aSingleton.getComponent(0).setVisible(true);
+				} catch (Exception e) {
+					Factory.logger.info("Component(0) is nonexistent.");
+				}
 			}
 
 		this.ui.runStop.addActionListener(this);
@@ -162,6 +191,7 @@ public class SessionManager extends Thread implements ActionListener {
 				groupsFlash.add(flasherGroup);
 				flasherGroup.calculateFrequencies();
 			}
+
 	}
 
 	public void buildUi(String title, String[][] options,
@@ -179,6 +209,7 @@ public class SessionManager extends Thread implements ActionListener {
 		this.ui.choices.setLayout(new GridLayout(singletons.length,
 				singletons[0].length, hGap, vGap));
 
+		this.ui.choices.removeAll();
 		for (Singleton[] singletonRow : singletons)
 			for (Singleton aSingleton : singletonRow)
 				this.ui.choices.add(aSingleton);
@@ -216,6 +247,7 @@ public class SessionManager extends Thread implements ActionListener {
 		this.ui.choices.setLayout(new GridLayout(singletons.length,
 				singletons[0].length, hGap, vGap));
 
+		this.ui.choices.removeAll();
 		for (Singleton[] singletonRow : singletons)
 			for (Singleton aSingleton : singletonRow)
 				this.ui.choices.add(aSingleton);
@@ -248,7 +280,7 @@ public class SessionManager extends Thread implements ActionListener {
 		if (!this.flashersShuffle.isEmpty())
 			this.flashersShuffle.get(0).setFlash(flashersShuffle);
 		else
-			System.out.println("this.flashersShuffle is empty");
+			Factory.getLogger().info("this.flashersShuffle is empty");
 	}
 
 	public void p300shuflle() {

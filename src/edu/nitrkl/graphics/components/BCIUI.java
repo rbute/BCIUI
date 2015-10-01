@@ -33,11 +33,6 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public FileSelectMenu loadPresetMenu = null;
 	RunStopBtn runStop = new RunStopBtn();
 
-	// public BCIUI(String[] args) {
-	// this("", true);
-	//
-	// }
-
 	public BCIUI(JSONObject settings) {
 		this(settings.getString("title"), settings.getBoolean("undecorate"));
 		this.choices.setLayout(new GridLayout());
@@ -89,11 +84,11 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 			System.exit(0);
 			break;
 		case "LOADPRESETS":
-			// System.out.println(((JMenuItem) e.getSource()).getText());
-			System.out.println("Selected Settings: "
-					+ ((JMenuItem) e.getSource()).getText());
-			System.out.println("Settings Named: "
-					+ ((JMenuItem) e.getSource()).getName());
+			Factory.getLogger().info(
+					"Selected Settings: "
+							+ ((JMenuItem) e.getSource()).getText());
+			Factory.getLogger().info(
+					"Settings Named: " + ((JMenuItem) e.getSource()).getName());
 			break;
 		default:
 			System.out.println(e.getActionCommand());
