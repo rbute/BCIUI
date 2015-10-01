@@ -61,8 +61,6 @@ public class SessionManager extends Thread implements ActionListener {
 
 	BCIUI ui = new BCIUI("", true);
 
-	// ReentrantLock lock = new ReentrantLock();
-
 	public SessionManager(boolean undecorate, String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
 			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
@@ -77,19 +75,23 @@ public class SessionManager extends Thread implements ActionListener {
 				signalType, vGap, hGap);
 		this.ui.runStop.addActionListener(this);
 		this.start();
+		System.gc();
 	}
 
 	public SessionManager(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
-		BCIUI ui2 = null;
-		ui2 = new BCIUI(jsObj.getJSONObject("uioptions").getString("title"),
-				jsObj.getJSONObject("uioptions").getBoolean("undecorate"));
+
+		this.ui.dispose();
+		this.ui = new BCIUI(
+				jsObj.getJSONObject("uioptions").getString("title"), jsObj
+						.getJSONObject("uioptions").getBoolean("undecorate"));
 		this.buildUi(jsObj);
-		ui = ui2;
 		this.detectionRecess = jsObj.getJSONObject("uioptions").getInt(
 				"detectionrecess");
+		this.ui.runStop.addActionListener(this);
+		this.start();
 		System.gc();
 	}
 
@@ -97,11 +99,11 @@ public class SessionManager extends Thread implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "RUN":
+			synchronized (this.lock) {
+				this.lock.notifyAll();
+			}
 			synchronized (this) {
 				this.notifyAll();
-				synchronized (this.lock) {
-					this.lock.notifyAll();
-				}
 			}
 			run = true;
 			break;
@@ -115,7 +117,7 @@ public class SessionManager extends Thread implements ActionListener {
 		}
 	}
 
-	public synchronized void buildUi(JSONObject jsObj) throws JSONException,
+	public void buildUi(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
@@ -138,8 +140,6 @@ public class SessionManager extends Thread implements ActionListener {
 
 		this.singletons = singletons2;
 		this.groups = groups2;
-		this.ui.dispose();
-		this.ui = new BCIUI(jsObj.getJSONObject("uioptions"));
 
 		this.ui.choices.setLayout(new GridLayout(singletons.length,
 				singletons[0].length, jsObj.getJSONObject("uioptions").getInt(
@@ -312,7 +312,6 @@ public class SessionManager extends Thread implements ActionListener {
 				// FIXME: Attention Hungry Loops
 				while (!flashersShuffle.isEmpty())
 					;
-				// System.out.println("Waiting for Flashers Shuffle to get Empty");
 				// synchronized (flashersShuffle) {
 				// try {
 				// flashersShuffle.wait();
@@ -329,9 +328,9 @@ public class SessionManager extends Thread implements ActionListener {
 					}
 				}
 			}
-			synchronized (this) {
+			synchronized (this.lock) {
 				try {
-					this.wait();
+					this.lock.wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
