@@ -84,7 +84,7 @@
 			"dutyCycle": 0.50,
 			"spectHigherFreq": 30,
 			"spectLowerFreq": 4,
-			"GroupFreqPolicy": "ARITHMETIC",
+			"GroupFreqPolicy": "GEOMETRIC",
 			"flashingLayer": 1,
 			"groups": 
 			[

@@ -46,9 +46,6 @@ public class SessionManager extends Thread implements ActionListener {
 	MatlabProxy matlabSession = null;
 	ArrayList<Class<?>> messageReceiveFormat = new ArrayList<Class<?>>();
 
-	// boolean logging = true;
-	// BufferedWriter loggingStream = null;
-
 	ArrayList<Object> messageSendFormat = new ArrayList<Object>();
 
 	long minSSVEPtime = 750;
@@ -63,7 +60,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 	String taskScript = "";;
 
-	BCIUI ui = new BCIUI("", true);
+	BCIUI ui = null;
 
 	public SessionManager(boolean undecorate, String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
@@ -72,7 +69,6 @@ public class SessionManager extends Thread implements ActionListener {
 			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
 			int hGap) {
 
-		this.ui.dispose();
 		this.ui = new BCIUI(title, undecorate);
 		this.ui.filesMenu.addActionListener(this);
 		buildUi(title, options, actionMap, components, colors, groupsList,
@@ -88,14 +84,13 @@ public class SessionManager extends Thread implements ActionListener {
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 
-		this.ui.dispose();
 		this.ui = new BCIUI(
 				jsObj.getJSONObject("uioptions").getString("title"), jsObj
 						.getJSONObject("uioptions").getBoolean("undecorate"));
-		this.ui.filesMenu.addActionListener(this);
 		this.buildUi(jsObj);
 		this.detectionRecess = jsObj.getJSONObject("uioptions").getInt(
 				"detectionrecess");
+		this.ui.filesMenu.addActionListener(this);
 		this.ui.runStop.addActionListener(this);
 		this.start();
 		System.gc();
@@ -118,8 +113,6 @@ public class SessionManager extends Thread implements ActionListener {
 			run = false;
 			break;
 		case "LOADPRESETS":
-			// (((JMenuItem) e.getSource()).getText())
-			// new JSONObject(new JSONTokener(new FileReader(
 			Factory.getLogger().info(
 					"Loading settings: "
 							+ ((JMenuItem) e.getSource()).getText());
@@ -182,8 +175,6 @@ public class SessionManager extends Thread implements ActionListener {
 					Factory.logger.info("Component(0) is nonexistent.");
 				}
 			}
-
-		this.ui.runStop.addActionListener(this);
 
 		for (FlasherGroup flasherGroup : this.groups)
 			if (flasherGroup.type == SignalType.P300)
@@ -334,6 +325,7 @@ public class SessionManager extends Thread implements ActionListener {
 			while (run) {
 
 				sessionStartTime = System.currentTimeMillis();
+
 				ssvepExcite();
 				p300shuflle();
 				p300Excite();
@@ -346,7 +338,9 @@ public class SessionManager extends Thread implements ActionListener {
 				}
 				// FIXME: Attention Hungry Loops
 				while (!flashersShuffle.isEmpty())
-					;
+					Factory.getLogger().info(
+							"Waiting for Flasher Shuffle to be empty");
+				;
 				// synchronized (flashersShuffle) {
 				// try {
 				// flashersShuffle.wait();

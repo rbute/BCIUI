@@ -57,6 +57,13 @@ public class FileSelectMenu extends JMenu implements MenuListener {
 	}
 
 	@Override
+	public void addActionListener(ActionListener l) {
+		// TODO Auto-generated method stub
+		Factory.getLogger().info("New Listener Added");
+		super.addActionListener(l);
+	}
+
+	@Override
 	public void menuDeselected(MenuEvent arg0) {
 		// Left Deactivated Intentionally
 		// this.removeAll();

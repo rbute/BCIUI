@@ -16,7 +16,7 @@ public class FlasherGroup extends ArrayList<Flasher> {
 
 	protected double dutyCycle = 0.5;
 	int flashingLayer = 0;
-	int[] flashTimes = new int[0];
+	long[] flashTimes = new long[0];
 	GroupFreqPolicy freqPolicy = GroupFreqPolicy.ARITHMETIC;
 	float spectHigherFreq = 20;
 	float spectLowerFreq = 5;
@@ -37,7 +37,7 @@ public class FlasherGroup extends ArrayList<Flasher> {
 			if (!(f > 0.9 || f < 40.1))
 				throw new IllegalArgumentException(
 						"No supplied frequency shall exceed 1.0 to 40.0 limit.");
-		flashTimes = new int[flashFreqs.length];
+		flashTimes = new long[flashFreqs.length];
 		for (int i = 0; i < flashFreqs.length; i++) {
 			flashTimes[i] = (int) (1000 / flashFreqs[i]);
 		}
@@ -72,14 +72,19 @@ public class FlasherGroup extends ArrayList<Flasher> {
 						this.flashingLayer));
 			}
 
-			flashTimes = new int[this.size()];
-			calculateFrequencies();
+			flashTimes = new long[this.size()];
 			for (int i = 0; i < flashTimes.length; i++) {
-				this.get(i).timePeriod = this.flashTimes[i];
+				this.get(i).timePeriod = (int) this.flashTimes[i];
 				this.get(i).dutyCycle = this.dutyCycle;
 				this.get(i).flashingLayer = (byte) this.flashingLayer;
 			}
 		}
+
+		String msg = "Flash Times: ";
+		for (long i : flashTimes)
+			msg = msg + " " + i;
+
+		Factory.getLogger().info(msg);
 	}
 
 	@Override
@@ -89,61 +94,46 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		e.dutyCycle = this.dutyCycle;
 		// FIXME: Proper Frequency Settings
 		// e.timePeriod = this.timePeriod;
+		// flashTimes = new int[super.size()];
 		calculateFrequencies();
 		return result;
 	}
 
 	void calculateFrequencies() {
+
 		if (this.size() != flashTimes.length)
-			flashTimes = new int[this.size()];
+			flashTimes = new long[this.size()];
+		Factory.getLogger().info("falshtimes size: " + flashTimes.length);
+		Factory.getLogger().info(
+				"spectrum higher Frequency: " + spectHigherFreq);
+		Factory.getLogger().info("specrum lower frequency: " + spectLowerFreq);
 
 		switch (freqPolicy) {
 		case ARITHMETIC:
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (1 / (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
-						* ((i + 1) / flashTimes.length)));
+			for (int i = 0; i < flashTimes.length; i++) {
+				double calculatedTimePeriod = 1000 / (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
+						* (i / flashTimes.length));
+				flashTimes[i] = (int) calculatedTimePeriod;
+				// Factory.getLogger().info(
+				// "calculatedTimePeriod: " + calculatedTimePeriod);
+			}
 			break;
 
 		case GEOMETRIC:
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (1 / (spectLowerFreq * java.lang.Math
+			for (int i = 0; i < flashTimes.length; i++) {
+				double calculatedTimePeriod = 1000 / (spectLowerFreq * java.lang.Math
 						.pow((spectHigherFreq / spectLowerFreq),
-								((i + 1) / flashTimes.length))));
+								(i / flashTimes.length)));
+				flashTimes[i] = (int) calculatedTimePeriod;
+				// Factory.getLogger().info(
+				// "calculatedTimePeriod: " + calculatedTimePeriod);
+
+			}
 			break;
 
 		case EQUAL:
 			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (1 / (spectLowerFreq));
-
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	public void calculateTimePeriod() {
-		switch (freqPolicy) {
-		case EQUAL:
-			flashTimes = new int[this.size()];
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
-						* (i / this.size()));
-
-			break;
-
-		case ARITHMETIC:
-			flashTimes = new int[this.size()];
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
-						* (i / this.size()));
-
-			break;
-
-		case GEOMETRIC:
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (spectLowerFreq * java.lang.Math.pow(
-						(spectHigherFreq / spectLowerFreq), (i / this.size())));
+				flashTimes[i] = (int) (1000 / (spectLowerFreq));
 
 			break;
 
@@ -151,6 +141,17 @@ public class FlasherGroup extends ArrayList<Flasher> {
 			break;
 		}
 
+		String str = "";
+
+		for (long l : flashTimes) {
+			str = str + " " + l;
+		}
+
+		Factory.getLogger().info(
+				"Calculated Frequncies of " + flashTimes.length
+						+ " Elements. With policy of " + freqPolicy
+						+ " distribution \n Calculated Frequencies: " + str);
+		// Factory.getLogger().
 	}
 
 	@Override
@@ -167,7 +168,6 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		synchronized (this) {
 			if (this.isEmpty()) {
 				this.notifyAll();
-				// System.out.println("FlasherGroup Noifies all");
 			}
 		}
 		return result;

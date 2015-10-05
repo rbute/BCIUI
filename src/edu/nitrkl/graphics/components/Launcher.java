@@ -14,25 +14,43 @@ public class Launcher {
 	 * @param args
 	 * @throws SecurityException
 	 * @throws IOException
-	 * 
-	 * @--logging=[]
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @param --logging=[ ALL |SEVERE | WARNING | INFO | FINE | FINER | FINEST |
+	 *        OFF ]
+	 * @param --logging=<settingsFilePath>
 	 * 
 	 */
 	public static synchronized void main(String[] args)
-			throws SecurityException, IOException {
+			throws SecurityException, IOException, IllegalArgumentException,
+			IllegalAccessException, NoSuchFieldException {
 
 		System.gc();
 
+		String settingsFile = Messages
+				.getString("Launcher.DefaultSettingsFile");
+
 		Factory.getLogger().setLevel(Level.OFF);
+
+		for (String str : args) {
+			if (str.matches("^(--logging=).*"))
+				Factory.getLogger()
+						.setLevel(
+								((Level) Level.class.getField(
+										str.split("^(--logging=)")[1]).get(
+										Level.class)));
+
+			if (str.matches("^(--settings=).*"))
+				settingsFile = str.split("^(--settings=)")[1];
+
+		}
+
 		try {
 
-			Factory.getLogger().info(" Starting Execution");
-			// SessionManager mgr =
+			Factory.getLogger().info("Starting Execution");
 			new SessionManager(new JSONObject(new JSONTokener(new FileReader(
-					Messages.getString("Launcher.DefaultSettingsFile")))));
-
-			// mgr.buildUi(new JSONObject(new JSONTokener(new FileReader(
-			// "settings/new.json"))));
+					settingsFile))));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,5 +59,4 @@ public class Launcher {
 					"public static void main()", e);
 		}
 	}
-
 }
