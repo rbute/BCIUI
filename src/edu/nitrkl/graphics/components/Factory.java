@@ -2,7 +2,6 @@ package edu.nitrkl.graphics.components;
 
 import java.awt.Component;
 import java.awt.Polygon;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
@@ -10,11 +9,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-
-import matlabcontrol.MatlabConnectionException;
-import matlabcontrol.MatlabInvocationException;
-import matlabcontrol.MatlabProxy;
-import matlabcontrol.MatlabProxyFactory;
 
 import org.json.JSONArray;
 
@@ -33,14 +27,6 @@ public class Factory {
 
 	public static Logger getLogger() {
 		return logger;
-	}
-
-	public static MatlabProxy getNewMatlabProxy(String scriptDir)
-			throws MatlabConnectionException, MatlabInvocationException,
-			IOException {
-		MatlabProxy matProxy = (new MatlabProxyFactory()).getProxy();
-		matProxy.eval("cd " + (new File(scriptDir)).getCanonicalPath());
-		return matProxy;
 	}
 
 	public static Singleton[][] makeBoard(JSONArray arr, Singleton singleton) {

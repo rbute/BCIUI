@@ -1,6 +1,5 @@
 package edu.nitrkl.graphics.components;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,13 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.swing.ActionMap;
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
-
-import matlabcontrol.MatlabProxy;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,8 +22,6 @@ public class SessionManager extends Thread implements ActionListener {
 		CONCATENATE, RANDOMIZE, ROUNDROBIN;
 	}
 
-	String endScript = "";
-
 	FlasherGroup flashersShuffle = new FlasherGroup();
 	ArrayList<FlasherGroup> groups = new ArrayList<FlasherGroup>();
 	ArrayList<FlasherGroup> groupsFlash = new ArrayList<FlasherGroup>();
@@ -40,44 +31,12 @@ public class SessionManager extends Thread implements ActionListener {
 	long detectionRecess = 1500;
 	ReentrantLock lock = new ReentrantLock(true);
 
-	ArrayList<Class<?>> logReceiveFormat = new ArrayList<Class<?>>();
-	ArrayList<Object> logSendFormat = new ArrayList<Object>();
-
-	MatlabProxy matlabSession = null;
-	ArrayList<Class<?>> messageReceiveFormat = new ArrayList<Class<?>>();
-
-	ArrayList<Object> messageSendFormat = new ArrayList<Object>();
-
 	long minSSVEPtime = 750;
 	P300GroupMergePolicy P300merging = P300GroupMergePolicy.RANDOMIZE;
 	boolean run = false;
-
 	long sessionStartTime = 0;
 	Singleton[][] singletons = null;
-	protected boolean SSVEPrunning = false;
-
-	String startScript = "";
-
-	String taskScript = "";;
-
 	BCIUI ui = null;
-
-	public SessionManager(boolean undecorate, String title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
-			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
-			int hGap) {
-
-		this.ui = new BCIUI(title, undecorate);
-		this.ui.filesMenu.addActionListener(this);
-		buildUi(title, options, actionMap, components, colors, groupsList,
-				freqPolicy, startingFrequencies, stoppingFrequencies,
-				signalType, vGap, hGap);
-		this.ui.runStop.addActionListener(this);
-		this.start();
-		System.gc();
-	}
 
 	public SessionManager(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
@@ -188,81 +147,6 @@ public class SessionManager extends Thread implements ActionListener {
 
 	}
 
-	public void buildUi(String title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			int[][][][] groupsList, GroupFreqPolicy[] freqPolicy,
-			float[] startingFrequencies, float[] stoppingFrequencies,
-			SignalType[] signalType, int vGap, int hGap) {
-
-		ui.setTitle(title);
-		ui.choices.removeAll();
-
-		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
-				colors);
-		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
-		this.ui.choices.setLayout(new GridLayout(singletons.length,
-				singletons[0].length, hGap, vGap));
-
-		this.ui.choices.removeAll();
-		for (Singleton[] singletonRow : singletons)
-			for (Singleton aSingleton : singletonRow)
-				this.ui.choices.add(aSingleton);
-
-		this.ui.runStop.addActionListener(this);
-
-		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
-				signalType);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.P300)
-				groupsShuffle.add(flasherGroup);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.SSVEP) {
-				groupsFlash.add(flasherGroup);
-				flasherGroup.calculateFrequencies();
-			}
-
-	}
-
-	public void buildUi(String title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
-			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
-			int hGap) {
-
-		ui.setTitle(title);
-		ui.choices.removeAll();
-
-		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
-				colors);
-		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
-		this.ui.choices.setLayout(new GridLayout(singletons.length,
-				singletons[0].length, hGap, vGap));
-
-		this.ui.choices.removeAll();
-		for (Singleton[] singletonRow : singletons)
-			for (Singleton aSingleton : singletonRow)
-				this.ui.choices.add(aSingleton);
-
-		this.ui.runStop.addActionListener(this);
-
-		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
-				signalType);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.P300)
-				groupsShuffle.add(flasherGroup);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.SSVEP) {
-				groupsFlash.add(flasherGroup);
-				flasherGroup.calculateFrequencies();
-			}
-
-	}
-
 	public ArrayList<FlasherGroup> getSSVEPGroups() {
 		ArrayList<FlasherGroup> ssvepGroups = new ArrayList<FlasherGroup>();
 		for (FlasherGroup flasherGroup : groups)
@@ -335,8 +219,7 @@ public class SessionManager extends Thread implements ActionListener {
 					}
 				}
 				while (!flashersShuffle.isEmpty())
-					Factory.getLogger().info(
-							"Waiting for Flasher Shuffle to be empty");
+					;
 				ssvepDeexcite();
 				synchronized (this) {
 					try {

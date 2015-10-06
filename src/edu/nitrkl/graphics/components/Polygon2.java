@@ -94,7 +94,6 @@ public class Polygon2 extends JComponent implements CloneableComponent {
 		this.setForeground(new Color(polygon.getForeground().getRed(), polygon
 				.getForeground().getGreen(), polygon.getForeground().getBlue()));
 
-		// FIXME: Fixed Value
 		this.setVisible(true);
 	}
 
@@ -136,7 +135,6 @@ public class Polygon2 extends JComponent implements CloneableComponent {
 	}
 
 	protected void calculatePoints() {
-		// FIXME: not visible
 		for (int i = 0; i < npoints; i++) {
 			visible.xpoints[i] = (int) (this.getBounds().width * xpoints[i]);
 			visible.ypoints[i] = (int) (this.getBounds().height * ypoints[i]);
@@ -150,13 +148,11 @@ public class Polygon2 extends JComponent implements CloneableComponent {
 
 	@Override
 	public void paintImmediately(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		super.paintImmediately(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void paintImmediately(Rectangle r) {
-		// TODO Auto-generated method stub
 		super.paintImmediately(r);
 	}
 

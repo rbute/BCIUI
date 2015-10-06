@@ -245,5 +245,4 @@ public class FlasherGroup extends ArrayList<Flasher> {
 			}
 		}
 	}
-
 }
