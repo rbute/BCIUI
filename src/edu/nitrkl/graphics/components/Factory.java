@@ -21,7 +21,6 @@ import org.json.JSONArray;
 public class Factory {
 
 	protected static final Logger logger = Logger.getLogger("syslog.log");
-	protected static MatlabProxy matlabProxy = null;
 
 	static {
 		try {
@@ -30,21 +29,10 @@ public class Factory {
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
-
-		try {
-			matlabProxy = (new MatlabProxyFactory()).getProxy();
-			matlabProxy.eval("cd 'script'");
-		} catch (MatlabConnectionException | MatlabInvocationException e) {
-			logger.severe(e.getMessage());
-		}
 	}
 
 	public static Logger getLogger() {
 		return logger;
-	}
-
-	public static MatlabProxy getMatlabProxy() {
-		return matlabProxy;
 	}
 
 	public static MatlabProxy getNewMatlabProxy(String scriptDir)
