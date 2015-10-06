@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -31,12 +32,23 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JMenuBar menuBar = new JMenuBar();
 	public JMenu filesMenu = new JMenu("Files");
 	public FileSelectMenu loadPresetMenu = null;
+	public static final JLabel crght = new JLabel("   Copyright"
+			+ " \u00A9 Rakesh" + " Bute (214ec3011)" + ", Pattern"
+			+ " Recognition" + " Lab" + "- NIT" + " Rourkela") {
+		private static final long serialVersionUID = 1L;
+		{
+			this.setBackground(Color.black);
+			this.setForeground(Color.white);
+			this.setAlignmentX(RIGHT_ALIGNMENT);
+			this.setBounds(new Rectangle(1000, 15));
+		}
+	};
+
 	RunStopBtn runStop = new RunStopBtn();
 
 	public BCIUI(JSONObject settings) {
 		this(settings.getString("title"), settings.getBoolean("undecorate"));
 		this.choices.setLayout(new GridLayout());
-
 	}
 
 	public BCIUI(String title, boolean unDecorate) {
@@ -75,6 +87,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 		this.filesMenu.add(menuItem);
 		this.menuBar.add(filesMenu);
 		this.menuBar.add(runStop);
+		this.menuBar.add(crght);
 	}
 
 	@Override

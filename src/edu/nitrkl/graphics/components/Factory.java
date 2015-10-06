@@ -21,6 +21,8 @@ import org.json.JSONArray;
 public class Factory {
 
 	protected static final Logger logger = Logger.getLogger("syslog.log");
+	protected static MatlabProxy matlabProxy = null;
+
 	static {
 		try {
 			logger.addHandler(new FileHandler("logs/log_"
@@ -28,13 +30,24 @@ public class Factory {
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
+
+		try {
+			matlabProxy = (new MatlabProxyFactory()).getProxy();
+			matlabProxy.eval("cd 'script'");
+		} catch (MatlabConnectionException | MatlabInvocationException e) {
+			logger.severe(e.getMessage());
+		}
 	}
 
 	public static Logger getLogger() {
 		return logger;
 	}
 
-	public static MatlabProxy getMatlabProxy(String scriptDir)
+	public static MatlabProxy getMatlabProxy() {
+		return matlabProxy;
+	}
+
+	public static MatlabProxy getNewMatlabProxy(String scriptDir)
 			throws MatlabConnectionException, MatlabInvocationException,
 			IOException {
 		MatlabProxy matProxy = (new MatlabProxyFactory()).getProxy();
@@ -59,7 +72,6 @@ public class Factory {
 		for (int i = 0; i < options.length; i++) {
 			for (int j = 0; j < options[0].length; j++) {
 				if (options[i][j] == null) {
-					// FIXME: Error Thrown
 					singletons[i][j] = Factory.makeEmptySingleton(singleton,
 							new int[] { i, j });
 				} else {
@@ -152,7 +164,6 @@ public class Factory {
 				for (ArrayList<int[]> flasher : group) {
 					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
 					for (int[] index : flasher) {
-						// FIXME: Error Thrown
 						flashersList
 								.add(singletons[index[0] - 1][index[1] - 1]);
 

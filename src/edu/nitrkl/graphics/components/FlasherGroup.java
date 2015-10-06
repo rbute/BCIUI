@@ -92,9 +92,6 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		boolean result = false;
 		result = super.add(e);
 		e.dutyCycle = this.dutyCycle;
-		// FIXME: Proper Frequency Settings
-		// e.timePeriod = this.timePeriod;
-		// flashTimes = new int[super.size()];
 		calculateFrequencies();
 		return result;
 	}
@@ -103,6 +100,8 @@ public class FlasherGroup extends ArrayList<Flasher> {
 
 		if (this.size() != flashTimes.length)
 			flashTimes = new long[this.size()];
+		double[] frequencies = new double[super.size()];
+
 		Factory.getLogger().info("falshtimes size: " + flashTimes.length);
 		Factory.getLogger().info(
 				"spectrum higher Frequency: " + spectHigherFreq);
@@ -110,30 +109,24 @@ public class FlasherGroup extends ArrayList<Flasher> {
 
 		switch (freqPolicy) {
 		case ARITHMETIC:
-			for (int i = 0; i < flashTimes.length; i++) {
-				double calculatedTimePeriod = 1000 / (spectLowerFreq + (spectHigherFreq - spectLowerFreq)
-						* (i / flashTimes.length));
-				flashTimes[i] = (int) calculatedTimePeriod;
-				// Factory.getLogger().info(
-				// "calculatedTimePeriod: " + calculatedTimePeriod);
+			for (int i = 0; i < frequencies.length; i++) {
+				frequencies[i] = spectLowerFreq
+						+ (spectHigherFreq - spectLowerFreq)
+						* ((double) i / (double) flashTimes.length);
 			}
 			break;
 
 		case GEOMETRIC:
-			for (int i = 0; i < flashTimes.length; i++) {
-				double calculatedTimePeriod = 1000 / (spectLowerFreq * java.lang.Math
-						.pow((spectHigherFreq / spectLowerFreq),
-								(i / flashTimes.length)));
-				flashTimes[i] = (int) calculatedTimePeriod;
-				// Factory.getLogger().info(
-				// "calculatedTimePeriod: " + calculatedTimePeriod);
-
+			for (int i = 0; i < frequencies.length; i++) {
+				frequencies[i] = (spectLowerFreq * Math.pow(
+						(spectHigherFreq / spectLowerFreq),
+						((double) i / (double) flashTimes.length)));
 			}
 			break;
 
 		case EQUAL:
-			for (int i = 0; i < flashTimes.length; i++)
-				flashTimes[i] = (int) (1000 / (spectLowerFreq));
+			for (int i = 0; i < frequencies.length; i++)
+				frequencies[i] = spectLowerFreq;
 
 			break;
 
@@ -141,17 +134,19 @@ public class FlasherGroup extends ArrayList<Flasher> {
 			break;
 		}
 
-		String str = "";
+		for (int i = 0; i < frequencies.length; i++) {
+			flashTimes[i] = (int) (1000.0d / frequencies[i]);
+			this.get(i).timePeriod = (int) flashTimes[i];
+		}
 
+		String str = "";
 		for (long l : flashTimes) {
 			str = str + " " + l;
 		}
-
 		Factory.getLogger().info(
-				"Calculated Frequncies of " + flashTimes.length
+				"Calculated Flash Times " + flashTimes.length
 						+ " Elements. With policy of " + freqPolicy
 						+ " distribution \n Calculated Frequencies: " + str);
-		// Factory.getLogger().
 	}
 
 	@Override

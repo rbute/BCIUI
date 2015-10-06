@@ -273,8 +273,6 @@ public class SessionManager extends Thread implements ActionListener {
 	protected void p300Excite() {
 		if (!this.flashersShuffle.isEmpty())
 			this.flashersShuffle.get(0).setFlash(flashersShuffle);
-		else
-			Factory.getLogger().info("this.flashersShuffle is empty");
 	}
 
 	public void p300shuflle() {

@@ -22,13 +22,9 @@ public class MatlabInterface {
 		File testFile = (new File(matlabScript));
 		String workDir = testFile.getCanonicalPath().split(
 				testFile.getName().split(".m")[0])[0];
-		// System.out.println("Working Directory: " + workDir);
 		matProxy.eval("cd '" + workDir + "'");
-		// matProxy.eval(testFile.getName().split(".m")[0]);
 		this.command = testFile.getName().split(".m")[0];
 		this.resultVariable = resultVar;
-		// System.out.println(testFile.getCanonicalPath().split(testFile.getName().split(".m")[0])[0]);
-		// System.out.println(testFile.getName().split(".m")[0]);
 	}
 
 	public String eval(String expression) {
