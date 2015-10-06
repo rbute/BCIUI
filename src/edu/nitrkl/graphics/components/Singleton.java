@@ -12,8 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// TODO: Invoke Action Command and send to action listeners.
-
 public class Singleton extends JComponent implements CloneableComponent {
 
 	/**
@@ -81,7 +79,6 @@ public class Singleton extends JComponent implements CloneableComponent {
 			JSONException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
-		// TODO Auto-generated constructor stub
 		this.name = singleton.getString("symbol");
 		JSONArray arr = singleton.getJSONArray("index");
 		this.index = new int[arr.length()];
@@ -94,7 +91,6 @@ public class Singleton extends JComponent implements CloneableComponent {
 
 		for (int i = 0; i < arr.length(); i++) {
 			JSONObject jObj = arr.getJSONObject(i);
-			// System.out.println(jObj.get("class"));
 
 			@SuppressWarnings("unchecked")
 			Class<? extends JComponent> cls = (Class<? extends JComponent>) Class
@@ -107,14 +103,8 @@ public class Singleton extends JComponent implements CloneableComponent {
 
 			comp.setVisible(true);
 
-			// this.add(((Class<? extends JComponent>) Class.forName(arr
-			// .getJSONObject(i).getString("class").toString()))
-			// .getConstructor(new Class[] { JSONObject.class })
-			// .newInstance(arr.getJSONObject(i)));
-
 			this.add(comp);
 		}
-		// System.out.println(arr);
 	}
 
 	@Override

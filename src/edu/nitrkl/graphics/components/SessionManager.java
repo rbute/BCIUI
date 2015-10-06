@@ -334,18 +334,9 @@ public class SessionManager extends Thread implements ActionListener {
 						e.printStackTrace();
 					}
 				}
-				// FIXME: Attention Hungry Loops
 				while (!flashersShuffle.isEmpty())
 					Factory.getLogger().info(
 							"Waiting for Flasher Shuffle to be empty");
-				;
-				// synchronized (flashersShuffle) {
-				// try {
-				// flashersShuffle.wait();
-				// } catch (InterruptedException e) {
-				// e.printStackTrace();
-				// }
-				// }
 				ssvepDeexcite();
 				synchronized (this) {
 					try {

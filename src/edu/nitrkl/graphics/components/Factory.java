@@ -248,9 +248,6 @@ public class Factory {
 			String[][][][] list) {
 		ArrayList<ArrayList<ArrayList<int[]>>> applicationGroups = new ArrayList<ArrayList<ArrayList<int[]>>>();
 		for (String[][][] index : list) {
-			// if (index == null) {
-			// applicationGroups.add(null);
-			// } else {
 			ArrayList<ArrayList<int[]>> flasherGroups = new ArrayList<ArrayList<int[]>>();
 			for (String[][] is : index) {
 				ArrayList<int[]> flasher = new ArrayList<int[]>();
@@ -264,7 +261,6 @@ public class Factory {
 				flasherGroups.add(flasher);
 			}
 			applicationGroups.add(flasherGroups);
-			// }
 		}
 		return applicationGroups;
 	}

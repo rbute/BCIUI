@@ -61,11 +61,6 @@ public class Flasher extends Thread implements EventListener {
 	 */
 	public synchronized void setFlash() {
 		this.flashOnce = true;
-
-		// synchronized (this.lock) {
-		// this.lock.notifyAll();
-		// }
-
 		synchronized (this) {
 			this.notify();
 		}
@@ -81,7 +76,6 @@ public class Flasher extends Thread implements EventListener {
 		synchronized (this) {
 			this.notify();
 		}
-		// System.out.println("Notified thread: " + this.getId());
 	}
 
 	/**
