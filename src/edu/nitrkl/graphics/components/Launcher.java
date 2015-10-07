@@ -19,7 +19,7 @@ public class Launcher {
 	 * @throws IllegalArgumentException
 	 * @param --logging=[ ALL |SEVERE | WARNING | INFO | FINE | FINER | FINEST |
 	 *        OFF ]
-	 * @param --logging=<settingsFilePath>
+	 * @param --settings=<settingsFilePath>
 	 * 
 	 */
 	public static synchronized void main(String[] args)
@@ -43,7 +43,6 @@ public class Launcher {
 
 			if (str.matches("^(--settings=).*"))
 				settingsFile = str.split("^(--settings=)")[1];
-
 		}
 
 		try {

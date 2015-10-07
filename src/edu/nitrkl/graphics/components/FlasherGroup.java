@@ -153,6 +153,7 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	public Flasher remove(int index) {
 		Flasher result = super.remove(index);
 		if (this.isEmpty())
+			Factory.getLogger().info("Flasher Empty. Notifying all");
 			this.notifyAll();
 		return result;
 	}
@@ -163,6 +164,7 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		synchronized (this) {
 			if (this.isEmpty()) {
 				this.notifyAll();
+				Factory.getLogger().info("Flasher Empty. Notifying all");
 			}
 		}
 		return result;
@@ -173,6 +175,7 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		boolean result = super.remove(c);
 		synchronized (this) {
 			this.notifyAll();
+			Factory.getLogger().info("Flasher Empty. Notifying all");
 		}
 		return result;
 	}
