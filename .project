@@ -18,5 +18,6 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipselabs.matclipse.MatlabNature</nature>
 	</natures>
 </projectDescription>
