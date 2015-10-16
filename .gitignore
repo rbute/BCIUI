@@ -1,7 +1,4 @@
 /bin/
 /.settings/
-
 /.gitignore
-/tests/*
-/tests
-/test/
+/.classpath

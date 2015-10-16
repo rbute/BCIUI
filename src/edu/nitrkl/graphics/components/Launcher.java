@@ -51,6 +51,7 @@ public class Launcher {
 			new SessionManager(new JSONObject(new JSONTokener(new FileReader(
 					settingsFile))));
 
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			Factory.getLogger().setLevel(Level.SEVERE);
