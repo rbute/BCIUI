@@ -3,14 +3,13 @@ function [ output_args ] = do( options,coordinates,actionCommand,calltime )
 %   Detailed explanation goes here
 
 if strcmp(actionCommand,'setup')
+setupLC;
 
-    setupLC;
-
-else if strcmp(actionCommand,'doit')
+else if strcmp(actionCommand,'init')
     disp('Just do it')
 else if strcmp(actionCommand,'dontdoit')
     disp('Why dont you do it')
 end
 
-end
+%end
 

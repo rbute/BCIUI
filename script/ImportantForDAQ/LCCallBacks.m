@@ -13,7 +13,8 @@ disp('OnSelectionChange called')
 kArrayOfDoubles = 1;  % GetSelectedData returns a matrix of doubles, not variants (cells)
 kAllSelectedChannels = -1; % GetSelectedData returns all selected channels, rather just the specified channel.
 data = gLCDoc.GetSelectedData(kArrayOfDoubles, kAllSelectedChannels);
-subplot(1,1,1); %no subplots
+subplot(1,1,1);
+%no subplots
 plot(data)
 
 function OnBlockStart(varargin)
@@ -28,9 +29,9 @@ global gLatestTickInBlock;
 global gChans;
 global gChansData;
 global gT;
-disp('OnBlockStart called')
-gLatestBlock = gLCDoc.NumberOfRecords
-gBlockSecsPerTick = gLCDoc.GetRecordSecsPerTick(gLatestBlock)
+disp('OnBlockStart called');
+gLatestBlock = gLCDoc.NumberOfRecords ;
+gBlockSecsPerTick = gLCDoc.GetRecordSecsPerTick(gLatestBlock);
 gNChanSamples = 0;
 gT = [];   %time (from start of block)
 gLatestTickInBlock = 0;
