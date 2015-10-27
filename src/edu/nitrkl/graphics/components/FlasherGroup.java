@@ -43,6 +43,10 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param jsObj
+	 */
 	private FlasherGroup(JSONObject jsObj) {
 		super();
 		this.type = Enum.valueOf(SignalType.class,
@@ -55,6 +59,11 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		this.flashingLayer = jsObj.getInt("flashingLayer");
 	}
 
+	/**
+	 * 
+	 * @param jsObj
+	 * @param singletons
+	 */
 	public FlasherGroup(JSONObject jsObj, Singleton[][] singletons) {
 		this(jsObj);
 		if (!jsObj.isNull("groups")) {

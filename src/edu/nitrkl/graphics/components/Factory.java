@@ -23,7 +23,7 @@ public class Factory {
 	protected static final Logger logger = Logger.getLogger("syslog.log");
 	protected static MatlabProxy matlabProxy = null;
 
-	static {
+	 static{
 		try {
 			logger.addHandler(new FileHandler("logs/log_"
 					+ System.currentTimeMillis() + "_.log"));

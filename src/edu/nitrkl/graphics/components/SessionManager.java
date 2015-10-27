@@ -133,6 +133,22 @@ public class SessionManager extends Thread implements ActionListener {
 			break;
 		}
 	}
+	
+	/**
+	 * 
+	 * Accepts JSonObject as settings to the ui
+	 *  
+	 * 
+	 * @param jsObj
+	 * @throws JSONException
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 
 	public void buildUi(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,

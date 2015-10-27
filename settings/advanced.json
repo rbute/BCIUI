@@ -6,8 +6,7 @@
 		"undecorate": true,
 		"horizontalgap": 10,
 		"verticalgap": 10,
-		"detectionrecess": 2000,
-		"scriptFile": "do.m"
+		"detectionrecess": 2000
 	},
 
 	"singletonmodel": 
@@ -155,11 +154,6 @@
 		{
 			"SignalType": "P300",
 			"dutyCycle": 0.50,
-			"groupFrequencies": 
-			[
-				
-			],
-
 			"spectHigherFreq": 20,
 			"spectLowerFreq": 21,
 			"GroupFreqPolicy": "EQUAL",
@@ -364,11 +358,6 @@
 		{
 			"SignalType": "SSVEP",
 			"dutyCycle": 0.50,
-			"groupFrequencies": 
-			[
-				
-			],
-
 			"spectHigherFreq": 20,
 			"spectLowerFreq": 21,
 			"GroupFreqPolicy": "ARITHMETIC",
@@ -571,11 +560,9 @@
 	},
 
 	"actionmap": 
-	[
-		[
-			
-		]
-	],
+	{
+		
+	},
 
 	"keys": 
 	[
