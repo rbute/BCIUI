@@ -33,7 +33,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public JMenu filesMenu = new JMenu("Files");
 	public FileSelectMenu loadPresetMenu = null;
 	public static final JLabel crght = new JLabel("   Copyright"
-			+ " \u00A9 Rakesh" + " Bute (214ec3011)" + ", Pattern"
+			+ " \u00A9 Pattern"
 			+ " Recognition" + " Lab" + "- NIT" + " Rourkela") {
 		private static final long serialVersionUID = 1L;
 		{

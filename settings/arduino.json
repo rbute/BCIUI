@@ -1,0 +1,182 @@
+{
+	"uioptions": 
+	{
+		"class": "edu.nitrkl.graphics.components.BCIUI",
+		"title": "BCI UI(Test Mode)",
+		"undecorate": true,
+		"horizontalgap": 10,
+		"verticalgap": 10,
+		"detectionrecess": 1,
+		"startscript": ""
+	},
+
+	"singletonmodel": 
+	{
+		"class": "edu.nitrkl.graphics.components.Singleton",
+		"symbol": "X",
+		"index": 
+		[
+			1,
+			1
+		],
+
+		"elements": 
+		[
+			{
+				"class": "edu.nitrkl.graphics.components.ResizableTextJLabel",
+				"color": 
+				[
+					255,
+					0,
+					0
+				],
+
+				"text": "Y",
+				"position": 
+				[
+					1,
+					1
+				],
+
+				"relativesize": 0.7
+			},
+
+			{
+				"class": "edu.nitrkl.graphics.components.Polygon2",
+				"color": 
+				[
+					100,
+					100,
+					100
+				],
+
+				"points": 
+				[
+					[
+						0,
+						0
+					],
+
+					[
+						1,
+						0
+					],
+
+					[
+						1,
+						1
+					],
+
+					[
+						0,
+						1
+					]
+				]
+			}
+		]
+	},
+
+	"groupmodel": 
+	{
+		"gp1": 
+		{
+			"SignalType": "SSVEP",
+			"dutyCycle": 0.50,
+			"spectHigherFreq": 30,
+			"spectLowerFreq": 4,
+			"GroupFreqPolicy": "GEOMETRIC",
+			"flashingLayer": 1,
+			"groups": 
+			[
+				[
+					[
+						1,
+						1
+					]
+				],
+
+				[
+					[
+						1,
+						2
+					]
+				],
+
+				[
+					[
+						1,
+						3
+					]
+				],
+
+				[
+					[
+						2,
+						1
+					]
+				],
+
+				[
+					[
+						2,
+						2
+					]
+				],
+
+				[
+					[
+						2,
+						3
+					]
+				],
+
+				[
+					[
+						3,
+						1
+					]
+				],
+
+				[
+					[
+						3,
+						2
+					]
+				],
+
+				[
+					[
+						3,
+						3
+					]
+				]
+			]
+		}
+	},
+
+	"actionmap": 
+	{
+		
+	},
+
+	"keys": 
+	[
+		[
+			" ",
+			"\u2191",
+			" "
+		],
+
+		[
+			"\u2190",
+			" ",
+			"\u2192"
+		],
+
+		[
+			" ",
+			"\u2193",
+			" "
+		]
+	]
+}
