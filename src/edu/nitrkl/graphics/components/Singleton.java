@@ -2,6 +2,7 @@ package edu.nitrkl.graphics.components;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -22,20 +23,9 @@ public class Singleton extends JComponent implements CloneableComponent {
 	private static final long serialVersionUID = -9136644409217116184L;
 
 	int[] index = null;
-	String actionCommand = "";
+
 	String name = "";
-	String option = "";
-
-	protected Singleton(Singleton singleton) {
-		this.index = new int[singleton.index.length];
-		for (int i = 0; i < this.index.length; i++)
-			this.index[i] = 0;
-
-		for (Component clc : singleton.getComponents()) {
-			this.add(((CloneableComponent) clc).getClone());
-		}
-		this.setLayout(new OcculdingLayout());
-	}
+	ProcessBuilder processBuilder = null;
 
 	public Singleton(int[] index) {
 		for (int i : index)
@@ -60,27 +50,10 @@ public class Singleton extends JComponent implements CloneableComponent {
 		}
 	}
 
-	public Singleton(String str, int[] index, JComponent[] jComponents,
-			Color[] colors) {
-		this(index);
-		if (jComponents.length > colors.length)
-			throw new IllegalArgumentException(
-					"Number of colors must be greater than or equal to the number of components");
-		this.setLayout(new OcculdingLayout());
-
-		for (int i = 0; i < jComponents.length; i++) {
-			JComponent component = jComponents[i];
-			component.setForeground(colors[i]);
-			if (component instanceof JLabel)
-				((JLabel) component).setText(str);
-			super.add(component);
-		}
-	}
-
 	public Singleton(JSONObject singleton) throws ClassNotFoundException,
 			JSONException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+			IllegalArgumentException, InvocationTargetException, IOException {
 		// TODO Auto-generated constructor stub
 		this.name = singleton.getString("symbol");
 		JSONArray arr = singleton.getJSONArray("index");
@@ -114,7 +87,38 @@ public class Singleton extends JComponent implements CloneableComponent {
 
 			this.add(comp);
 		}
-		// System.out.println(arr);
+
+		if (singleton.has("process"))
+			this.processBuilder = new ProcessBuilder(
+					singleton.getString("process"));
+	}
+
+	protected Singleton(Singleton singleton) {
+		this.index = new int[singleton.index.length];
+		for (int i = 0; i < this.index.length; i++)
+			this.index[i] = 0;
+
+		for (Component clc : singleton.getComponents()) {
+			this.add(((CloneableComponent) clc).getClone());
+		}
+		this.setLayout(new OcculdingLayout());
+	}
+
+	public Singleton(String str, int[] index, JComponent[] jComponents,
+			Color[] colors) {
+		this(index);
+		if (jComponents.length > colors.length)
+			throw new IllegalArgumentException(
+					"Number of colors must be greater than or equal to the number of components");
+		this.setLayout(new OcculdingLayout());
+
+		for (int i = 0; i < jComponents.length; i++) {
+			JComponent component = jComponents[i];
+			component.setForeground(colors[i]);
+			if (component instanceof JLabel)
+				((JLabel) component).setText(str);
+			super.add(component);
+		}
 	}
 
 	@Override
@@ -124,6 +128,10 @@ public class Singleton extends JComponent implements CloneableComponent {
 
 	public int[] getIndex() {
 		return index;
+	}
+
+	public synchronized ProcessBuilder getProcessBuilder() {
+		return processBuilder;
 	}
 
 	public void paintImmediately() {
@@ -146,6 +154,10 @@ public class Singleton extends JComponent implements CloneableComponent {
 					+ inputIndex.length + ")");
 		else
 			this.index = inputIndex;
+	}
+
+	public synchronized void setProcessBuilder(ProcessBuilder processBuilder) {
+		this.processBuilder = processBuilder;
 	}
 
 	@Override

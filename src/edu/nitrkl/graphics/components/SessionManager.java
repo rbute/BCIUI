@@ -4,20 +4,17 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
-
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
-
 import matlabcontrol.MatlabProxy;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,8 +26,6 @@ public class SessionManager extends Thread implements ActionListener {
 		CONCATENATE, RANDOMIZE, ROUNDROBIN;
 	}
 
-	String endScript = "";
-
 	FlasherGroup flashersShuffle = new FlasherGroup();
 	ArrayList<FlasherGroup> groups = new ArrayList<FlasherGroup>();
 	ArrayList<FlasherGroup> groupsFlash = new ArrayList<FlasherGroup>();
@@ -40,13 +35,7 @@ public class SessionManager extends Thread implements ActionListener {
 	long detectionRecess = 1500;
 	ReentrantLock lock = new ReentrantLock(true);
 
-	ArrayList<Class<?>> logReceiveFormat = new ArrayList<Class<?>>();
-	ArrayList<Object> logSendFormat = new ArrayList<Object>();
-
 	MatlabProxy matlabSession = null;
-	ArrayList<Class<?>> messageReceiveFormat = new ArrayList<Class<?>>();
-
-	ArrayList<Object> messageSendFormat = new ArrayList<Object>();
 
 	long minSSVEPtime = 750;
 	P300GroupMergePolicy P300merging = P300GroupMergePolicy.RANDOMIZE;
@@ -82,7 +71,7 @@ public class SessionManager extends Thread implements ActionListener {
 	public SessionManager(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+			IllegalArgumentException, InvocationTargetException, IOException {
 
 		this.ui = new BCIUI(
 				jsObj.getJSONObject("uioptions").getString("title"), jsObj
@@ -123,7 +112,7 @@ public class SessionManager extends Thread implements ActionListener {
 					| NoSuchMethodException | SecurityException
 					| InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException
-					| FileNotFoundException e1) {
+					| IOException e1) {
 				e1.printStackTrace();
 				Factory.getLogger().severe(e1.getMessage());
 			}
@@ -133,11 +122,11 @@ public class SessionManager extends Thread implements ActionListener {
 			break;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Accepts JSonObject as settings to the ui
-	 *  
+	 * 
 	 * 
 	 * @param jsObj
 	 * @throws JSONException
@@ -148,12 +137,13 @@ public class SessionManager extends Thread implements ActionListener {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
+	 * @throws IOException
 	 */
 
 	public void buildUi(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+			IllegalArgumentException, InvocationTargetException, IOException {
 
 		Singleton singleton = new Singleton(
 				(JSONObject) jsObj.getJSONObject("singletonmodel"));

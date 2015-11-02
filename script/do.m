@@ -1,15 +1,10 @@
-function [ output_args ] = do( options,coordinates,actionCommand,calltime )
+function [ output_args ] = do( options )
 %DO Summary of this function goes here
 %   Detailed explanation goes here
 
-if strcmp(actionCommand,'setup')
-setupLC;
 
-else if strcmp(actionCommand,'init')
-    disp('Just do it')
-else if strcmp(actionCommand,'dontdoit')
-    disp('Why dont you do it')
-end
+disp(options);
+output_args='OK, Tested';
 
 %end
 
