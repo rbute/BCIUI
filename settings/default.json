@@ -7,7 +7,7 @@
 		"horizontalgap": 10,
 		"verticalgap": 10,
 		"detectionrecess": 1,
-		"startscript": ""
+		"matlabscript": ""
 	},
 
 	"singletonmodel": 

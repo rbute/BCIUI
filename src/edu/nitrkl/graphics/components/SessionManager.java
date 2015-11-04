@@ -11,10 +11,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
+
+import matlabcontrol.MatlabInvocationException;
 import matlabcontrol.MatlabProxy;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,9 +49,7 @@ public class SessionManager extends Thread implements ActionListener {
 	Singleton[][] singletons = null;
 	protected boolean SSVEPrunning = false;
 
-	String startScript = "";
-
-	String taskScript = "";;
+	String matlabScript = null;
 
 	BCIUI ui = null;
 
@@ -192,6 +194,14 @@ public class SessionManager extends Thread implements ActionListener {
 				flasherGroup.calculateFrequencies();
 			}
 
+		if (jsObj.has("matlabscript"))
+			this.matlabScript = jsObj.getString("matlabscript");
+		else
+			this.matlabScript = null;
+
+		if (this.matlabScript == null)
+			Factory.getLogger().info("MatlabScript is absent");
+
 	}
 
 	public void buildUi(String title, String[][] options,
@@ -333,6 +343,16 @@ public class SessionManager extends Thread implements ActionListener {
 				ssvepExcite();
 				p300shuflle();
 				p300Excite();
+
+				// TODO: Improve with returning eval
+				try {
+					Factory.getMatlabProxy().eval("");
+				} catch (MatlabInvocationException e1) {
+
+					e1.printStackTrace();
+					Factory.getLogger().info(
+							"Cannot eval while starting a flasher sequence");
+				}
 				synchronized (this.lock) {
 					try {
 						lock.wait(this.minSSVEPtime);
@@ -353,6 +373,17 @@ public class SessionManager extends Thread implements ActionListener {
 				// }
 				// }
 				ssvepDeexcite();
+
+				// TODO: Improve with returning eval
+				try {
+					Factory.getMatlabProxy().eval("");
+				} catch (MatlabInvocationException e1) {
+
+					e1.printStackTrace();
+					Factory.getLogger().info(
+							"Cannot eval while starting a flasher sequence");
+				}
+
 				synchronized (this) {
 					try {
 						this.wait(detectionRecess);
