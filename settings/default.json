@@ -85,6 +85,11 @@
 			"spectHigherFreq": 30,
 			"spectLowerFreq": 4,
 			"GroupFreqPolicy": "GEOMETRIC",
+			"frequencies": 
+			[
+				
+			],
+
 			"flashingLayer": 1,
 			"groups": 
 			[

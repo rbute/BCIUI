@@ -258,4 +258,8 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		}
 	}
 
+	public synchronized void setFlashTimes(long[] flashTimes) {
+		this.flashTimes = flashTimes;
+	}
+
 }

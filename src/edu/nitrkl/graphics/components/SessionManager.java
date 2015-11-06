@@ -31,26 +31,26 @@ public class SessionManager extends Thread implements ActionListener {
 		CONCATENATE, RANDOMIZE, ROUNDROBIN;
 	}
 
+	long detectionRecess = 1500;
 	FlasherGroup flashersShuffle = new FlasherGroup();
 	ArrayList<FlasherGroup> groups = new ArrayList<FlasherGroup>();
 	ArrayList<FlasherGroup> groupsFlash = new ArrayList<FlasherGroup>();
-	ArrayList<FlasherGroup> groupsShuffle = new ArrayList<FlasherGroup>();
 
+	ArrayList<FlasherGroup> groupsShuffle = new ArrayList<FlasherGroup>();
 	boolean infiniteLoop = true;
-	long detectionRecess = 1500;
 	ReentrantLock lock = new ReentrantLock(true);
 
-	MatlabProxy matlabSession = null;
+	String matlabScript = null;
 
+	MatlabProxy matlabSession = null;
 	long minSSVEPtime = 750;
 	P300GroupMergePolicy P300merging = P300GroupMergePolicy.RANDOMIZE;
-	boolean run = false;
 
+	boolean run = false;
 	long sessionStartTime = 0;
 	Singleton[][] singletons = null;
-	protected boolean SSVEPrunning = false;
 
-	String matlabScript = null;
+	protected boolean SSVEPrunning = false;
 
 	BCIUI ui = null;
 
@@ -192,7 +192,21 @@ public class SessionManager extends Thread implements ActionListener {
 		for (FlasherGroup flasherGroup : this.groups)
 			if (flasherGroup.type == SignalType.SSVEP) {
 				groupsFlash.add(flasherGroup);
-				flasherGroup.calculateFrequencies();
+
+				if ((jsObj.getJSONObject("groupmodel").has("frequencies"))) {
+					JSONArray freqs = jsObj.getJSONObject("groupmodel")
+							.getJSONArray("frequencies");
+
+					long[] flashtimes = new long[freqs.length()];
+
+					for (int i = 0; i < flashtimes.length; i++)
+						flashtimes[i] = (long) (1 / freqs.getDouble(i));
+
+					flasherGroup.setFlashTimes(flashtimes);
+
+				} else
+
+					flasherGroup.calculateFrequencies();
 			}
 
 		if (jsObj.getJSONObject("uioptions").has("matlabscript")) {
@@ -202,7 +216,7 @@ public class SessionManager extends Thread implements ActionListener {
 			try {
 				if (Factory.getMatlabProxy() == null)
 					Factory.getNewMatlabProxy("script");
-				
+
 				Factory.getMatlabProxy().feval(matlabScript, "SETUP",
 						System.currentTimeMillis(), "");
 			} catch (MatlabInvocationException | MatlabConnectionException e) {
@@ -220,9 +234,10 @@ public class SessionManager extends Thread implements ActionListener {
 
 	public void buildUi(String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			int[][][][] groupsList, GroupFreqPolicy[] freqPolicy,
-			float[] startingFrequencies, float[] stoppingFrequencies,
-			SignalType[] signalType, int vGap, int hGap) {
+			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
+			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
+			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
+			int hGap) {
 
 		ui.setTitle(title);
 		ui.choices.removeAll();
@@ -257,10 +272,9 @@ public class SessionManager extends Thread implements ActionListener {
 
 	public void buildUi(String title, String[][] options,
 			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
-			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
-			int hGap) {
+			int[][][][] groupsList, GroupFreqPolicy[] freqPolicy,
+			float[] startingFrequencies, float[] stoppingFrequencies,
+			SignalType[] signalType, int vGap, int hGap) {
 
 		ui.setTitle(title);
 		ui.choices.removeAll();
