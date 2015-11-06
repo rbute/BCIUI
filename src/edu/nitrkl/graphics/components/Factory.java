@@ -23,7 +23,7 @@ public class Factory {
 	protected static final Logger logger = Logger.getLogger("syslog.log");
 	protected static MatlabProxy matlabProxy = null;
 
-	 static{
+	static {
 		try {
 			logger.addHandler(new FileHandler("logs/log_"
 					+ System.currentTimeMillis() + "_.log"));
@@ -31,12 +31,12 @@ public class Factory {
 			e.printStackTrace();
 		}
 
-		try {
-			matlabProxy = (new MatlabProxyFactory()).getProxy();
-			matlabProxy.eval("cd 'script'");
-		} catch (MatlabConnectionException | MatlabInvocationException e) {
-			logger.severe(e.getMessage());
-		}
+		// try {
+		// matlabProxy = (new MatlabProxyFactory()).getProxy();
+		// matlabProxy.eval("cd 'script'");
+		// } catch (MatlabConnectionException | MatlabInvocationException e) {
+		// logger.severe(e.getMessage());
+		// }
 	}
 
 	public static Logger getLogger() {
@@ -50,9 +50,9 @@ public class Factory {
 	public static MatlabProxy getNewMatlabProxy(String scriptDir)
 			throws MatlabConnectionException, MatlabInvocationException,
 			IOException {
-		MatlabProxy matProxy = (new MatlabProxyFactory()).getProxy();
-		matProxy.eval("cd " + (new File(scriptDir)).getCanonicalPath());
-		return matProxy;
+		matlabProxy = (new MatlabProxyFactory()).getProxy();
+		matlabProxy.eval("cd " + (new File(scriptDir)).getCanonicalPath());
+		return matlabProxy;
 	}
 
 	public static Singleton[][] makeBoard(JSONArray arr, Singleton singleton) {

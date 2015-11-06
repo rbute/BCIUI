@@ -94,6 +94,13 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "EXIT":
+
+			try {
+				Factory.getMatlabProxy().exit();
+			} catch (Exception e2) {
+				Factory.getLogger()
+						.info("Matlab Session was nonexistent at the time of exiting");
+			}
 			System.exit(0);
 			break;
 		case "LOADPRESETS":

@@ -16,6 +16,7 @@ import javax.swing.ActionMap;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
+import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
 import matlabcontrol.MatlabProxy;
 
@@ -194,10 +195,23 @@ public class SessionManager extends Thread implements ActionListener {
 				flasherGroup.calculateFrequencies();
 			}
 
-		if (jsObj.has("matlabscript"))
-			this.matlabScript = jsObj.getString("matlabscript");
-		else
-			this.matlabScript = null;
+		if (jsObj.getJSONObject("uioptions").has("matlabscript")) {
+			this.matlabScript = jsObj.getJSONObject("uioptions").getString(
+					"matlabscript");
+
+			try {
+				if (Factory.getMatlabProxy() == null)
+					Factory.getNewMatlabProxy("script");
+				
+				Factory.getMatlabProxy().feval(matlabScript, "SETUP",
+						System.currentTimeMillis(), "");
+			} catch (MatlabInvocationException | MatlabConnectionException e) {
+				Factory.getLogger().info(
+						"Error executing matlab file. Either"
+								+ " wrong syntax or inaccessible file");
+				e.printStackTrace();
+			}
+		}
 
 		if (this.matlabScript == null)
 			Factory.getLogger().info("MatlabScript is absent");
@@ -346,7 +360,9 @@ public class SessionManager extends Thread implements ActionListener {
 
 				// TODO: Improve with returning eval
 				try {
-					Factory.getMatlabProxy().eval("");
+					Factory.getMatlabProxy().feval(matlabScript, "START",
+							System.currentTimeMillis(), "");
+
 				} catch (MatlabInvocationException e1) {
 
 					e1.printStackTrace();
@@ -364,19 +380,12 @@ public class SessionManager extends Thread implements ActionListener {
 				while (!flashersShuffle.isEmpty())
 					Factory.getLogger().info(
 							"Waiting for Flasher Shuffle to be empty");
-				;
-				// synchronized (flashersShuffle) {
-				// try {
-				// flashersShuffle.wait();
-				// } catch (InterruptedException e) {
-				// e.printStackTrace();
-				// }
-				// }
 				ssvepDeexcite();
 
-				// TODO: Improve with returning eval
 				try {
-					Factory.getMatlabProxy().eval("");
+					Factory.getMatlabProxy().feval(matlabScript, "START",
+							System.currentTimeMillis(), "");
+
 				} catch (MatlabInvocationException e1) {
 
 					e1.printStackTrace();
