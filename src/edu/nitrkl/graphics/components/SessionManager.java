@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
@@ -189,13 +190,24 @@ public class SessionManager extends Thread implements ActionListener {
 			if (flasherGroup.type == SignalType.P300)
 				groupsShuffle.add(flasherGroup);
 
+		
+		// Group making
 		for (FlasherGroup flasherGroup : this.groups)
 			if (flasherGroup.type == SignalType.SSVEP) {
 				groupsFlash.add(flasherGroup);
 
+				// TODO
+				System.out.println();
+				
 				if ((jsObj.getJSONObject("groupmodel").has("frequencies"))) {
 					JSONArray freqs = jsObj.getJSONObject("groupmodel")
 							.getJSONArray("frequencies");
+
+					System.out
+							.println("Setting frrequencies from array fond in frequencies");
+					if (freqs.length() != jsObj.getJSONObject("groupmodel")
+							.getJSONArray("groups").length())
+						System.out.println("Length Mismatch");
 
 					long[] flashtimes = new long[freqs.length()];
 
@@ -204,11 +216,14 @@ public class SessionManager extends Thread implements ActionListener {
 
 					flasherGroup.setFlashTimes(flashtimes);
 
-				} else
+				} else {
 
 					flasherGroup.calculateFrequencies();
+				}
 			}
 
+		
+		
 		if (jsObj.getJSONObject("uioptions").has("matlabscript")) {
 			this.matlabScript = jsObj.getJSONObject("uioptions").getString(
 					"matlabscript");
@@ -374,12 +389,11 @@ public class SessionManager extends Thread implements ActionListener {
 
 				// TODO: Improve with returning eval
 				try {
-					Factory.getMatlabProxy().feval(matlabScript, "START",
-							System.currentTimeMillis(), "");
+					if (Factory.getMatlabProxy() != null)
+						Factory.getMatlabProxy().feval(matlabScript, "START",
+								System.currentTimeMillis(), "");
 
 				} catch (MatlabInvocationException e1) {
-
-					e1.printStackTrace();
 					Factory.getLogger().info(
 							"Cannot eval while starting a flasher sequence");
 				}
@@ -387,7 +401,7 @@ public class SessionManager extends Thread implements ActionListener {
 					try {
 						lock.wait(this.minSSVEPtime);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Factory.getLogger().log(Level.WARNING, e.toString());
 					}
 				}
 				// FIXME: Attention Hungry Loops
@@ -397,12 +411,11 @@ public class SessionManager extends Thread implements ActionListener {
 				ssvepDeexcite();
 
 				try {
-					Factory.getMatlabProxy().feval(matlabScript, "START",
-							System.currentTimeMillis(), "");
+					if (Factory.getMatlabProxy() != null)
+						Factory.getMatlabProxy().feval(matlabScript, "START",
+								System.currentTimeMillis(), "");
 
 				} catch (MatlabInvocationException e1) {
-
-					e1.printStackTrace();
 					Factory.getLogger().info(
 							"Cannot eval while starting a flasher sequence");
 				}
@@ -411,7 +424,7 @@ public class SessionManager extends Thread implements ActionListener {
 					try {
 						this.wait(detectionRecess);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Factory.getLogger().log(Level.WARNING, e.toString());
 					}
 				}
 			}
@@ -419,7 +432,7 @@ public class SessionManager extends Thread implements ActionListener {
 				try {
 					this.lock.wait();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Factory.getLogger().log(Level.WARNING, e.toString());
 				}
 			}
 		}

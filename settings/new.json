@@ -6,8 +6,7 @@
 		"undecorate": true,
 		"horizontalgap": 10,
 		"verticalgap": 10,
-		"detectionrecess": 2000,
-		"scriptFile": "do.m"
+		"detectionrecess": 2000
 	},
 
 	"singletonmodel": 
@@ -157,7 +156,15 @@
 			"dutyCycle": 0.50,
 			"groupFrequencies": 
 			[
-				
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13
 			],
 
 			"spectHigherFreq": 20,
@@ -366,7 +373,12 @@
 			"dutyCycle": 0.50,
 			"groupFrequencies": 
 			[
-				
+				4,
+				5,
+				6,
+				7,
+				8,
+				9
 			],
 
 			"spectHigherFreq": 20,
