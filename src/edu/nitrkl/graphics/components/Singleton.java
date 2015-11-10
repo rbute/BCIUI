@@ -121,6 +121,11 @@ public class Singleton extends JComponent implements CloneableComponent {
 		}
 	}
 
+	public void hideSublayers() {
+		for (int i = 1; i < super.getComponents().length; i++)
+			super.getComponent(i).setVisible(false);
+	}
+
 	@Override
 	public Singleton getClone() {
 		return new Singleton(this);

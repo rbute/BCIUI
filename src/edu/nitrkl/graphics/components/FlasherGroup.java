@@ -53,8 +53,8 @@ public class FlasherGroup extends ArrayList<Flasher> {
 				jsObj.getString("SignalType"));
 		// this.freqPolicy = Enum.valueOf(GroupFreqPolicy.class,
 		// jsObj.getString("GroupFreqPolicy"));
-		this.spectLowerFreq = (float) jsObj.getDouble("spectLowerFreq");
-		this.spectHigherFreq = (float) jsObj.getDouble("spectHigherFreq");
+		// this.spectLowerFreq = (float) jsObj.getDouble("spectLowerFreq");
+		// this.spectHigherFreq = (float) jsObj.getDouble("spectHigherFreq");
 		this.dutyCycle = jsObj.getDouble("dutyCycle");
 		this.flashingLayer = jsObj.getInt("flashingLayer");
 	}

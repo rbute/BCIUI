@@ -7,9 +7,9 @@
 		"horizontalgap": 10,
 		"verticalgap": 10,
 		"detectionrecess": 1,
+		"initclean": true,
 		"matlabscript": "do",
-		"matlabsetup":"setupLC"
-		
+		"matlabsetup": "setupLC"
 	},
 
 	"singletonmodel": 

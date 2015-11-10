@@ -253,16 +253,12 @@ public class SessionManager extends Thread implements ActionListener {
 				e.printStackTrace();
 			}
 		}
-		try {
 
-			System.out.println(jsObj.getJSONObject("groupmodel")
-					.getJSONObject("gp1").get("frequencies"));
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		if (this.matlabScript == null)
-			Factory.getLogger().info("MatlabScript is absent");
+		if (jsObj.getJSONObject("uioptions").has("initclean")
+				&& jsObj.getJSONObject("uioptions").getBoolean("initclean"))
+			for (Singleton[] sArray : this.singletons)
+				for (Singleton aSingleton : sArray)
+					aSingleton.hideSublayers();
 
 	}
 
