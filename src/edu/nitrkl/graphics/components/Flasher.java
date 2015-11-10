@@ -27,6 +27,10 @@ public class Flasher extends Thread implements EventListener {
 		this.dutyCycle = dutyCycle;
 		this.flashingLayer = (byte) flashingLayer;
 		this.start();
+		Factory.getLogger().config(
+				"Flasher Created: " + this.elements + " time Period: "
+						+ this.timePeriod + " duty Cycle: " + this.dutyCycle
+						+ " layer: " + this.flashingLayer);
 	}
 
 	public Flasher(Singleton[] elements, int timePeriod, double dutyCycle,
@@ -62,10 +66,6 @@ public class Flasher extends Thread implements EventListener {
 	public synchronized void setFlash() {
 		this.flashOnce = true;
 
-		// synchronized (this.lock) {
-		// this.lock.notifyAll();
-		// }
-
 		synchronized (this) {
 			this.notify();
 		}
@@ -81,7 +81,6 @@ public class Flasher extends Thread implements EventListener {
 		synchronized (this) {
 			this.notify();
 		}
-		// System.out.println("Notified thread: " + this.getId());
 	}
 
 	/**

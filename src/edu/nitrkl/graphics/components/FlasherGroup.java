@@ -17,7 +17,7 @@ public class FlasherGroup extends ArrayList<Flasher> {
 	protected double dutyCycle = 0.5;
 	int flashingLayer = 0;
 	long[] flashTimes = new long[0];
-	GroupFreqPolicy freqPolicy = GroupFreqPolicy.ARITHMETIC;
+	// GroupFreqPolicy freqPolicy = GroupFreqPolicy.ARITHMETIC;
 	float spectHigherFreq = 20;
 	float spectLowerFreq = 5;
 
@@ -37,10 +37,10 @@ public class FlasherGroup extends ArrayList<Flasher> {
 			if (!(f > 0.9 || f < 40.1))
 				throw new IllegalArgumentException(
 						"No supplied frequency shall exceed 1.0 to 40.0 limit.");
-		flashTimes = new long[flashFreqs.length];
-		for (int i = 0; i < flashFreqs.length; i++) {
-			flashTimes[i] = (int) (1000 / flashFreqs[i]);
-		}
+		// flashTimes = new long[flashFreqs.length];
+		// for (int i = 0; i < flashFreqs.length; i++) {
+		// flashTimes[i] = (int) (1000 / flashFreqs[i]);
+		// }
 	}
 
 	/**
@@ -51,8 +51,8 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		super();
 		this.type = Enum.valueOf(SignalType.class,
 				jsObj.getString("SignalType"));
-		this.freqPolicy = Enum.valueOf(GroupFreqPolicy.class,
-				jsObj.getString("GroupFreqPolicy"));
+		// this.freqPolicy = Enum.valueOf(GroupFreqPolicy.class,
+		// jsObj.getString("GroupFreqPolicy"));
 		this.spectLowerFreq = (float) jsObj.getDouble("spectLowerFreq");
 		this.spectHigherFreq = (float) jsObj.getDouble("spectHigherFreq");
 		this.dutyCycle = jsObj.getDouble("dutyCycle");
@@ -77,23 +77,26 @@ public class FlasherGroup extends ArrayList<Flasher> {
 							.getJSONArray(j).getInt(0)) - 1][(groups
 							.getJSONArray(i).getJSONArray(j).getInt(1)) - 1]);
 
-				this.add(new Flasher(singletonList, 1000, this.dutyCycle,
+				int cycleTime = (int) (1000 / jsObj.getJSONArray("frequencies")
+						.getDouble(i));
+
+				this.add(new Flasher(singletonList, cycleTime, this.dutyCycle,
 						this.flashingLayer));
 			}
 
-			flashTimes = new long[this.size()];
-			for (int i = 0; i < flashTimes.length; i++) {
-				this.get(i).timePeriod = (int) this.flashTimes[i];
-				this.get(i).dutyCycle = this.dutyCycle;
-				this.get(i).flashingLayer = (byte) this.flashingLayer;
-			}
+			// flashTimes = new long[this.size()];
+			// for (int i = 0; i < flashTimes.length; i++) {
+			// this.get(i).timePeriod = (int) this.flashTimes[i];
+			// this.get(i).dutyCycle = this.dutyCycle;
+			// this.get(i).flashingLayer = (byte) this.flashingLayer;
+			// }
 		}
 
+		// Log a Message
 		String msg = "Flash Times: ";
 		for (long i : flashTimes)
 			msg = msg + " " + i;
-
-		Factory.getLogger().info(msg);
+		Factory.getLogger().config(msg);
 	}
 
 	@Override
@@ -101,69 +104,69 @@ public class FlasherGroup extends ArrayList<Flasher> {
 		boolean result = false;
 		result = super.add(e);
 		e.dutyCycle = this.dutyCycle;
-		calculateFrequencies();
+		// calculateFrequencies();
 		return result;
 	}
 
-	void calculateFrequencies() {
-
-		if (this.size() != flashTimes.length)
-			flashTimes = new long[this.size()];
-		double[] frequencies = new double[super.size()];
-
-		Factory.getLogger().info("falshtimes size: " + flashTimes.length);
-		Factory.getLogger().info(
-				"spectrum higher Frequency: " + spectHigherFreq);
-		Factory.getLogger().info("specrum lower frequency: " + spectLowerFreq);
-
-		switch (freqPolicy) {
-		case ARITHMETIC:
-			for (int i = 0; i < frequencies.length; i++) {
-				frequencies[i] = spectLowerFreq
-						+ (spectHigherFreq - spectLowerFreq)
-						* ((double) i / (double) flashTimes.length);
-			}
-			break;
-
-		case GEOMETRIC:
-			for (int i = 0; i < frequencies.length; i++) {
-				frequencies[i] = (spectLowerFreq * Math.pow(
-						(spectHigherFreq / spectLowerFreq),
-						((double) i / (double) flashTimes.length)));
-			}
-			break;
-
-		case EQUAL:
-			for (int i = 0; i < frequencies.length; i++)
-				frequencies[i] = spectLowerFreq;
-
-			break;
-
-		default:
-			break;
-		}
-
-		for (int i = 0; i < frequencies.length; i++) {
-			flashTimes[i] = (int) (1000.0d / frequencies[i]);
-			this.get(i).timePeriod = (int) flashTimes[i];
-		}
-
-		String str = "";
-		for (long l : flashTimes) {
-			str = str + " " + l;
-		}
-		Factory.getLogger().info(
-				"Calculated Flash Times " + flashTimes.length
-						+ " Elements. With policy of " + freqPolicy
-						+ " distribution \n Calculated Frequencies: " + str);
-	}
+	// void calculateFrequencies() {
+	//
+	// if (this.size() != flashTimes.length)
+	// flashTimes = new long[this.size()];
+	// double[] frequencies = new double[super.size()];
+	//
+	// Factory.getLogger().info("falshtimes size: " + flashTimes.length);
+	// Factory.getLogger().info(
+	// "spectrum higher Frequency: " + spectHigherFreq);
+	// Factory.getLogger().info("specrum lower frequency: " + spectLowerFreq);
+	//
+	// switch (freqPolicy) {
+	// case ARITHMETIC:
+	// for (int i = 0; i < frequencies.length; i++) {
+	// frequencies[i] = spectLowerFreq
+	// + (spectHigherFreq - spectLowerFreq)
+	// * ((double) i / (double) flashTimes.length);
+	// }
+	// break;
+	//
+	// case GEOMETRIC:
+	// for (int i = 0; i < frequencies.length; i++) {
+	// frequencies[i] = (spectLowerFreq * Math.pow(
+	// (spectHigherFreq / spectLowerFreq),
+	// ((double) i / (double) flashTimes.length)));
+	// }
+	// break;
+	//
+	// case EQUAL:
+	// for (int i = 0; i < frequencies.length; i++)
+	// frequencies[i] = spectLowerFreq;
+	//
+	// break;
+	//
+	// default:
+	// break;
+	// }
+	//
+	// for (int i = 0; i < frequencies.length; i++) {
+	// flashTimes[i] = (int) (1000.0d / frequencies[i]);
+	// this.get(i).timePeriod = (int) flashTimes[i];
+	// }
+	//
+	// String str = "";
+	// for (long l : flashTimes) {
+	// str = str + " " + l;
+	// }
+	// Factory.getLogger().info(
+	// "Calculated Flash Times " + flashTimes.length
+	// + " Elements. With policy of " + freqPolicy
+	// + " distribution \n Calculated Frequencies: " + str);
+	// }
 
 	@Override
 	public Flasher remove(int index) {
 		Flasher result = super.remove(index);
 		if (this.isEmpty())
 			Factory.getLogger().info("Flasher Empty. Notifying all");
-			this.notifyAll();
+		this.notifyAll();
 		return result;
 	}
 

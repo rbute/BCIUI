@@ -1,4 +1,7 @@
 clear all;
+
+disp('Seting up Lab Chart')
+
 global gLCApp;
 global gChans;
 global gLCDoc;

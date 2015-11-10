@@ -151,34 +151,34 @@ public class Factory {
 	 * 
 	 *         For Complete Construction of the Hierarchy
 	 */
-
-	public static ArrayList<FlasherGroup> makeGroups(
-			ArrayList<ArrayList<ArrayList<int[]>>> list,
-			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
-			SignalType[] signalType) {
-		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
-		int i = 0;
-		for (ArrayList<ArrayList<int[]>> group : list) {
-			FlasherGroup flasherGroup = new FlasherGroup();
-			if (group != null) {
-				for (ArrayList<int[]> flasher : group) {
-					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
-					for (int[] index : flasher) {
-						flashersList
-								.add(singletons[index[0] - 1][index[1] - 1]);
-
-					}
-					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
-					flasherGroup.add(aFlasher);
-					flasherGroup.type = signalType[i];
-					flasherGroup.freqPolicy = freqPolicy[i];
-				}
-				flasherGroupsCluster.add(flasherGroup);
-			}
-			i++;
-		}
-		return flasherGroupsCluster;
-	}
+//
+//	public static ArrayList<FlasherGroup> makeGroups(
+//			ArrayList<ArrayList<ArrayList<int[]>>> list,
+//			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
+//			SignalType[] signalType) {
+//		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
+//		int i = 0;
+//		for (ArrayList<ArrayList<int[]>> group : list) {
+//			FlasherGroup flasherGroup = new FlasherGroup();
+//			if (group != null) {
+//				for (ArrayList<int[]> flasher : group) {
+//					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
+//					for (int[] index : flasher) {
+//						flashersList
+//								.add(singletons[index[0] - 1][index[1] - 1]);
+//
+//					}
+//					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
+//					flasherGroup.add(aFlasher);
+//					flasherGroup.type = signalType[i];
+//					flasherGroup.freqPolicy = freqPolicy[i];
+//				}
+//				flasherGroupsCluster.add(flasherGroup);
+//			}
+//			i++;
+//		}
+//		return flasherGroupsCluster;
+//	}
 
 	public static ArrayList<ArrayList<ArrayList<int[]>>> makeGroups(
 			int[][][][] list) {
@@ -231,30 +231,30 @@ public class Factory {
 	 * 
 	 *         For Complete Construction of the Hierarchy
 	 */
-
-	public static ArrayList<FlasherGroup> makeGroups(int[][][][] list,
-			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
-			SignalType[] signalType) {
-		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
-		int i = 0;
-		for (int[][][] group : list) {
-			FlasherGroup flasherGroup = new FlasherGroup();
-			if (group != null) {
-				for (int[][] flasher : group) {
-					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
-					for (int[] index : flasher)
-						flashersList.add(singletons[index[0]][index[1]]);
-					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
-					flasherGroup.add(aFlasher);
-					flasherGroup.type = signalType[i];
-					flasherGroup.freqPolicy = freqPolicy[i];
-				}
-				flasherGroupsCluster.add(flasherGroup);
-			}
-			i++;
-		}
-		return flasherGroupsCluster;
-	}
+//
+//	public static ArrayList<FlasherGroup> makeGroups(int[][][][] list,
+//			Singleton[][] singletons, GroupFreqPolicy[] freqPolicy,
+//			SignalType[] signalType) {
+//		ArrayList<FlasherGroup> flasherGroupsCluster = new ArrayList<FlasherGroup>();
+//		int i = 0;
+//		for (int[][][] group : list) {
+//			FlasherGroup flasherGroup = new FlasherGroup();
+//			if (group != null) {
+//				for (int[][] flasher : group) {
+//					ArrayList<Singleton> flashersList = new ArrayList<Singleton>();
+//					for (int[] index : flasher)
+//						flashersList.add(singletons[index[0]][index[1]]);
+//					Flasher aFlasher = new Flasher(flashersList, 100, 0.5, i);
+//					flasherGroup.add(aFlasher);
+//					flasherGroup.type = signalType[i];
+//					flasherGroup.freqPolicy = freqPolicy[i];
+//				}
+//				flasherGroupsCluster.add(flasherGroup);
+//			}
+//			i++;
+//		}
+//		return flasherGroupsCluster;
+//	}
 
 	public static ArrayList<ArrayList<ArrayList<int[]>>> makeGroups(
 			String[][][][] list) {

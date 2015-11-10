@@ -7,7 +7,9 @@
 		"horizontalgap": 10,
 		"verticalgap": 10,
 		"detectionrecess": 1,
-		"matlabscript-------": "do"
+		"matlabscript": "do",
+		"matlabsetup":"setupLC"
+		
 	},
 
 	"singletonmodel": 
@@ -82,20 +84,17 @@
 		{
 			"SignalType": "SSVEP",
 			"dutyCycle": 0.50,
-			"spectHigherFreq": 30,
-			"spectLowerFreq": 4,
-			"GroupFreqPolicy": "GEOMETRIC",
 			"frequencies": 
 			[
+				0,
+				6,
+				0,
+				7,
+				0,
 				8,
-				8,
-				8,
-				8,
-				8,
-				8,
-				8,
-				8,
-				8
+				0,
+				9,
+				0
 			],
 
 			"flashingLayer": 1,

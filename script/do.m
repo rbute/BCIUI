@@ -10,7 +10,20 @@ function [ output_args ] = do( action ,timestamp,data)
 
 % global gLCApp;
 % global gChans;
- global gLCDoc;
+global gLCDoc;
+global settings;
+global gLCApp;
+global gChans;
+global gLCDoc;
+
+global gLatestBlock;
+global gBlockSecsPerTick;
+global gLatestTickInBlock;
+global gChansData;
+global gT;
+
+global SSVEP_CHANS;
+
 % 
 % global gLatestBlock;
 % global gBlockSecsPerTick;
@@ -27,8 +40,11 @@ elseif(strcmp (action,'START'))
     SSVEP_exp1;   
     
 elseif(strcmp(action,'SETUP'))
-    setupLC;
-    setupExp;
+    disp('Preparing for experiment.');
+    addpath JSON;
+settings=JSON.parse(data);
+        setupLC;
+        setupExp;
 end
 end
 

@@ -1,6 +1,5 @@
 package edu.nitrkl.graphics.components;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,8 +12,6 @@ import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
-import javax.swing.ActionMap;
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
 import matlabcontrol.MatlabConnectionException;
@@ -55,22 +52,23 @@ public class SessionManager extends Thread implements ActionListener {
 
 	BCIUI ui = null;
 
-	public SessionManager(boolean undecorate, String title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
-			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
-			int hGap) {
-
-		this.ui = new BCIUI(title, undecorate);
-		this.ui.filesMenu.addActionListener(this);
-		buildUi(title, options, actionMap, components, colors, groupsList,
-				freqPolicy, startingFrequencies, stoppingFrequencies,
-				signalType, vGap, hGap);
-		this.ui.runStop.addActionListener(this);
-		this.start();
-		System.gc();
-	}
+	// public SessionManager(boolean undecorate, String title, String[][]
+	// options,
+	// ActionMap[][] actionMap, JComponent[] components, Color[] colors,
+	// ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
+	// GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
+	// float[] stoppingFrequencies, SignalType[] signalType, int vGap,
+	// int hGap) {
+	//
+	// this.ui = new BCIUI(title, undecorate);
+	// this.ui.filesMenu.addActionListener(this);
+	// buildUi(title, options, actionMap, components, colors, groupsList,
+	// freqPolicy, startingFrequencies, stoppingFrequencies,
+	// signalType, vGap, hGap);
+	// this.ui.runStop.addActionListener(this);
+	// this.start();
+	// System.gc();
+	// }
 
 	public SessionManager(JSONObject jsObj) throws JSONException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
@@ -190,50 +188,64 @@ public class SessionManager extends Thread implements ActionListener {
 			if (flasherGroup.type == SignalType.P300)
 				groupsShuffle.add(flasherGroup);
 
-		
 		// Group making
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.SSVEP) {
+		// for (FlasherGroup flasherGroup : this.groups)
+		for (int j = 0; j < this.groups.size(); j++) {
+
+			FlasherGroup flasherGroup = this.groups.get(j);
+
+			if (flasherGroup.type == SignalType.SSVEP
+					|| flasherGroup.type == SignalType.P300) {
 				groupsFlash.add(flasherGroup);
 
 				// TODO
-				System.out.println();
-				
-				if ((jsObj.getJSONObject("groupmodel").has("frequencies"))) {
+
+				if ((jsObj.getJSONObject("groupmodel").getJSONObject(names[j])
+						.has("frequencies"))) {
 					JSONArray freqs = jsObj.getJSONObject("groupmodel")
+							.getJSONObject(names[j])
 							.getJSONArray("frequencies");
 
-					System.out
-							.println("Setting frrequencies from array fond in frequencies");
 					if (freqs.length() != jsObj.getJSONObject("groupmodel")
-							.getJSONArray("groups").length())
+							.getJSONObject(names[j]).getJSONArray("groups")
+							.length())
 						System.out.println("Length Mismatch");
 
 					long[] flashtimes = new long[freqs.length()];
 
-					for (int i = 0; i < flashtimes.length; i++)
+					for (int i = 0; i < flashtimes.length; i++) {
 						flashtimes[i] = (long) (1 / freqs.getDouble(i));
+						flasherGroup.setFlashTimes(flashtimes);
+					}
 
 					flasherGroup.setFlashTimes(flashtimes);
 
 				} else {
 
-					flasherGroup.calculateFrequencies();
+					System.out.println("Frequency definition not proper");
+					// flasherGroup.calculateFrequencies();
 				}
 			}
+		}
 
-		
-		
-		if (jsObj.getJSONObject("uioptions").has("matlabscript")) {
+		// Setting up a matlab Session
+		if (jsObj.getJSONObject("uioptions").has("matlabscript")
+				&& jsObj.getJSONObject("uioptions").has("matlabsetup")) {
+
 			this.matlabScript = jsObj.getJSONObject("uioptions").getString(
 					"matlabscript");
+			String setupScript = jsObj.getJSONObject("uioptions").getString(
+					"matlabsetup");
 
 			try {
 				if (Factory.getMatlabProxy() == null)
 					Factory.getNewMatlabProxy("script");
 
-				Factory.getMatlabProxy().feval(matlabScript, "SETUP",
-						System.currentTimeMillis(), "");
+				Factory.getMatlabProxy().eval(setupScript);
+
+				Factory.getMatlabProxy().feval(this.matlabScript, "SETUP",
+						System.currentTimeMillis(), jsObj.toString());
+
 			} catch (MatlabInvocationException | MatlabConnectionException e) {
 				Factory.getLogger().info(
 						"Error executing matlab file. Either"
@@ -241,86 +253,93 @@ public class SessionManager extends Thread implements ActionListener {
 				e.printStackTrace();
 			}
 		}
+		try {
+
+			System.out.println(jsObj.getJSONObject("groupmodel")
+					.getJSONObject("gp1").get("frequencies"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 		if (this.matlabScript == null)
 			Factory.getLogger().info("MatlabScript is absent");
 
 	}
 
-	public void buildUi(String title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
-			GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
-			float[] stoppingFrequencies, SignalType[] signalType, int vGap,
-			int hGap) {
+	// public void buildUi(String title, String[][] options,
+	// ActionMap[][] actionMap, JComponent[] components, Color[] colors,
+	// ArrayList<ArrayList<ArrayList<int[]>>> groupsList,
+	// GroupFreqPolicy[] freqPolicy, float[] startingFrequencies,
+	// float[] stoppingFrequencies, SignalType[] signalType, int vGap,
+	// int hGap) {
+	//
+	// ui.setTitle(title);
+	// ui.choices.removeAll();
+	//
+	// Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
+	// colors);
+	// singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
+	// this.ui.choices.setLayout(new GridLayout(singletons.length,
+	// singletons[0].length, hGap, vGap));
+	//
+	// this.ui.choices.removeAll();
+	// for (Singleton[] singletonRow : singletons)
+	// for (Singleton aSingleton : singletonRow)
+	// this.ui.choices.add(aSingleton);
+	//
+	// this.ui.runStop.addActionListener(this);
+	//
+	// this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
+	// signalType);
+	//
+	// for (FlasherGroup flasherGroup : this.groups)
+	// if (flasherGroup.type == SignalType.P300)
+	// groupsShuffle.add(flasherGroup);
+	//
+	// for (FlasherGroup flasherGroup : this.groups)
+	// if (flasherGroup.type == SignalType.SSVEP) {
+	// groupsFlash.add(flasherGroup);
+	// flasherGroup.calculateFrequencies();
+	// }
+	//
+	// }
 
-		ui.setTitle(title);
-		ui.choices.removeAll();
-
-		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
-				colors);
-		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
-		this.ui.choices.setLayout(new GridLayout(singletons.length,
-				singletons[0].length, hGap, vGap));
-
-		this.ui.choices.removeAll();
-		for (Singleton[] singletonRow : singletons)
-			for (Singleton aSingleton : singletonRow)
-				this.ui.choices.add(aSingleton);
-
-		this.ui.runStop.addActionListener(this);
-
-		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
-				signalType);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.P300)
-				groupsShuffle.add(flasherGroup);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.SSVEP) {
-				groupsFlash.add(flasherGroup);
-				flasherGroup.calculateFrequencies();
-			}
-
-	}
-
-	public void buildUi(String title, String[][] options,
-			ActionMap[][] actionMap, JComponent[] components, Color[] colors,
-			int[][][][] groupsList, GroupFreqPolicy[] freqPolicy,
-			float[] startingFrequencies, float[] stoppingFrequencies,
-			SignalType[] signalType, int vGap, int hGap) {
-
-		ui.setTitle(title);
-		ui.choices.removeAll();
-
-		Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
-				colors);
-		singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
-		this.ui.choices.setLayout(new GridLayout(singletons.length,
-				singletons[0].length, hGap, vGap));
-
-		this.ui.choices.removeAll();
-		for (Singleton[] singletonRow : singletons)
-			for (Singleton aSingleton : singletonRow)
-				this.ui.choices.add(aSingleton);
-
-		this.ui.runStop.addActionListener(this);
-
-		this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
-				signalType);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.P300)
-				groupsShuffle.add(flasherGroup);
-
-		for (FlasherGroup flasherGroup : this.groups)
-			if (flasherGroup.type == SignalType.SSVEP) {
-				groupsFlash.add(flasherGroup);
-				flasherGroup.calculateFrequencies();
-			}
-
-	}
+	// public void buildUi(String title, String[][] options,
+	// ActionMap[][] actionMap, JComponent[] components, Color[] colors,
+	// int[][][][] groupsList, GroupFreqPolicy[] freqPolicy,
+	// float[] startingFrequencies, float[] stoppingFrequencies,
+	// SignalType[] signalType, int vGap, int hGap) {
+	//
+	// ui.setTitle(title);
+	// ui.choices.removeAll();
+	//
+	// Singleton singleton = new Singleton(new int[] { 1, 1 }, components,
+	// colors);
+	// singletons = (Singleton[][]) Factory.makeBoard(options, singleton);
+	// this.ui.choices.setLayout(new GridLayout(singletons.length,
+	// singletons[0].length, hGap, vGap));
+	//
+	// this.ui.choices.removeAll();
+	// for (Singleton[] singletonRow : singletons)
+	// for (Singleton aSingleton : singletonRow)
+	// this.ui.choices.add(aSingleton);
+	//
+	// this.ui.runStop.addActionListener(this);
+	//
+	// this.groups = Factory.makeGroups(groupsList, singletons, freqPolicy,
+	// signalType);
+	//
+	// for (FlasherGroup flasherGroup : this.groups)
+	// if (flasherGroup.type == SignalType.P300)
+	// groupsShuffle.add(flasherGroup);
+	//
+	// for (FlasherGroup flasherGroup : this.groups)
+	// if (flasherGroup.type == SignalType.SSVEP) {
+	// groupsFlash.add(flasherGroup);
+	// flasherGroup.calculateFrequencies();
+	// }
+	//
+	// }
 
 	public ArrayList<FlasherGroup> getSSVEPGroups() {
 		ArrayList<FlasherGroup> ssvepGroups = new ArrayList<FlasherGroup>();
