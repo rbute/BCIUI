@@ -2,9 +2,10 @@ clear all;
 
 disp('Seting up Lab Chart')
 
+global gLCDoc;
+global settings;
 global gLCApp;
 global gChans;
-global gLCDoc;
 
 global gLatestBlock;
 global gBlockSecsPerTick;
@@ -18,7 +19,7 @@ addpath device;
 addpath JSON;
 addpath uitemplates;
 %GetLCApp;
-gChans = [ 1 2 3 ];
+gChans = 1:8;
 
 
 
