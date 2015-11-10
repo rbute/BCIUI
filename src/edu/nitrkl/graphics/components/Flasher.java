@@ -6,19 +6,19 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Flasher extends Thread implements EventListener {
 
-	ArrayList<Singleton> elements = new ArrayList<Singleton>();
 	double dutyCycle = 0.5;
-	byte flashingLayer = 2;
-	public int timePeriod = 100;
-
-	ArrayList<Flasher> flashSequence = new ArrayList<Flasher>();
-	boolean flashOnce = false;
+	ArrayList<Singleton> elements = new ArrayList<Singleton>();
 	boolean flash = false;
+
 	byte flashCount = 0;
+	byte flashingLayer = 2;
+	boolean flashOnce = false;
+	ArrayList<Flasher> flashSequence = new ArrayList<Flasher>();
 	long flashUntil = 0;
 
 	boolean infiniteLoop = true;
 	public ReentrantLock lock = new ReentrantLock();
+	public int timePeriod = 100;
 
 	public Flasher(ArrayList<Singleton> elements, int timePeriod,
 			double dutyCycle, int flashingLayer) {
@@ -43,20 +43,54 @@ public class Flasher extends Thread implements EventListener {
 		this.start();
 	}
 
-	public synchronized void terminate() {
-		infiniteLoop = false;
-		synchronized (this) {
-			this.notify();
-		}
+	protected void flash() throws InterruptedException {
+		if (this.timePeriod > 0 && this.timePeriod < 1000)
+			setGroupVisibility(true);
+		Thread.sleep((long) (timePeriod * dutyCycle));
+		setGroupVisibility(false);
+		Thread.sleep((long) (timePeriod * (1 - dutyCycle)));
+
 	}
 
-	/**
-	 * Stops continuous flashing
-	 */
-	public synchronized void unsetFlash() {
-		this.flashOnce = false;
-		synchronized (this) {
-			this.notify();
+	@Override
+	public void run() {
+		while (infiniteLoop) {
+			while (infiniteLoop
+					&& (flash || flashOnce || (flashCount > 0) || (System
+							.currentTimeMillis() < flashUntil))
+					|| (this.flashSequence.indexOf(this) >= 0)) {
+
+				if (!this.lock.isLocked())
+					this.lock.lock();
+
+				try {
+					flash();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				if (System.currentTimeMillis() < flashUntil)
+					;
+				else if (flashOnce) {
+					flashOnce = false;
+				} else if (flashCount > 0) {
+					flashCount--;
+				} else if (this.flashSequence.indexOf(this) >= 0) {
+					this.flashSequence.remove(this);
+					if (!this.flashSequence.isEmpty())
+						this.flashSequence.get(0).setFlash(this.flashSequence);
+				}
+			}
+			if (this.lock.isLocked())
+				this.lock.unlock();
+
+			synchronized (this) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -68,6 +102,20 @@ public class Flasher extends Thread implements EventListener {
 
 		synchronized (this) {
 			this.notify();
+		}
+	}
+
+	/**
+	 * 
+	 * @param flashSequence
+	 * 
+	 *            This Function flashes the array sequentially as supplied by
+	 *            flashSequence
+	 */
+	public synchronized void setFlash(ArrayList<Flasher> flashSequence) {
+		this.flashSequence = flashSequence;
+		synchronized (this) {
+			this.notifyAll();
 		}
 	}
 
@@ -122,20 +170,6 @@ public class Flasher extends Thread implements EventListener {
 		}
 	}
 
-	/**
-	 * 
-	 * @param flashSequence
-	 * 
-	 *            This Function flashes the array sequentially as supplied by
-	 *            flashSequence
-	 */
-	public synchronized void setFlash(ArrayList<Flasher> flashSequence) {
-		this.flashSequence = flashSequence;
-		synchronized (this) {
-			this.notifyAll();
-		}
-	}
-
 	protected void setGroupVisibility(boolean visible) {
 		for (Singleton component : elements) {
 			component.getComponent(this.flashingLayer).setVisible(visible);
@@ -143,53 +177,20 @@ public class Flasher extends Thread implements EventListener {
 		}
 	}
 
-	protected void flash() throws InterruptedException {
-		setGroupVisibility(true);
-		Thread.sleep((long) (timePeriod * dutyCycle));
-		setGroupVisibility(false);
-		Thread.sleep((long) (timePeriod * (1 - dutyCycle)));
-
+	public synchronized void terminate() {
+		infiniteLoop = false;
+		synchronized (this) {
+			this.notify();
+		}
 	}
 
-	@Override
-	public void run() {
-		while (infiniteLoop) {
-			while (infiniteLoop
-					&& (flash || flashOnce || (flashCount > 0) || (System
-							.currentTimeMillis() < flashUntil))
-					|| (this.flashSequence.indexOf(this) >= 0)) {
-
-				if (!this.lock.isLocked())
-					this.lock.lock();
-
-				try {
-					flash();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
-				if (System.currentTimeMillis() < flashUntil)
-					;
-				else if (flashOnce) {
-					flashOnce = false;
-				} else if (flashCount > 0) {
-					flashCount--;
-				} else if (this.flashSequence.indexOf(this) >= 0) {
-					this.flashSequence.remove(this);
-					if (!this.flashSequence.isEmpty())
-						this.flashSequence.get(0).setFlash(this.flashSequence);
-				}
-			}
-			if (this.lock.isLocked())
-				this.lock.unlock();
-
-			synchronized (this) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+	/**
+	 * Stops continuous flashing
+	 */
+	public synchronized void unsetFlash() {
+		this.flashOnce = false;
+		synchronized (this) {
+			this.notify();
 		}
 	}
 }
