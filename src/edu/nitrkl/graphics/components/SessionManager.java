@@ -198,8 +198,6 @@ public class SessionManager extends Thread implements ActionListener {
 					|| flasherGroup.type == SignalType.P300) {
 				groupsFlash.add(flasherGroup);
 
-				// TODO
-
 				if ((jsObj.getJSONObject("groupmodel").getJSONObject(names[j])
 						.has("frequencies"))) {
 					JSONArray freqs = jsObj.getJSONObject("groupmodel")
@@ -229,19 +227,14 @@ public class SessionManager extends Thread implements ActionListener {
 		}
 
 		// Setting up a matlab Session
-		if (jsObj.getJSONObject("uioptions").has("matlabscript")
-				&& jsObj.getJSONObject("uioptions").has("matlabsetup")) {
+		if (jsObj.getJSONObject("uioptions").has("matlabscript")) {
 
 			this.matlabScript = jsObj.getJSONObject("uioptions").getString(
 					"matlabscript");
-			String setupScript = jsObj.getJSONObject("uioptions").getString(
-					"matlabsetup");
 
 			try {
 				if (Factory.getMatlabProxy() == null)
 					Factory.getNewMatlabProxy("script");
-
-				Factory.getMatlabProxy().eval(setupScript);
 
 				Factory.getMatlabProxy().feval(this.matlabScript, "SETUP",
 						System.currentTimeMillis(), jsObj.toString());

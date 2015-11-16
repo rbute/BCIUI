@@ -347,8 +347,6 @@ public class Factory {
 		return temp;
 	}
 
-	public static void executeScript(String str, String[] args) {
 
-	}
 
 }

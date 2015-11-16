@@ -2,46 +2,37 @@
 function [ output_args ] = do( action ,timestamp,data)
 
 
-
 %DO Summary of this function goes here
 %   Detailed explanation goes her
 
-% global gLCApp;
-% global gChans;
-% global gLCDoc;
-% global settings;
-% global gLCApp;
-% global gChans;
-% global gLCDoc;
+
+% global gLCDoc 
+% global settings 
+% global gLCApp 
+% global gChans 
 % 
-% global gLatestBlock;
-% global gBlockSecsPerTick;
-% global gLatestTickInBlock;
-% global gChansData;
-% global gT;
-% global SSVEP_CHANS;
+% global gLatestBlock 
+% global gBlockSecsPerTick 
+% global gLatestTickInBlock 
+% global gChansData 
+% global gT 
 % 
-%
-% global gLatestBlock;
-% global gBlockSecsPerTick;
-% global gLatestTickInBlock;
-% global gChansData;
-% global gT;
-% 
-% global SSVEP_CHANS;
+% global SSVEP_CHANS
+
+
 
 if(strcmp(action,'STOP'))
-    gLCDoc.StartSampling;
+    evalin('base','gLCDoc.StartSampling;');
 elseif(strcmp (action,'START'))
-    gLCDoc.StopSampling;
-    SSVEP_exp1;   
+    evalin('base','gLCDoc.StopSampling;');
+    evalin('base','SSVEP_exp1; ');  
     
 elseif(strcmp(action,'SETUP'))
-    disp('Preparing for experiment.');
-    addpath JSON;
-    set JSON.parse(data);
-        setupLC;
-        setupExp;
+   disp('Preparing for experiment.');
+   addpath JSON;
+   evalin('base','settings=JSON.parse(data);')
+   evalin('base','setupLC;');
+        %setupExp;
 end
-end
+
 

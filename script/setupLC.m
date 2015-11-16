@@ -2,18 +2,18 @@ clear all;
 
 disp('Seting up Lab Chart')
 
-global gLCDoc;
-global settings;
-global gLCApp;
-global gChans;
+global gLCDoc 
+global settings 
+global gLCApp 
+global gChans 
 
-global gLatestBlock;
-global gBlockSecsPerTick;
-global gLatestTickInBlock;
-global gChansData;
-global gT;
+global gLatestBlock 
+global gBlockSecsPerTick 
+global gLatestTickInBlock 
+global gChansData 
+global gT 
 
-global SSVEP_CHANS;
+global SSVEP_CHANS 
 
 addpath device;
 addpath JSON;

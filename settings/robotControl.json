@@ -8,8 +8,7 @@
 		"verticalgap": 10,
 		"detectionrecess": 1,
 		"initclean": true,
-		"matlabscript": "do",
-		"matlabsetup": "setupLC"
+		"matlabscript": "do"
 	},
 
 	"singletonmodel": 
@@ -30,7 +29,7 @@
 				[
 					35,
 					35,
-					25
+					35
 				],
 
 				"text": "Y",
