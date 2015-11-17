@@ -15,9 +15,10 @@ global gT
 
 global SSVEP_CHANS 
 
-addpath device;
-addpath JSON;
-addpath uitemplates;
+%addpath device;
+%addpath JSON;
+%addpath uitemplates;
+%addpath util;
 %GetLCApp;
 gChans = 1:8;
 
