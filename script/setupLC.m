@@ -13,7 +13,10 @@ global gLatestTickInBlock
 global gChansData 
 global gT 
 
-global SSVEP_CHANS 
+global datafolder
+global samplingStartTime
+global SSVEP_CHANS
+global spect;
 
 %addpath device;
 %addpath JSON;

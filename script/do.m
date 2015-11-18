@@ -44,6 +44,7 @@ elseif(strcmp(action,'SETUP'))
     global gChansData ;
     global gT ;
     global SSVEP_CHANS; 
+    global dataAnalysisInfo;
     %global datafolder;
     %global spect;
     
@@ -53,7 +54,7 @@ elseif(strcmp(action,'SETUP'))
     
     datafolder=['..\data\',getTimeStamp];
     mkdir(datafolder);
-    
+    load('exp1_info');
     
         %setupExp;
 end
