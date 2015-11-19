@@ -5,26 +5,48 @@ function [ output_args ] = do( action ,timestamp,data)
 %DO Summary of this function goes here
 %   Detailed explanation goes her
 
+% LabLabchart Variables
 
- global gLCDoc 
- global settings 
- global samplingStartTime
- global spect
- global datafolder
- global gChans ;
+ 
 
+% For Lab chart application and it's launching
+global gLCDoc 
+global settings 
+global gLCApp 
+global gChans 
 
+% For Acquired data by lab chart
+global gLatestBlock 
+global gBlockSecsPerTick 
+global gLatestTickInBlock 
+global gChansData 
+global gT 
+
+% For scripted Data processing
+global datafolder
+global samplingStartTime
+global SSVEP_CHANS
+global spect
+global capturedData
+
+global dataAnalysisInfo;
+global dataChannelInfo
+
+% Start Sampling script
 if(strcmp(action,'START'))
     %evalin('base','gLCDoc.StartSampling;');
     gLCDoc.StartSampling;
     figure;
-    samplingStartTime=currentTimeMillis;
+    samplingStartTime=timestamp;
+    
+% Stop Sampling Script
 elseif(strcmp (action,'STOP'))
     %evalin('base','gLCDoc.StopSampling;');
     %evalin('base','SSVEP_exp1; ');  
     gLCDoc.StopSampling
     SSVEP_exp1;
     
+% Setup Script
 elseif(strcmp(action,'SETUP'))
    disp('Preparing for experiment.');
    
@@ -33,30 +55,36 @@ elseif(strcmp(action,'SETUP'))
    %evalin('base','setupLC;');
    settings=JSON.parse(data);
    setupLC;
-   
-    %global gLCDoc ;
-    %global settings ;
-    global gLCApp ;
-    %global gChans ;
-    global gLatestBlock ;
-    global gBlockSecsPerTick ;
-    global gLatestTickInBlock ;
-    global gChansData ;
-    global gT ;
-    global SSVEP_CHANS; 
-    global dataAnalysisInfo;
-    %global datafolder;
-    %global spect;
-    
+       
     addpath device;
     addpath JSON;
     addpath util;
+    addpath device;
     
-    datafolder=['..\data\',getTimeStamp];
-    mkdir(datafolder);
+%     datafolder=['..\data\',getTimeStamp];
+%     mkdir(datafolder);
     load('exp1_info');
+    assignin('base','dataAnalysisInfo',dataAnalysisInfo);
+    assignin('base','dataChannelInfo',dataChannelInfo);
+    
     
         %setupExp;
+     %Copy of quick Setup Code
+    addpath .
+    setupLC                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    %global datafolder
+    %global samplingStartTime
+
+    evalin('base',' global datafolder;');
+    evalin('base',' global samplingStartTime;');
+
+    samplingStartTime=currentTimeMillis;
+    datafolder=['.\data\',getTimeStamp];
+
+    mkdir(datafolder);
+    addpath(datafolder);
+    load('exp1_info');
+    cd .
 end
 
 

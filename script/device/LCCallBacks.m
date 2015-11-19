@@ -28,9 +28,11 @@ global gLatestTickInBlock;
 global gChans;
 global gChansData;
 global gT;
-disp('OnBlockStart called')
-gLatestBlock = gLCDoc.NumberOfRecords
-gBlockSecsPerTick = gLCDoc.GetRecordSecsPerTick(gLatestBlock)
+%disp('OnBlockStart called');
+gLatestBlock = gLCDoc.NumberOfRecords;
+gBlockSecsPerTick = gLCDoc.GetRecordSecsPerTick(gLatestBlock);
+disp(['OnBlockStart-> gLatestBlock: ',int2str(int64(gLatestBlock))...
+    , ' gBlockSecsPerTick: ',int2str(int64(gBlockSecsPerTick))]);
 gNChanSamples = 0;
 gT = [];   %time (from start of block)
 gLatestTickInBlock = 0;
@@ -97,7 +99,7 @@ global gLatestTickInBlock;
 global gChans;
 global gChansData;
 global gT;
-disp('OnBlockFinish called')
+disp('OnBlockFinish-> ')
 %This would be a good place to save the gChansData and gT for the completed
 %block, if needed.
 

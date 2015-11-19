@@ -396,10 +396,11 @@ public class SessionManager extends Thread implements ActionListener {
 				p300Excite();
 
 				// TODO: Improve with returning eval
+				// STart Sampling
 				try {
 					if (Factory.getMatlabProxy() != null)
 						Factory.getMatlabProxy().feval(matlabScript, "START",
-								System.currentTimeMillis(), "");
+									""+System.currentTimeMillis(), "");
 
 				} catch (MatlabInvocationException e1) {
 					Factory.getLogger().info(
@@ -418,10 +419,11 @@ public class SessionManager extends Thread implements ActionListener {
 							"Waiting for Flasher Shuffle to be empty");
 				ssvepDeexcite();
 
+				// Stop Sampling
 				try {
 					if (Factory.getMatlabProxy() != null)
-						Factory.getMatlabProxy().feval(matlabScript, "START",
-								System.currentTimeMillis(), "");
+						Factory.getMatlabProxy().feval(matlabScript, "STOP",
+								""+System.currentTimeMillis(), "");
 
 				} catch (MatlabInvocationException e1) {
 					Factory.getLogger().info(
