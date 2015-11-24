@@ -38,8 +38,9 @@ clf; % clear current figure
 
 % Save data for future use
 mkdir([datafolder,'\',samplingStartTime,'\']);
-save([datafolder,'\',samplingStartTime,'\',samplingStartTime,'_data'],'gChans',...
-    'samplingStartTime','capturedData');
+save([datafolder,'\',samplingStartTime,'\',samplingStartTime,'_data'],...
+    'gChans','samplingStartTime','capturedData','gBlockSecsPerTick');
+
 load('exp1_info');
 % Take pictures of graphs
 for i = 1: channelCount
