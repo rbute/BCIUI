@@ -1,5 +1,5 @@
 
-pwd
+% pwd
 
 database=uigetdir('..\data','Please select a Database');
 folders=ls(database);
@@ -8,6 +8,7 @@ folders=folders(3:fl,:);
 %folders=folders(folders()~='settings');
 %clear fl;
 [fl,~]=size(folders);
+close(gcf);
 figure('units','normalized','outerposition',[0 0 1 1]);
 
 global calculationMatrix;
@@ -30,22 +31,12 @@ fftPoints = 5000;
 gBlockSecsPerTick=1e-3;
 f1 = 5.0;
 f2 = 20.0;
-calculationMatrix = ...
-    [  0.5  0  -0.5  0  0  0  0  0;
-    0  0.5  0  -0.5  0  0  0  0;
-    0  0  0  0  -0.5  0.5  0  0;
-    
-    ];
 
 gridrows=2;
-gridcols=5;
+gridcols=6;
 tobeplottedchans=[1 2 3 4 5 6];
 gridusedupto=0;
 
-
-if isempty (calculationMatrix)
-    calculationMatrix=calmat;
-end
 
 try
     settings=JSON.parse(fileread(filepath));
@@ -58,7 +49,7 @@ for i=1:fl
         %         disp(['Loading: ',[database,'\',folders(i,:),'\',...
         %             folders(i,:),'_data.mat']]);
         load([database,'\',strtrim(folders(i,:)),'\',strtrim( folders(i,:)),'_data.mat']);
-        fplot;
+        funcplot;
         pause(0.9999);
     end
 end

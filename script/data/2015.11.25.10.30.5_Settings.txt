@@ -1,0 +1,17 @@
+channels:
+O1
+O2
+O3
+O4
+Oz
+Pz
+
+Bio Amp settings:
+Lowpass: 30Hz
+Highpass: 1S
+Samping Freq: 1000 /S
+Range: 1mV
+50 Hz filter
+PowerLine suppressed
+
+Samples recorded in ambient condition
