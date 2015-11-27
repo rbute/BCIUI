@@ -7,17 +7,17 @@ global f2
 global gBlockSecsPerTick;
 % global calculationMatrix;
 
-calculationMatrix = ...
-    [  -1 -1 -1 -1 4];
+% calculationMatrix = ...
+%     [  -1 -1 -1 -1 4];
 
 analysisTimeFFTPoints = 5000;
 freqs = (1/(gBlockSecsPerTick*analysisTimeFFTPoints))...
     *(0:(analysisTimeFFTPoints-1));
 
-[result]=pca(input_args);
+[pcamat]=pca(input_args');
+result=pcamat*input_args;
 
-output_args= abs([fft(result,analysisTimeFFTPoints,1),...
-    fft((result*calculationMatrix'),analysisTimeFFTPoints,1)]);
+output_args= abs(fft(result',analysisTimeFFTPoints,1));
 
 plotted_freqs=freqs(find(freqs>=f1 & freqs <=f2))';
 output_args=output_args(find(freqs>=f1 & freqs <=f2),:);

@@ -33,7 +33,7 @@ f1 = 5.0;
 f2 = 20.0;
 
 gridrows=2;
-gridcols=6;
+gridcols=7;
 tobeplottedchans=[1 2 3 4 5 6];
 gridusedupto=0;
 
