@@ -1,25 +1,32 @@
-function groupPlot( data, timebase , rows , cols ,xtext,ytext)
+function groupPlot( data, timebase , grid, plots ,xtext,ytext,titletext)
 %GROUPPLOT Summary of this function goes here
 %   Detailed explanation goes here
+%   groupPlot( data, timebase , grid, plots ,xtext,ytext,titletext)
+
 [N,~]=size(data);
-close(gcf);
+% close(gcf);
 
 for i= 1:N
-    subplot(rows,cols,i);
+    subplot(grid(1),grid(2),plots(i));
     plot(timebase,data(i,:));
     
-    if isrow(xtext)
+    if length(xtext)==1
         xlabel(xtext);
-    else
-        xlabel(xtext(i))
+    elseif length(xtext)>1
+        xlabel(xtext{i})
     end
     
-    if isrow(ytext)
+    if length(ytext)==1
         ylabel(ytext)
-    else
-        ylabel(ytext(i))
+    elseif length(ytext)>1
+        ylabel(ytext{1})
     end
     
+    if length(titletext)==1
+        title(titletext)
+    elseif length(titletext)>1
+        title(titletext{i})
+    end
 end
 
 end
