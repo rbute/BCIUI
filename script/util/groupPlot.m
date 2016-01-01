@@ -3,12 +3,13 @@ function groupPlot( data, timebase , grid, plots ,xtext,ytext,titletext)
 %   Detailed explanation goes here
 %   groupPlot( data, timebase , grid, plots ,xtext,ytext,titletext)
 
-[N,~]=size(data);
+[~,N]=size(data);
+% size(data)
 % close(gcf);
 
 for i= 1:N
     subplot(grid(1),grid(2),plots(i));
-    plot(timebase,data(i,:));
+    plot(timebase,data(:,i));
     
     if length(xtext)==1
         xlabel(xtext);
@@ -27,6 +28,9 @@ for i= 1:N
     elseif length(titletext)>1
         title(titletext{i})
     end
+%     [Peak, PeakIdx] = findpeaks(data(i,:));
+%     disp(findpeaks(data(i,:)))
+%     text(data(i,PeakIdx), Peak, sprintf('Peak = %6.3f', Peak));
 end
 
 end

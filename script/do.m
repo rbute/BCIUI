@@ -35,17 +35,17 @@ global dataChannelInfo
 % Start Sampling script
 if(strcmp(action,'START'))
     %evalin('base','gLCDoc.StartSampling;');
-    gLCDoc.StartSampling;
-    figure;
+%     gLCDoc.StartSampling;
+%     figure;
     samplingStartTime=timestamp;
-    
+    close all;
 % Stop Sampling Script
 elseif(strcmp (action,'STOP'))
     %evalin('base','gLCDoc.StopSampling;');
     %evalin('base','SSVEP_exp1; ');  
-    gLCDoc.StopSampling
+%     gLCDoc.StopSampling
     SSVEP_exp1;
-    
+    close all;
 % Setup Script
 elseif(strcmp(action,'SETUP'))
    disp('Preparing for experiment.');

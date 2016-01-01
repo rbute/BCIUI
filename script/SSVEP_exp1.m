@@ -31,7 +31,7 @@ global dataChannelInfo
 
 gLCDoc.StopSampling
 
-capturedData=cell2mat(gChansData)';
+capturedData=cell2mat(gChansData);
 clf; % clear current figure
 
 [channelCount,~]=size(capturedData);
@@ -41,16 +41,16 @@ mkdir([datafolder,'\',samplingStartTime,'\']);
 save([datafolder,'\',samplingStartTime,'\',samplingStartTime,'_data'],...
     'gChans','samplingStartTime','capturedData','gBlockSecsPerTick');
 
-load('exp1_info');
-% Take pictures of graphs
-for i = 1: channelCount
-    plot(capturedData(i,:));
-    ylabel('Ampitude(Volts)');
-    xlabel('Time (Seconds)')
-    title(['Time domain signal from ',dataChannelInfo(i,:)]);
-    saveas(gcf,[datafolder,'\',samplingStartTime,'\',samplingStartTime,...
-        '_Channel-',dataChannelInfo(i,:),'.jpg']);
-end
+% load('exp1_info');
+% % Take pictures of graphs
+% for i = 1: channelCount
+%     plot(capturedData(i,:));
+%     ylabel('Ampitude(Volts)');
+%     xlabel('Time (Seconds)')
+%     title(['Time domain signal from ',dataChannelInfo(i,:)]);
+%     saveas(gcf,[datafolder,'\',samplingStartTime,'\',samplingStartTime,...
+%         '_Channel-',dataChannelInfo(i,:),'.jpg']);
+% end
 
 close(gcf);
 
