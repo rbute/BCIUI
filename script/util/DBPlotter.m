@@ -3,7 +3,10 @@
 % close(gcf);
 % close(gcf);
 
-if(~exist('database','var'))
+
+%standaloneExp=[];
+
+if(~exist('database','var') | exist ('standaloneExp','var'))
     database=uigetdir('..\data','Please select a Database');
 end
 
@@ -47,4 +50,7 @@ gBlockSecsPerTick=1e-3;
 settingsFilepath = '..\..\settings\robotControl.json';
 stimulusFreqs = [7 9 13 15];
 
-Plotter;
+% capturedData = capturedData(1:200,:);
+
+% Analysis;
+Analysis2;
