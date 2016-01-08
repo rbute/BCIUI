@@ -31,7 +31,7 @@ global capturedData
 
 global dataAnalysisInfo;
 global dataChannelInfo
-
+global myBot
 % Start Sampling script
 if(strcmp(action,'START'))
     %evalin('base','gLCDoc.StartSampling;');
@@ -45,6 +45,7 @@ elseif(strcmp (action,'STOP'))
     %evalin('base','SSVEP_exp1; ');  
 %     gLCDoc.StopSampling
     SSVEP_exp1;
+    SSVEP_exp2;
     close all;
 % Setup Script
 elseif(strcmp(action,'SETUP'))
@@ -84,6 +85,13 @@ elseif(strcmp(action,'SETUP'))
     mkdir(datafolder);
     addpath(datafolder);
     load('exp1_info');
+    
+    try
+        myBot = bot('COM12',[],[]);
+    catch
+    end
+   
+    
     cd .
 end
 

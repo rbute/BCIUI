@@ -54,3 +54,6 @@ stimulusFreqs = [7 9 13 15];
 
 % Analysis;
 Analysis2;
+if exist('myBot','var')
+       myBot.sendCommand(num2str( indx));
+end
