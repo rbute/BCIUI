@@ -1,17 +1,17 @@
- 
+
 
 % For Lab chart application and it's launching
-global gLCDoc 
-global settings 
-global gLCApp 
-global gChans 
+global gLCDoc
+global settings
+global gLCApp
+global gChans
 
 % For Acquired data by lab chart
-global gLatestBlock 
-global gBlockSecsPerTick 
-global gLatestTickInBlock 
-global gChansData 
-global gT 
+global gLatestBlock
+global gBlockSecsPerTick
+global gLatestTickInBlock
+global gChansData
+global gT
 
 % For scripted Data processing
 global datafolder
@@ -32,7 +32,7 @@ global indx;
 
 close(gcf);
 
-gLCDoc.StopSampling
+% gLCDoc.StopSampling
 
 capturedData=cell2mat(gChansData);
 % capturedData=capturedData;
@@ -89,7 +89,8 @@ settingsFilepath = '..\..\settings\robotControl.json';
 stimulusFreqs = [7 9 13 15];
 
 Analysis2;
-if exist('myBot','var')
-       myBot.sendCommand(num2str( indx));
+if exist('myBot','var') && ~  isempty(myBot)  
+    disp('Sending Command to Bot');
+    myBot.sendCommand(num2str( indx));
 end
 

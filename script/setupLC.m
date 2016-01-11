@@ -1,4 +1,6 @@
-clear all;
+clear gLCDoc settings gLCApp gChans gLatestBlock gBlockSecsPerTick ...
+    gLatestTickInBlock gChansData gT datafolder samplingStartTime ...
+    SSVEP_CHANS spect;
 
 disp('Seting up Lab Chart')
 

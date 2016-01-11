@@ -99,6 +99,7 @@ global gLatestTickInBlock;
 global gChans;
 global gChansData;
 global gT;
+% cell2mat(gChansData)
 disp('OnBlockFinish-> ')
 %This would be a good place to save the gChansData and gT for the completed
 %block, if needed.

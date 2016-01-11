@@ -5,6 +5,7 @@ import java.awt.Polygon;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.jar.Attributes;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
@@ -45,6 +46,16 @@ public class Factory {
 
 	public static MatlabProxy getMatlabProxy() {
 		return matlabProxy;
+	}
+	
+	public static Attributes parseAttributes(String[] args){
+		Attributes switches = new Attributes();
+		for (String string : args) 
+			if (string.matches("^-+.*=.*$")) {
+				String[] str = string.split("(^-+)|=");
+				switches.putValue(str[1], str[2]);
+			}
+		return switches;
 	}
 
 	public static MatlabProxy getNewMatlabProxy(String scriptDir)

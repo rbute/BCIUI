@@ -11,6 +11,8 @@ global tobeplottedchans;
 global gridusedupto;
 global settingsFilepath
 
+capturedData=cell2mat(gChansData);
+disp(['Size of Captured Data: ', num2str(size(capturedData))]);
 % Plot Time domain
 [N,~]=size(capturedData);
 grid=[3,2];

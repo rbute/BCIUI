@@ -7,20 +7,12 @@ function [ output_args ] = do( action ,timestamp,data)
 
 % LabLabchart Variables
 
- 
-
-% For Lab chart application and it's launching
-global gLCDoc 
-global settings 
-global gLCApp 
-global gChans 
-
 % For Acquired data by lab chart
-global gLatestBlock 
-global gBlockSecsPerTick 
-global gLatestTickInBlock 
-global gChansData 
-global gT 
+global gLatestBlock
+global gBlockSecsPerTick
+global gLatestTickInBlock
+global gChansData
+global gT
 
 % For scripted Data processing
 global datafolder
@@ -32,67 +24,79 @@ global capturedData
 global dataAnalysisInfo;
 global dataChannelInfo
 global myBot
+
+% For Lab chart application and it's launching
+global gLCDoc
+global settings
+global gLCApp
+global gChans
+
 % Start Sampling script
 if(strcmp(action,'START'))
     %evalin('base','gLCDoc.StartSampling;');
-%     gLCDoc.StartSampling;
-%     figure;
+    gLCDoc.StartSampling;
+    %     figure;
     samplingStartTime=timestamp;
     close all;
-% Stop Sampling Script
+    % Stop Sampling Script
 elseif(strcmp (action,'STOP'))
     %evalin('base','gLCDoc.StopSampling;');
-    %evalin('base','SSVEP_exp1; ');  
-%     gLCDoc.StopSampling
-    SSVEP_exp1;
+    %evalin('base','SSVEP_exp1; ');
+    gLCDoc.StopSampling
+    %     SSVEP_exp1;
     SSVEP_exp2;
     close all;
-% Setup Script
+    % Setup Script
 elseif(strcmp(action,'SETUP'))
-   disp('Preparing for experiment.');
-   
-   addpath JSON;
-   %evalin('base','settings=JSON.parse(data);')
-   %evalin('base','setupLC;');
-   settings=JSON.parse(data);
-   setupLC;
-       
+    disp('Preparing for experiment.');
+    
+    addpath JSON;
+    %evalin('base','settings=JSON.parse(data);')
+    %evalin('base','setupLC;');
+    %    settings=JSON.parse(data);
+    setupLC;
+    
     addpath device;
     addpath JSON;
     addpath util;
     addpath device;
     
-%     datafolder=['..\data\',getTimeStamp];
-%     mkdir(datafolder);
-    load('exp1_info');
+    %     datafolder=['..\data\',getTimeStamp];
+    %     mkdir(datafolder);
+    %     load('exp1_info');
     assignin('base','dataAnalysisInfo',dataAnalysisInfo);
     assignin('base','dataChannelInfo',dataChannelInfo);
+    assignin('base','gChansData',gChansData);
+    assignin('base','gBlockSecsPerTick',gBlockSecsPerTick);
     
     
-        %setupExp;
-     %Copy of quick Setup Code
+    %     disp('Exists timestamp')
+    %     exist('timestamp','var')
+    %
+    %     disp('Exists data')
+    %     exist('data','var')
+    %
+    %     assignin('base','timestamp',timestamp);
+    %     assignin('base','data',data);
+    
+    %setupExp;
+    %Copy of quick Setup Code
     addpath .
-    setupLC                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-    %global datafolder
-    %global samplingStartTime
-
-    evalin('base',' global datafolder;');
-    evalin('base',' global samplingStartTime;');
-
+    
     samplingStartTime=currentTimeMillis;
-    datafolder=['.\data\',getTimeStamp];
-
+    datafolder=['.\data\',num2str(timestamp)];
+    settings=JSON.parse(data);
+    load('exp1_info');
     mkdir(datafolder);
     addpath(datafolder);
     load('exp1_info');
-    
     try
         myBot = bot('COM12',[],[]);
     catch
     end
-   
-    
+    setupLC;
     cd .
+end
 end
 
 
