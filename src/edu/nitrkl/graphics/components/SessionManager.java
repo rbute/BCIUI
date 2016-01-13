@@ -81,7 +81,7 @@ public class SessionManager extends Thread implements ActionListener {
 		this.buildUi(jsObj);
 		this.detectionRecess = jsObj.getJSONObject("uioptions").getInt(
 				"detectionrecess");
-		this.ui.filesMenu.addActionListener(this);
+		this.ui.loadPresetMenu.addActionListener(this);
 		this.ui.runStop.addActionListener(this);
 		this.start();
 		System.gc();
@@ -89,6 +89,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		switch (e.getActionCommand()) {
 		case "RUN":
 			synchronized (this.lock) {
@@ -104,12 +105,13 @@ public class SessionManager extends Thread implements ActionListener {
 			run = false;
 			break;
 		case "LOADPRESETS":
+
 			Factory.getLogger().info(
 					"Loading settings: "
 							+ ((JMenuItem) e.getSource()).getText());
 			try {
 				buildUi(new JSONObject(new JSONTokener(new FileReader(
-						((JMenuItem) e.getSource()).getText()))));
+						((JMenuItem) e.getSource()).getName()))));
 			} catch (JSONException | ClassNotFoundException
 					| NoSuchMethodException | SecurityException
 					| InstantiationException | IllegalAccessException
@@ -400,7 +402,7 @@ public class SessionManager extends Thread implements ActionListener {
 				try {
 					if (Factory.getMatlabProxy() != null)
 						Factory.getMatlabProxy().feval(matlabScript, "START",
-									""+System.currentTimeMillis(), "");
+								"" + System.currentTimeMillis(), "");
 
 				} catch (MatlabInvocationException e1) {
 					Factory.getLogger().info(
@@ -423,7 +425,7 @@ public class SessionManager extends Thread implements ActionListener {
 				try {
 					if (Factory.getMatlabProxy() != null)
 						Factory.getMatlabProxy().feval(matlabScript, "STOP",
-								""+System.currentTimeMillis(), "");
+								"" + System.currentTimeMillis(), "");
 
 				} catch (MatlabInvocationException e1) {
 					Factory.getLogger().info(
@@ -461,5 +463,11 @@ public class SessionManager extends Thread implements ActionListener {
 	public void terminate() {
 		this.infiniteLoop = false;
 		this.notify();
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString() + "Session Manager";
 	}
 }

@@ -27,7 +27,7 @@ classdef bot
                 this.commandmap=CommandMap;
             else
                 disp('Command Map is set Default. ')
-                this.commandmap={'0' '1','2','3','4';...
+                this.commandmap={'1' '2','3','4','5';...
                     '0' '1' '3' '4' '2' }';
             end
             fopen(this.connection);
@@ -44,6 +44,7 @@ classdef bot
         end
         
         function clear(this)
+            this.send('0');
             fclose(this.connection);
         end
         

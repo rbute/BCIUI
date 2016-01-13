@@ -91,7 +91,8 @@ elseif(strcmp(action,'SETUP'))
     addpath(datafolder);
     load('exp1_info');
     try
-        myBot = bot('COM12',[],[]);
+        myBot = bot('COM11',{},{'1' '2' '3' '4' '5' ;...
+            '1' '3' '0' '4' '2'}');
     catch
     end
     setupLC;

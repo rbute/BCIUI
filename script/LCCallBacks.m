@@ -12,9 +12,9 @@ global gLCDoc;
 disp('OnSelectionChange called')
 kArrayOfDoubles = 1;  % GetSelectedData returns a matrix of doubles, not variants (cells)
 kAllSelectedChannels = -1; % GetSelectedData returns all selected channels, rather just the specified channel.
-data = gLCDoc.GetSelectedData(kArrayOfDoubles, kAllSelectedChannels);
-subplot(1,1,1); %no subplots
-plot(data)
+% data = gLCDoc.GetSelectedData(kArrayOfDoubles, kAllSelectedChannels);
+% subplot(1,1,1); %no subplots
+% plot(data)
 
 function OnBlockStart(varargin)
 %Example event handler called when sampling and a new block is about to be
@@ -85,9 +85,9 @@ end
 
 %plot the latest 5000 samples
 plotRange = max(1,minChanLength-5000):minChanLength;
-for ch = gChans
-    subplot(length(gChans),1,ch), plot(gT(plotRange),gChansData{ch}(plotRange));
-end
+% for ch = gChans
+%     subplot(length(gChans),1,ch), plot(gT(plotRange),gChansData{ch}(plotRange));
+% end
 
 
 

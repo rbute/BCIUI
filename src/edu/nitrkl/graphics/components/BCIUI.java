@@ -28,7 +28,7 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 	private static final long serialVersionUID = -5789990501425003741L;
 
 	public JLabel result = new JLabel("", null, JLabel.CENTER);
-	public JPanel choices = new JPanel(new GridLayout());
+	public volatile JPanel choices = new JPanel(new GridLayout());
 	public JMenuBar menuBar = new JMenuBar();
 	public JMenu filesMenu = new JMenu("Files");
 	public FileSelectMenu loadPresetMenu = null;
@@ -92,7 +92,9 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		switch (e.getActionCommand()) {
+
 		case "EXIT":
 
 			try {
@@ -109,9 +111,11 @@ public class BCIUI extends JFrame implements ActionListener, Cloneable {
 							+ ((JMenuItem) e.getSource()).getText());
 			Factory.getLogger().info(
 					"Settings Named: " + ((JMenuItem) e.getSource()).getName());
+
 			break;
 		default:
-			System.out.println(e.getActionCommand());
+			System.out.println("BCIUI: No Action Assigned: "
+					+ e.getActionCommand());
 			break;
 		}
 	}

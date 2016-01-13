@@ -19,7 +19,6 @@ public class FileSelectMenu extends JMenu implements MenuListener {
 	String matchExpressions = "";
 	String directory = "";
 	String itemsActionCommand = "";
-	ActionListener[] listeners = null;
 
 	public FileSelectMenu(String name, String sourceDirectory,
 			String[] extensions, String actionCommand,
@@ -32,7 +31,9 @@ public class FileSelectMenu extends JMenu implements MenuListener {
 		this.matchExpressions += "]$";
 		this.directory = sourceDirectory;
 		this.itemsActionCommand = actionCommand;
-		this.listeners = listeningObjects;
+		for (ActionListener actionListener : listeningObjects) 
+			this.addActionListener(actionListener);
+		
 		this.addMenuListener(this);
 	}
 
@@ -49,7 +50,7 @@ public class FileSelectMenu extends JMenu implements MenuListener {
 			JMenuItem item = new JMenuItem(aFile.getName());
 			item.setName(this.directory + "/" + aFile.getName());
 			item.setActionCommand(this.itemsActionCommand);
-			for (ActionListener aListener : listeners)
+			for (ActionListener aListener : this.getActionListeners())
 				item.addActionListener(aListener);
 			this.add(item);
 		}

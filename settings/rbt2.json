@@ -8,7 +8,7 @@
 		"verticalgap": 10,
 		"detectionrecess": 1,
 		"initclean": true,
-		"matlabscript": "do"
+		"matlabscript ": "do"
 	},
 
 	"singletonmodel": 
