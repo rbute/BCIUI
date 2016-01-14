@@ -32,7 +32,6 @@ public class Singleton extends JComponent implements CloneableComponent {
 			if (i <= 0)
 				throw new IllegalArgumentException(
 						"Index must be real positive nonzero integers");
-
 		this.index = new int[index.length];
 	}
 

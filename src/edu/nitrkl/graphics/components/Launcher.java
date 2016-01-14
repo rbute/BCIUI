@@ -46,11 +46,9 @@ public class Launcher {
 		}
 
 		try {
-
 			Factory.getLogger().info("Starting Execution");
 			new SessionManager(new JSONObject(new JSONTokener(new FileReader(
 					settingsFile))));
-
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -10,6 +10,7 @@ global saveplot;
 global tobeplottedchans;
 global gridusedupto;
 global settingsFilepath
+global stimulusFreqs
 
 capturedData=cell2mat(gChansData);
 disp(['Size of Captured Data: ', num2str(size(capturedData))]);
@@ -29,11 +30,20 @@ analyzedData = capturedData(:,1:6);
 % ssvep_mod_mat=sin(2*pi*(0:gBlockSecsPerTick:(N-1)...
 %     *gBlockSecsPerTick)'*[7 9 13 15]);
 
+
+%Short way to force set
+if ~exist('stimulusFreqs','var')
+    stimulusFreqs=[7,9,11,13,15];
+end
+
 if ~exist('ssvep_mod_mat','var') || size(ssvep_mod_mat,1)<N
-ssvep_mod_mat=sin(2*pi*(0:gBlockSecsPerTick:(N*2-1)...
-    *gBlockSecsPerTick)'*[7 0 9 0 13 0 15 0 17 0])+...
-    cos(2*pi*(0:gBlockSecsPerTick:(N*2-1)...
-    *gBlockSecsPerTick)'*[0 7 0 9 0 13 0 15 0 17]);
+    % freqs=[7:2:13];
+    ssvep_mod_mat(:,1:2:2*size(stimulusFreqs,2))=...
+        sin(2*pi*(0:gBlockSecsPerTick:(N*2-1)*gBlockSecsPerTick)'...
+        *stimulusFreqs);
+    ssvep_mod_mat(:,2:2:2*size(stimulusFreqs,2))=...
+        cos(2*pi*(0:gBlockSecsPerTick:(N*2-1)...
+        *gBlockSecsPerTick)'*stimulusFreqs);
 end
 
 
