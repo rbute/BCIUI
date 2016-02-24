@@ -1,14 +1,14 @@
 classdef bot
-    %bot 
+    %bot
     % syntax: bot(comport,BaudRate,CommandMap)
     % comport: 'COM1' | 'COM2' | '/dev/ttyUSB0' ... etc
     % BaudRate: Standard Baudrates. By default: 9600
-    % Command Map: Command Interpretation to bot for 
-    % bot.sendCommand(Command)   ... Function. 
+    % Command Map: Command Interpretation to bot for
+    % bot.sendCommand(Command)   ... Function.
     % Should be cell with two columns
     %
     %
-
+    
     properties
         connection
         commandmap
@@ -16,22 +16,29 @@ classdef bot
     end
     
     methods
-        function this=bot(comport,BaudRate,CommandMap)
-            this.connection=serial(comport);
-            if ~isempty(BaudRate)
-                disp(['Setting Baud to: ' num2str(BaudRate)]);
-                this.connection.BaudRate=BaudRate;
-            end
-            if ~isempty(CommandMap)
-                disp('Setting Command Map: ')
-                this.commandmap=CommandMap;
+        function this=bot(comport_or_struct,BaudRate,CommandMap)
+            %             if isstruct(comport_or_struct)
+            %                 if isfield()
+            
+            if false
             else
-                disp('Command Map is set Default. ')
-                this.commandmap={'1' '2','3','4','5';...
-                    '0' '1' '3' '4' '2' }';
+                this.connection=serial(comport_or_struct);
+                
+                if ~isempty(BaudRate)
+                    disp(['Setting Baud to: ' num2str(BaudRate)]);
+                    this.connection.BaudRate=BaudRate;
+                end
+                if ~isempty(CommandMap)
+                    disp('Setting Command Map: ')
+                    this.commandmap=CommandMap;
+                else
+                    disp('Command Map is set Default. ')
+                    this.commandmap={'1' '2','3','4','5';...
+                        '0' '1' '3' '4' '2' }';
+                end
+                fopen(this.connection);
+                this.oncleanup=onCleanup(@()clear(this));
             end
-            fopen(this.connection);
-            this.oncleanup=onCleanup(@()clear(this));
         end
         
         function send(this,message)

@@ -1,10 +1,10 @@
 function [ output_args ] = quickSpect( input_args ,subPlots, fftPoints ...
-    ,fftDim,Fs,freqRange,xLabel,yLabel,tiTle)
+    ,Fs,freqRange,xLabel,yLabel,tiTle)
 %QUICKSPECT Summary of this function goes here
 %  [ output_args ] = quickSpect( input_args ,subPlots, fftPoints ...
-%                       ,fftDim,Fs,freqRange,xLabel,yLabel,tiTle)
+%                       ,Fs,freqRange,xLabel,yLabel,tiTle)
 
-output_args=abs(fft(input_args,fftPoints,fftDim));
+output_args=abs(fft(input_args,fftPoints));
 [obs,vects]=size(output_args);
 % figure('units','normalized','outerposition',[0 0 1 1],'Name',...
 %     'Waveform of PCA Processed Chanels');

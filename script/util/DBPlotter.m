@@ -4,14 +4,13 @@
 % close(gcf);
 
 
-%standaloneExp=[];
+standaloneExp=[];
 
 if(~exist('database','var') | exist ('standaloneExp','var'))
     database=uigetdir('..\data','Please select a Database');
 end
 
 [dbname,foldername,~]=fileparts(database);
-replot=false;
 
 global gBlockSecsPerTick
 global fftPoints
@@ -26,7 +25,7 @@ global settingsFilepath
 global saveplot
 
 global stimulusFreqs
-
+global freqWindow
 % Addpaths
 addpath ..\JSON\
 
@@ -44,16 +43,18 @@ gridrows=2;
 gridcols=7;
 saveplot=true;
 gridusedupto=0;
-fftPoints = 5000;
+fftPoints = 8196;
 tobeplottedchans=1:6;
 gBlockSecsPerTick=1e-3;
 settingsFilepath = '..\..\settings\robotControl.json';
-stimulusFreqs = [7 9 13 15];
-
+stimulusFreqs = [7 9 13 15 17];
+freqWindow = 1.0;
 % capturedData = capturedData(1:200,:);
 
 % Analysis;
-Analysis2;
+% Analysis2;
+Analysis3;
+
 if exist('myBot','var')
        myBot.sendCommand(num2str( indx));
 end

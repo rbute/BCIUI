@@ -4,6 +4,8 @@ clear gLCDoc settings gLCApp gChans gLatestBlock gBlockSecsPerTick ...
 
 disp('Seting up Lab Chart')
 
+
+
 global gLCDoc 
 global settings 
 global gLCApp 

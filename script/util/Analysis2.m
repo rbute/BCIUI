@@ -12,7 +12,10 @@ global gridusedupto;
 global settingsFilepath
 global stimulusFreqs
 
+if exist('gChansData','var')
 capturedData=cell2mat(gChansData);
+end
+
 disp(['Size of Captured Data: ', num2str(size(capturedData))]);
 % Plot Time domain
 [N,~]=size(capturedData);
@@ -65,6 +68,19 @@ end
 % B
 
 [~,indx]=max(max(abs([A1(1:2:size(A1,1),:) A1(2:2:size(A1,1),:)]),[],2));
-disp(['The result is(From Analysis2):',num2str( indx)])
+disp(['Analysis2: Cannonn Corr Result:',num2str( indx)])
+
+output_args=abs(fft(analyzedData,fftPoints));
+[obs,vects]=size(output_args);
+freqs=(0:(obs-1))/(obs*gBlockSecsPerTick);
+out=output_args*[1 1 -1 -1 -1 1 ]';
+plot(freqs(freqs>freqRange(1)&freqs<freqRange(2)),...
+            out(freqs>freqRange(1)&freqs<freqRange(2),:));
+
+        
+%         freqRange=[4 20];
 % Plot;
 % indx=4;
+
+
+% spectrogram()

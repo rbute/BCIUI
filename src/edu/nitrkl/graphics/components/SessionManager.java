@@ -41,7 +41,6 @@ public class SessionManager extends Thread implements ActionListener {
 	String matlabScript = null;
 
 	MatlabProxy matlabSession = null;
-	long minSSVEPtime = 750;
 	P300GroupMergePolicy P300merging = P300GroupMergePolicy.RANDOMIZE;
 
 	boolean run = false;
@@ -238,8 +237,10 @@ public class SessionManager extends Thread implements ActionListener {
 				if (Factory.getMatlabProxy() == null)
 					Factory.getNewMatlabProxy("script");
 
-				Factory.getMatlabProxy().feval(this.matlabScript, "SETUP",
+				Factory.getMatlabProxy().feval("do", "SETUP",
 						System.currentTimeMillis(), jsObj.toString());
+				// Factory.getMatlabProxy().feval("do", "SET_MSG_PANE",
+				// System.currentTimeMillis(), ui.result);
 
 			} catch (MatlabInvocationException | MatlabConnectionException e) {
 				Factory.getLogger().info(
@@ -397,25 +398,23 @@ public class SessionManager extends Thread implements ActionListener {
 				p300shuflle();
 				p300Excite();
 
-				// TODO: Improve with returning eval
 				// STart Sampling
 				try {
 					if (Factory.getMatlabProxy() != null)
 						Factory.getMatlabProxy().feval(matlabScript, "START",
-								"" + System.currentTimeMillis(), "");
+								" " + System.currentTimeMillis(), "");
 
 				} catch (MatlabInvocationException e1) {
 					Factory.getLogger().info(
 							"Cannot eval while starting a flasher sequence");
 				}
-				synchronized (this.lock) {
-					try {
-						lock.wait(this.minSSVEPtime);
-					} catch (InterruptedException e) {
-						Factory.getLogger().log(Level.WARNING, e.toString());
-					}
-				}
-				// FIXME: Attention Hungry Loops
+				// synchronized (this.lock) {
+				// try {
+				// lock.wait(this.minSSVEPtime);
+				// } catch (InterruptedException e) {
+				// Factory.getLogger().log(Level.WARNING, e.toString());
+				// }
+				// }
 				while (!flashersShuffle.isEmpty())
 					Factory.getLogger().info(
 							"Waiting for Flasher Shuffle to be empty");
@@ -425,7 +424,7 @@ public class SessionManager extends Thread implements ActionListener {
 				try {
 					if (Factory.getMatlabProxy() != null)
 						Factory.getMatlabProxy().feval(matlabScript, "STOP",
-								"" + System.currentTimeMillis(), "");
+								System.currentTimeMillis());
 
 				} catch (MatlabInvocationException e1) {
 					Factory.getLogger().info(
@@ -434,7 +433,7 @@ public class SessionManager extends Thread implements ActionListener {
 
 				synchronized (this) {
 					try {
-						this.wait(detectionRecess);
+						this.wait(this.detectionRecess);
 					} catch (InterruptedException e) {
 						Factory.getLogger().log(Level.WARNING, e.toString());
 					}
@@ -467,7 +466,6 @@ public class SessionManager extends Thread implements ActionListener {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return super.toString() + "Session Manager";
 	}
 }

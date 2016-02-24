@@ -8,10 +8,10 @@ folders=folders(3:size(folders,1),:);
 foldersList=cell(size(folders,1),1);
 
 
-try
-    myBot = bot('COM12',[],[]);
-catch
-end
+% try
+%     myBot = bot('COM12',[],[]);
+% catch
+% end
 
 for i=1:size(folders,1)
     if exist(strcat(database,'\' ,strtrim(folders(i,:))),'dir')
@@ -27,4 +27,4 @@ for iCellRec=1:length(foldersList)
     DBPlotter
     pause(1);
 end
-myBot.sendCommand('0');
+% myBot.sendCommand('0');

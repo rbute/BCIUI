@@ -4,6 +4,7 @@ function a = LCCallBacks(str)
 a = str2func(str);
 
 function OnSelectionChange(varargin)
+disp(varargin)
 %Example event handler. Called when the selection changes in the LabChart
 %document.
 %This example gets the selected data as a (2D) matrix with each column

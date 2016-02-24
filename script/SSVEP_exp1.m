@@ -1,17 +1,18 @@
- 
+
+function SSVEP_exp1()
 
 % For Lab chart application and it's launching
-global gLCDoc 
-global settings 
-global gLCApp 
-global gChans 
+global gLCDoc
+global settings
+global gLCApp
+global gChans
 
 % For Acquired data by lab chart
-global gLatestBlock 
-global gBlockSecsPerTick 
-global gLatestTickInBlock 
-global gChansData 
-global gT 
+global gLatestBlock
+global gBlockSecsPerTick
+global gLatestTickInBlock
+global gChansData
+global gT
 
 % For scripted Data processing
 global datafolder
@@ -55,3 +56,4 @@ save([datafolder,'\',samplingStartTime,'\',samplingStartTime,'_data'],...
 close(gcf);
 
 
+end

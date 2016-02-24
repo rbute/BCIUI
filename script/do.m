@@ -27,65 +27,53 @@ global myBot
 
 % For Lab chart application and it's launching
 global gLCDoc
-global settings
+global UISettings
 global gLCApp
 global gChans
-
+global messege_banner
 % Start Sampling script
 if(strcmp(action,'START'))
-    %evalin('base','gLCDoc.StartSampling;');
-    gLCDoc.StartSampling;
-    %     figure;
-    samplingStartTime=timestamp;
+    disp(['Acquired Timestamp: ' timestamp])
+    gLCDoc.StartSampling; %uncomment later
+    %samplingStartTime=timestamp;
+    samplingStartTime=currentTimeMillis;
     close all;
+    
     % Stop Sampling Script
 elseif(strcmp (action,'STOP'))
-    %evalin('base','gLCDoc.StopSampling;');
-    %evalin('base','SSVEP_exp1; ');
     gLCDoc.StopSampling
     %     SSVEP_exp1;
-    SSVEP_exp2;
+    %     SSVEP_exp2; % uncomment later
+    disp(['Evaluating: ' UISettings.uioptions.experimentscript]);
+    eval(UISettings.uioptions.experimentscript);
     close all;
+    
+    % elseif (strcmp(action,'SET_MSG_PANE'))
+    %     disp('Setting Message Banner')
+    %     disp(data)
+    %     messege_banner = data;
+    
+    
     % Setup Script
 elseif(strcmp(action,'SETUP'))
     disp('Preparing for experiment.');
-    
-    addpath JSON;
-    %evalin('base','settings=JSON.parse(data);')
-    %evalin('base','setupLC;');
-    %    settings=JSON.parse(data);
-    setupLC;
     
     addpath device;
     addpath JSON;
     addpath util;
     addpath device;
     
-    %     datafolder=['..\data\',getTimeStamp];
-    %     mkdir(datafolder);
-    %     load('exp1_info');
-    assignin('base','dataAnalysisInfo',dataAnalysisInfo);
-    assignin('base','dataChannelInfo',dataChannelInfo);
-    assignin('base','gChansData',gChansData);
-    assignin('base','gBlockSecsPerTick',gBlockSecsPerTick);
+    load('exp1_info');
+    %     assignin('base','dataAnalysisInfo',dataAnalysisInfo);
+    %     assignin('base','dataChannelInfo',dataChannelInfo);
+    %     assignin('base','gChansData',gChansData);
+    %     assignin('base','gBlockSecsPerTick',gBlockSecsPerTick);
     
-    
-    %     disp('Exists timestamp')
-    %     exist('timestamp','var')
-    %
-    %     disp('Exists data')
-    %     exist('data','var')
-    %
-    %     assignin('base','timestamp',timestamp);
-    %     assignin('base','data',data);
-    
-    %setupExp;
     %Copy of quick Setup Code
     addpath .
-    
-    samplingStartTime=currentTimeMillis;
-    datafolder=['.\data\',num2str(timestamp)];
-    settings=JSON.parse(data);
+    samplingStartTime=num2str(timestamp);
+    datafolder=['.\data\',getTimeStamp];
+    UISettings=JSON.parse(data);
     load('exp1_info');
     mkdir(datafolder);
     addpath(datafolder);

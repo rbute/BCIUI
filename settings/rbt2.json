@@ -6,9 +6,34 @@
 		"undecorate": true,
 		"horizontalgap": 10,
 		"verticalgap": 10,
-		"detectionrecess": 1,
+		"detectionrecess": 30000,
 		"initclean": true,
-		"matlabscript ": "do"
+		"matlabscript": "do",
+		"experimentscript": "SSVEP_exp3"
+	},
+
+	"botsettings": 
+	{
+		"connectto": "COM12",
+		"baudrate":9600,
+		"commandmapping": 
+		[
+			[
+				"1",
+				"2",
+				"3",
+				"4",
+				"5"
+			],
+
+			[
+				"1",
+				"3",
+				"0",
+				"4",
+				"2"
+			]
+		]
 	},
 
 	"singletonmodel": 
@@ -157,8 +182,6 @@
 
 	"groupmodel": 
 	{
-		
-
 		"gp2": 
 		{
 			"SignalType": "P300",
@@ -166,13 +189,13 @@
 			"frequencies": 
 			[
 				1,
-				7,
+				6,
 				1,
-				9,
-				13,
-				15,
+				8,
 				1,
-				17,
+				16,
+				1,
+				18,
 				1
 			],
 
